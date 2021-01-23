@@ -1,28 +1,6 @@
 # Game Plan
 ### Livia Seibert
 
-#### Examples
-
-You need to put blank lines to write some text
-
-in separate paragraphs.
-
-
-Emphasis, aka italics, with *asterisks* or _underscores_.
-
-Strong emphasis, aka bold, with **asterisks** or __underscores__.
-
-Combined emphasis with **asterisks and _underscores_**.
-
-
-You can also make lists:
-* Bullets are made with asterisks
-1. You can order things with numbers.
-
-
-You can put links in like this: [Duke CompSci](https://www.cs.duke.edu)
-
-
 ## Interesting Breakout Variants
 I thought Brick Breaker Hero was an interesting variant of Breakout. I like
 that the game feels more like a video game than a traditional version of
@@ -101,11 +79,26 @@ Player gets another life.
 ## Class Ideas
 
 #### Paddle
+This class would be used to create the paddle object. Since one of the power ups makes the
+paddle grow in length, the paddle class would need to have an expand function to widen the
+paddle.
 
 #### Ball
+This class would be used to create the main ball for the game as well as additional balls
+needed for power-ups. Since the ball's main functionality is to bounce, we would need a
+function to determine how the ball's motion should change when it hits a block or paddle.
 
-#### Brick
+#### Bricks
+This class would be used for the single and multi-hit blocks in the game. I think these two
+types of blocks can share a class, as a multi-hit block is just a single hit block with more
+lives. Once a multi-hit block is down to one life, it can become a single-hit block. Accordingly,
+we will need a function that decrements a block's life when the ball collides with it.
+
+#### Game Controller
+This class would be used to oversee the main functionality of the entire game. Accordingly, it
+would need to have a function to detect collisions between the ball and the brick.
 
 #### Powerup
-
-####
+This class would be for the power-up objects. Since the power-up released from each power-up
+block is chosen at random, the power-up class will need a random type generator function that
+selects one of the three types of power-ups.
