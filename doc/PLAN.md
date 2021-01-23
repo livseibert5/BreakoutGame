@@ -40,12 +40,14 @@ display the number of hits it has left before it breaks, decrementing the number
 every time the ball hits it.
 
 #### Power-Up Blocks
-These blocks will release power-ups, but they type of power-up they release will
+These blocks will release power-ups, but the type of power-up they release will
 be chosen at random.
 
 ## Power-up Ideas
 My game will have three types of power ups, and they will be released by breaking
-certain blocks.
+power-up blocks. The look of the power-up block will not reveal which of the power-ups
+it releases, as the power-up is generated randomly. The selected power-up will simply
+be applied to the game, and play will continue normally.
 
 #### Extra Balls
 Another ball will be introduced to the game. The player will not die if one of the
@@ -53,7 +55,8 @@ balls drops, only if both of them are missed by the paddle.
 
 #### Ball Speeds Up
 This power-up will make the game harder for the player, as the ball will start
-moving faster and therefore be harder to deflect with the paddle.
+moving faster and therefore be harder to deflect with the paddle. However, a faster
+ball can also break bricks more quickly.
 
 #### Paddle Gets Longer
 This power-up will make the length of the player's paddle increase. Therefore, it
@@ -75,6 +78,13 @@ Random power-up is applied to the game.
 Player gets another life.
 
 ## Level Descriptions
+
+#### General Overview
+Since it is almost February, this game is going to be Valentine's Day themed. The player will
+start with three lives, represented by roses, and the ball will have a heart on it. The single-hit
+bricks will be pink, the multi-hit bricks will be red with the number of hits they have left
+written on them, and the power-up bricks will be red and pink with hearts. The boss enemy will
+be a baby cupid, and all of the bricks in each level will be arranged as hearts.
 
 #### Level 1
 Level 1 will be the most basic level of the game. Single-hit blocks will be arranged in a
@@ -140,6 +150,7 @@ heart will be made with alternating layers of multi-hit and single-hit blocks, w
 blocks interspersed within. This level will have a boss enemy as well that is a baby cupid sliding
 back and forth across the screen. If the ball hits the enemy, the player loses a life.
 
+    ****                               ****
            @(((((((           (((((((@            
         (((((((((((((((((((((((((((((((%          
        (((((((********((((((((*******@((((((      
@@ -152,14 +163,15 @@ back and forth across the screen. If the ball hits the enemy, the player loses a
               /((((((@*******((((((((             
                 ((((((((   (((((((                
                      ((((((((                     
-                                                  
+    ****                              ****                                                  
                                                   
                                      (((          
                                     (((           
                                  ((((( * 
 
 This is the filled-in heart with the multi-hit blocks on the outside, and the single-hit blocks
-on the inside. The blob in the bottom right is a very rough rendition of the baby cupid boss enemy.
+on the inside. The astericks on the outside represent power-up blocks. The blob in the bottom
+right is a very rough rendition of the baby cupid boss enemy.
 
 ## Class Ideas
 
