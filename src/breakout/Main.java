@@ -1,32 +1,77 @@
 package breakout;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.stage.Stage;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.Group;
 import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class Main extends Application {
 
+  private static final int WIDTH = 600;
+  private static final int HEIGHT = 800;
+  private static final String TITLE = "Valentine's Breakout";
+  private static final int FRAMES_PER_SECOND = 60;
+  private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+  private static final Paint BACKGROUND = Color.LIGHTPINK;
+
+  private boolean gameStarted = false;
+
   private GameController controller;
+  private Instructions instructions;
+  private Scene myScene;
+  private Paddle paddle;
+  private Ball ball;
 
   /**
    * Initialize what will be displayed and how it will be updated.
    */
   @Override
-  public void start(Stage primaryStage) throws Exception {
-    // TODO: Show menu screen and instructions.
-    // TODO: Launch step function.
+  public void start(Stage stage) throws Exception {
+    instructions = new Instructions(WIDTH, HEIGHT, TITLE);
+    myScene = instructions.getScene();
+    stage.setScene(myScene);
+    stage.setTitle(TITLE);
+    stage.show();
+    myScene.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent e) {
+        setupGame(WIDTH, HEIGHT, BACKGROUND);
+        KeyFrame frame = new KeyFrame(Duration.seconds(SECOND_DELAY), event -> step(SECOND_DELAY));
+        Timeline animation = new Timeline();
+        animation.setCycleCount(Timeline.INDEFINITE);
+        animation.getKeyFrames().add(frame);
+        animation.play();
+      }
+    });
+  }
+
+  // Create the game's "scene": what shapes will be in the game and their starting properties.
+  private void setupGame(int width, int height, Paint background) {
+    paddle = new Paddle();
   }
 
   // Change properties of shapes in small ways to animate them over time.
   private void step (double elapsedTime) {
-    // TODO: Call game controller to set the level up and commence game play.
+    paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
   }
 
   // What to do each time a key is pressed.
   private void handleKeyInput(KeyCode code) {
-
+    if (code == KeyCode.RIGHT) {
+      // Move paddle right.
+      if (paddle.getXDirection() != 1) paddle.switchDirection();
+    } else if (code == KeyCode.LEFT) {
+      // Move paddle left.
+      if (paddle.getXDirection() != -1) paddle.switchDirection();
+    }
   }
 
   /**
