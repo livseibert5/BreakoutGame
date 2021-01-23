@@ -84,7 +84,8 @@ Since it is almost February, this game is going to be Valentine's Day themed. Th
 start with three lives, represented by roses, and the ball will have a heart on it. The single-hit
 bricks will be pink, the multi-hit bricks will be red with the number of hits they have left
 written on them, and the power-up bricks will be red and pink with hearts. The boss enemy will
-be a baby cupid, and all of the bricks in each level will be arranged as hearts.
+be a baby cupid, and all the bricks in each level will be arranged as hearts. To clear a level,
+the player must destroy all the bricks.
 
 #### Level 1
 Level 1 will be the most basic level of the game. Single-hit blocks will be arranged in a
@@ -193,7 +194,7 @@ we will need a function that decrements a block's life when the ball collides wi
 
 #### Game Controller
 This class would be used to oversee the main functionality of the entire game. Accordingly, it
-would need to have a function to detect collisions between the ball and the brick.
+would need to have a function to detect collisions between the ball and the bricks.
 
 #### Powerup
 This class would be for the power-up objects. Since the power-up released from each power-up
