@@ -29,12 +29,14 @@ public class Main extends Application {
   private Scene myScene;
   private Paddle paddle;
   private Ball ball;
+  private int level = 1;
 
   /**
    * Initialize what will be displayed and how it will be updated.
    */
   @Override
   public void start(Stage stage) throws Exception {
+    controller = new GameController();
     instructions = new Instructions(WIDTH, HEIGHT, TITLE);
     myScene = instructions.getScene();
     stage.setScene(myScene);
@@ -43,7 +45,7 @@ public class Main extends Application {
     myScene.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent e) {
-        setupGame(WIDTH, HEIGHT, BACKGROUND);
+        controller.setupGame(level);
         KeyFrame frame = new KeyFrame(Duration.seconds(SECOND_DELAY), event -> step(SECOND_DELAY));
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -52,11 +54,12 @@ public class Main extends Application {
       }
     });
   }
-
+/*
   // Create the game's "scene": what shapes will be in the game and their starting properties.
-  private void setupGame(int width, int height, Paint background) {
+  private void setupGame(int level) {
+
     paddle = new Paddle();
-  }
+  }*/
 
   // Change properties of shapes in small ways to animate them over time.
   private void step (double elapsedTime) {
