@@ -194,8 +194,9 @@ lives. Once a multi-hit block is down to one life, it can become a single-hit bl
 we will need a function that decrements a block's life when the ball collides with it.
 
 #### Game Controller
-This class would be used to oversee the main functionality of the entire game. Accordingly, it
-would need to have a function to detect collisions between the ball and the bricks.
+This class would be used to switch between levels of the game. It will need a function that takes
+the current level as input and creates a new scene according to the layout of that level. Then it
+should return that scene to the main driver class.
 
 #### Powerup
 This class would be for the power-up objects. Since the power-up released from each power-up
