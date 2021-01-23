@@ -24,9 +24,10 @@ to make a game look good without unnecessarily complex elements.
 When the paddle hits the left or right of the screen, it appears on the other
 side of the screen instead of bouncing off the wall.
 
-#### Ball Sticks to Paddle Randomly
-The ball will not always stick to the paddle, but it will at random intervals.
-When this happens, the player will need to hit the up arrow to re-launch the ball.
+#### Ball Bounces Differently
+The ball will bounce differently depending on which part of the paddle it hits.
+On the outer thirds, the ball reverses its direction and goes back the way it
+came, and on the middle third the ball bounces normally.
 
 ## Block Ideas
 
@@ -75,6 +76,90 @@ Player gets another life.
 
 ## Level Descriptions
 
+#### Level 1
+Level 1 will be the most basic level of the game. Single-hit blocks will be arranged in a
+large outline of a heart with a box in the middle made of multi-hit blocks. These multi-hit 
+blocks will contain a power-up in the center.
+
+             *******           ********
+        ********************************          
+      @*******        ********      ,*******      
+    &*******                         %*******     
+      @*******        ((((((((      ,*******      
+         *******@                  ********       
+          ********    ((#(((((   *******@         
+          @@@@@@@@@@          @@@@@@@@@@@         
+            ********          ********            
+              #*******       ********             
+                ********   *******&               
+                     ********  
+
+This is a rough ASCII art picture of the heart with the multi-hit and power-up blocks inside.
+In the actual game I anticipate having more than one multi-hit block and more than one power-up
+block in the middle in contrast to what I have here.
+
+#### Level 2
+Level 2 will be slightly more difficult, with smaller hearts made of blocks scattered around
+the screen. Some hearts will be made entirely of multi-hit blocks, and others will be
+made entirely of single-hit blocks. Each heart will have a power-up block at its center.
+
+
+
+                         ((((((((   ((((((((      
+                      ((((((((#((#(@&(&(((((((*   
+                         ((((((((   ((((((((      
+                           (((((((((((((((        
+                           @@@@@@@@@@@@@@@        
+                               @@@@@@@@           
+        ********   ********                           
+     ********@((@(((*********                       
+        ********   ********                           
+          ***************                             
+             ********                                
+                         @@@@@@@@   @@@@@@@@
+                        ((((((((     ((((((((      
+                      ((((((((#((@(#((&(((((((*   
+                         ((((((((   ((((((((      
+                           (((((((((((((((        
+                               ((((((((
+
+      ********   ********                         
+    ********&(@((#(#********                      
+      ********   ********                         
+        *******@*******@                          
+            ********      
+
+In this diagram, there are four hearts. The two on the left-hand side would be made of single-hit
+blocks, and the two on the right-hand side would be made of multi-hit blocks. The block in the center
+of each is a power-up block.
+
+#### Level 3
+The final level will feature a completely solid heart, with all the outer blocks being multi-hit
+blocks. Four power-ups will be placed outside the heart for assistance. The inside of the
+heart will be made with alternating layers of multi-hit and single-hit blocks, with power-up
+blocks interspersed within. This level will have a boss enemy as well that is a baby cupid sliding
+back and forth across the screen. If the ball hits the enemy, the player loses a life.
+
+           @(((((((           (((((((@            
+        (((((((((((((((((((((((((((((((%          
+       (((((((********((((((((*******@((((((      
+    ((((((((********  #######@*******@(((((((     
+       (((((((*******########*******((((((((      
+         ((((((((@((@#&(   #%@&&@@@(((((((#       
+         @@@@@@@@@@@@@@@@@@@@@@@@%%@@@@@@@#       
+          ((((((((*******(*******(((((((          
+            #((((((( /******* (((((((@            
+              /((((((@*******((((((((             
+                ((((((((   (((((((                
+                     ((((((((                     
+                                                  
+                                                  
+                                     (((          
+                                    (((           
+                                 ((((( * 
+
+This is the filled-in heart with the multi-hit blocks on the outside, and the single-hit blocks
+on the inside. The blob in the bottom right is a very rough rendition of the baby cupid boss enemy.
 
 ## Class Ideas
 
