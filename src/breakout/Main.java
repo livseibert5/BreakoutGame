@@ -20,7 +20,7 @@ public class Main extends Application {
   private static final String TITLE = "Valentine's Breakout";
   private static final int FRAMES_PER_SECOND = 60;
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-  private static final Paint BACKGROUND = Color.LIGHTPINK;
+  private static final Paint BACKGROUND = Color.BEIGE;
 
   private boolean gameStarted = false;
 
@@ -45,7 +45,9 @@ public class Main extends Application {
     myScene.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent e) {
-        controller.setupGame(level);
+        controller.setupGame(level, WIDTH, HEIGHT, BACKGROUND);
+        myScene = controller.getScene();
+        stage.setScene(myScene);
         KeyFrame frame = new KeyFrame(Duration.seconds(SECOND_DELAY), event -> step(SECOND_DELAY));
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -63,7 +65,7 @@ public class Main extends Application {
 
   // Change properties of shapes in small ways to animate them over time.
   private void step (double elapsedTime) {
-    paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
+    //paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
   }
 
   // What to do each time a key is pressed.
