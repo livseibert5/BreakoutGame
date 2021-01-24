@@ -56,12 +56,6 @@ public class Main extends Application {
       }
     });
   }
-/*
-  // Create the game's "scene": what shapes will be in the game and their starting properties.
-  private void setupGame(int level) {
-
-    paddle = new Paddle();
-  }*/
 
   // Change properties of shapes in small ways to animate them over time.
   private void step (double elapsedTime) {
@@ -71,11 +65,15 @@ public class Main extends Application {
   // What to do each time a key is pressed.
   private void handleKeyInput(KeyCode code) {
     if (code == KeyCode.RIGHT) {
-      // Move paddle right.
       if (paddle.getXDirection() != 1) paddle.switchDirection();
     } else if (code == KeyCode.LEFT) {
-      // Move paddle left.
       if (paddle.getXDirection() != -1) paddle.switchDirection();
+    } else if (code == KeyCode.DIGIT1) {
+      controller.setupGame(1, WIDTH, HEIGHT, BACKGROUND);
+    } else if (code == KeyCode.DIGIT2) {
+      controller.setupGame(2, WIDTH, HEIGHT, BACKGROUND);
+    } else if (code == KeyCode.DIGIT3) {
+      controller.setupGame(3, WIDTH, HEIGHT, BACKGROUND);
     }
   }
 

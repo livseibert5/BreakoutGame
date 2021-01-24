@@ -4,8 +4,8 @@ public class Brick {
 
   private int lives;
 
-  public Brick() {
-
+  public Brick(int lives) {
+    this.lives = lives;
   }
 
   /**
