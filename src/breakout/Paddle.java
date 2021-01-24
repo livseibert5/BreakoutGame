@@ -8,7 +8,7 @@ public class Paddle extends Rectangle {
 
   private int xDirection;
   private Image image;
-  private final int PADDLE_SPEED = 50;
+  private final int PADDLE_SPEED = 70;
 
   public Paddle(int width, int height) {
     xDirection = 0;

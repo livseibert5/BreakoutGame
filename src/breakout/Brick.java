@@ -13,12 +13,7 @@ public class Brick extends Rectangle {
     this.lives = lives;
     this.setWidth(width / 16);
     this.setHeight(height / 18);
-
-    String imageName = "file:resources/pink.png";
-    if (lives > 1) imageName = "file:resources/red.png";
-    image = new Image(imageName);
-    ImagePattern imagePattern = new ImagePattern(image);
-    this.setFill(imagePattern);
+    selectImage();
   }
 
   public Brick() { this.lives = 1; }
@@ -31,6 +26,18 @@ public class Brick extends Rectangle {
    */
   public void decrementLives() {
     lives--;
+    selectImage();
+  }
+
+  public void selectImage() {
+    String imageName = "file:resources/pink.png";
+    if (lives == 2) imageName = "file:resources/red2.png";
+    if (lives == 3) imageName = "file:resources/red3.png";
+    if (lives == 4) imageName = "file:resources/red4.png";
+    if (lives == 5) imageName = "file:resources/red5.png";
+    image = new Image(imageName);
+    ImagePattern imagePattern = new ImagePattern(image);
+    this.setFill(imagePattern);
   }
 
   // Getter function returns the number of lives a brick has left.

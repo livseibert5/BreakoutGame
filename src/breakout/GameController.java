@@ -104,6 +104,8 @@ public class GameController {
 
   public List<Brick> getBricks() { return bricks; }
 
+  public Group getRoot() { return root; }
+
   public Scene getScene() {
     return myScene;
   }

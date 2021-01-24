@@ -12,6 +12,7 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.util.List;
+import javafx.scene.Group;
 
 public class Main extends Application {
 
@@ -30,6 +31,7 @@ public class Main extends Application {
   private Paddle paddle;
   private Stage stage;
   private Ball ball;
+  private Group root;
   private List<Brick> bricks;
   private int level = 1;
 
@@ -63,15 +65,24 @@ public class Main extends Application {
     ball.setCenterX(ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
     ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
     paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
+
     if (ball.getCenterX() <= ball.getRadius() ||
-        ball.getCenterX() >= WIDTH - ball.getRadius()) {
+          ball.getCenterX() >= WIDTH - ball.getRadius()) {
       ball.invertXDirection();
     }
     if (ball.getCenterY() <= ball.getRadius() ||
-        ball.getCenterY() >= HEIGHT - ball.getRadius()) {
+          ball.getCenterY() >= HEIGHT - ball.getRadius()) {
       ball.invertYDirection();
     }
-    //paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
+
+    if (ball.getBoundsInParent().intersects(paddle.getBoundsInParent())) ball.invertYDirection();
+
+    for (Brick brick: bricks) {
+      if (ball.getBoundsInParent().intersects(brick.getBoundsInParent())) {
+        brick.decrementLives();
+        if (brick.getLives() == 0) root.getChildren().remove(brick);
+      }
+    }
   }
 
   private void handleKeyLift(KeyCode code) {
@@ -104,6 +115,7 @@ public class Main extends Application {
     this.paddle = controller.getPaddle();
     this.ball = controller.getBall();
     this.bricks = controller.getBricks();
+    this.root = controller.getRoot();
     myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
     myScene.setOnKeyReleased(e -> handleKeyLift(e.getCode()));
   }
