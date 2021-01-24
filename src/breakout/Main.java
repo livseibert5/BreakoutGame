@@ -34,6 +34,7 @@ public class Main extends Application {
   private Group root;
   private List<Brick> bricks;
   private int level = 1;
+  private int lives = 3;
 
   /**
    * Initialize what will be displayed and how it will be updated.
@@ -76,7 +77,12 @@ public class Main extends Application {
     }
 
     if (ball.getBoundsInParent().intersects(paddle.getBoundsInParent())) ball.invertYDirection();
+    if (ball.getCenterX() + ball.getRadius() >= HEIGHT) lives--;
 
+    checkBallCollision();
+  }
+
+  private void checkBallCollision() {
     for (Brick brick: bricks) {
       if (ball.getBoundsInParent().intersects(brick.getBoundsInParent())) {
         brick.decrementLives();
@@ -101,6 +107,8 @@ public class Main extends Application {
       setLevel(2);
     } else if (code == KeyCode.DIGIT3) {
       setLevel(3);
+    } else if (code == KeyCode.L) {
+      lives++;
     }
   }
 
