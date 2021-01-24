@@ -90,60 +90,46 @@ arrow keys on the keyboard.
 
 #### Level 1
 Level 1 will be the most basic level of the game. Single-hit blocks will be arranged in a
-large outline of a heart with a box in the middle made of multi-hit blocks. These multi-hit 
-blocks will contain a power-up in the center.
+large outline of a heart with a region in the middle made of multi-hit blocks. These multi-hit 
+blocks will be adjacent to a power-up in the center.
 
-             *******           ********
-        ********************************          
-      @*******        ********      ,*******      
-    &*******                         %*******     
-      @*******        ((((((((      ,*******      
-         *******@                  ********       
-          ********    ((#(((((   *******@         
-          @@@@@@@@@@          @@@@@@@@@@@         
-            ********          ********            
-              #*******       ********             
-                ********   *******&               
-                     ********  
+    0000000000000000
+    0001110000111000
+    0010001001000100
+    0100000110000010
+    0100000000000010
+    0010000330000100
+    0001002222001000
+    0000100000010000
+    0000010000100000
+    0000001001000000
+    0000000110000000
+    0000000000000000
 
-This is a rough ASCII art picture of the heart with the multi-hit and power-up blocks inside.
-In the actual game I anticipate having more than one multi-hit block and more than one power-up
-block in the middle in contrast to what I have here.
+In this picture, 1s are single-hit blocks, 2s are multi-hit blocks, and 3s are power-up blocks.
+0s are just empty space. This is true for the diagrams below as well.
 
 #### Level 2
 Level 2 will be slightly more difficult, with smaller hearts made of blocks scattered around
 the screen. Some hearts will be made entirely of multi-hit blocks, and others will be
 made entirely of single-hit blocks. Each heart will have a power-up block at its center.
 
+    011011000220220
+    100100102002002
+    013331000233320
+    001010000020200
+    000100000002000
+    000000000000000
+    022022000110110
+    200200201002001
+    023332000133310
+    002020000010100
+    000200000001000
+    000000000000000    
 
-
-                         ((((((((   ((((((((      
-                      ((((((((#((#(@&(&(((((((*   
-                         ((((((((   ((((((((      
-                           (((((((((((((((        
-                           @@@@@@@@@@@@@@@        
-                               @@@@@@@@           
-        ********   ********                           
-     ********@((@(((*********                       
-        ********   ********                           
-          ***************                             
-             ********                                
-                         @@@@@@@@   @@@@@@@@
-                        ((((((((     ((((((((      
-                      ((((((((#((@(#((&(((((((*   
-                         ((((((((   ((((((((      
-                           (((((((((((((((        
-                               ((((((((
-
-      ********   ********                         
-    ********&(@((#(#********                      
-      ********   ********                         
-        *******@*******@                          
-            ********      
-
-In this diagram, there are four hearts. The two on the left-hand side would be made of single-hit
-blocks, and the two on the right-hand side would be made of multi-hit blocks. The block in the center
-of each is a power-up block.
+In this diagram, there are four hearts. The top left heart and bottom right heart are made of
+single-hit blocks and the top-right and bottom-left hearts are made from multi-hit blocks. The
+3s in the middle of each heart are the power-ups.
 
 #### Level 3
 The final level will feature a completely solid heart, with all the outer blocks being multi-hit
@@ -152,28 +138,22 @@ heart will be made with alternating layers of multi-hit and single-hit blocks, w
 blocks interspersed within. This level will have a boss enemy as well that is a baby cupid sliding
 back and forth across the screen. If the ball hits the enemy, the player loses a life.
 
-    ****                               ****
-           @(((((((           (((((((@            
-        (((((((((((((((((((((((((((((((%          
-       (((((((********((((((((*******@((((((      
-    ((((((((********  #######@*******@(((((((     
-       (((((((*******########*******((((((((      
-         ((((((((@((@#&(   #%@&&@@@(((((((#       
-         @@@@@@@@@@@@@@@@@@@@@@@@%%@@@@@@@#       
-          ((((((((*******(*******(((((((          
-            #((((((( /******* (((((((@            
-              /((((((@*******((((((((             
-                ((((((((   (((((((                
-                     ((((((((                     
-    ****                              ****                                                  
-                                                  
-                                     (((          
-                                    (((           
-                                 ((((( * 
+    0000000000000000
+    0302220000222030
+    0021112002111200
+    0232221221222320
+    0212121112112120
+    0023211331123200
+    0002121111212000
+    0000212332120000
+    0300023223200030
+    0000002112000000
+    0000000220000000
+    0000000000000000
 
 This is the filled-in heart with the multi-hit blocks on the outside, and the single-hit blocks
-on the inside. The astericks on the outside represent power-up blocks. The blob in the bottom
-right is a very rough rendition of the baby cupid boss enemy.
+on the inside. The 3s surrounding the heart are the starting power-up. The cupid boss enemy will
+go back and forth where that last row of zeroes are.
 
 ## Class Ideas
 
