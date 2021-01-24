@@ -11,7 +11,7 @@ public class Paddle extends Rectangle {
   private final int PADDLE_SPEED = 50;
 
   public Paddle(int width, int height) {
-    xDirection = 1;
+    xDirection = 0;
     this.setWidth(width / 6);
     this.setHeight(height / 21);
     image = new Image("file:resources/paddle.png");
@@ -24,10 +24,13 @@ public class Paddle extends Rectangle {
     // TODO: Implement function.
   }
 
-  // Changes direction of paddle motion.
-  public void switchDirection() {
-    xDirection *= -1;
+  public void moveRight() {
+    xDirection = 1;
   }
+  public void moveLeft() {
+    xDirection = -1;
+  }
+  public void stop() { xDirection = 0; }
 
   public int getXDirection() {
     return xDirection;

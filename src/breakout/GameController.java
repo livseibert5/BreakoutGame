@@ -9,6 +9,8 @@ import java.util.Scanner;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.input.KeyCode;
+import javafx.animation.KeyFrame;
 
 public class GameController {
 

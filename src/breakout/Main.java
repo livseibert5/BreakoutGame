@@ -47,8 +47,8 @@ public class Main extends Application {
       @Override
       public void handle(MouseEvent e) {
         controller.setupGame(level, WIDTH, HEIGHT, BACKGROUND);
-        retrieveGamePieces();
         myScene = controller.getScene();
+        retrieveGamePieces();
         stage.setScene(myScene);
         KeyFrame frame = new KeyFrame(Duration.seconds(SECOND_DELAY), event -> step(SECOND_DELAY));
         Timeline animation = new Timeline();
@@ -63,6 +63,7 @@ public class Main extends Application {
   private void step (double elapsedTime) {
     ball.setCenterX(ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
     ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
+    paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
     if (ball.getCenterX() <= ball.getRadius() ||
         ball.getCenterX() >= WIDTH - ball.getRadius()) {
       ball.invertXDirection();
@@ -74,19 +75,28 @@ public class Main extends Application {
     //paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
   }
 
+  private void handleKeyLift(KeyCode code) {
+    if (code == KeyCode.RIGHT || code == KeyCode.LEFT) { paddle.stop(); }
+  }
+
   // What to do each time a key is pressed.
-  private void handleKeyInput(KeyCode code, double elapsedTime) {
+  private void handleKeyInput(KeyCode code) {
     if (code == KeyCode.RIGHT) {
-      if (paddle.getXDirection() != 1) { paddle.switchDirection(); }
-      paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
+      if (paddle.getXDirection() != 1) { paddle.moveRight(); }
     } else if (code == KeyCode.LEFT) {
-      if (paddle.getXDirection() != -1) paddle.switchDirection();
+      if (paddle.getXDirection() != -1) paddle.moveLeft();
     } else if (code == KeyCode.DIGIT1) {
       controller.setupGame(1, WIDTH, HEIGHT, BACKGROUND);
+      retrieveGamePieces();
+      myScene = controller.getScene();
     } else if (code == KeyCode.DIGIT2) {
       controller.setupGame(2, WIDTH, HEIGHT, BACKGROUND);
+      retrieveGamePieces();
+      myScene = controller.getScene();
     } else if (code == KeyCode.DIGIT3) {
       controller.setupGame(3, WIDTH, HEIGHT, BACKGROUND);
+      retrieveGamePieces();
+      myScene = controller.getScene();
     }
   }
 
@@ -94,6 +104,8 @@ public class Main extends Application {
     this.paddle = controller.getPaddle();
     this.ball = controller.getBall();
     this.bricks = controller.getBricks();
+    myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
+    myScene.setOnKeyReleased(e -> handleKeyLift(e.getCode()));
   }
 
   /**
