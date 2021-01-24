@@ -4,13 +4,18 @@ import java.io.FileNotFoundException;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.Text;
 import java.io.File;
 import java.util.Scanner;
+import java.util.Random;
 
 public class GameController {
 
   private Scene myScene;
+  private Ball ball;
+  private Paddle paddle;
+  private Group root;
+  private int width;
+  private int height;
   private int[][] brickLayout;
 
   public GameController() {
@@ -18,18 +23,20 @@ public class GameController {
   }
 
   public void setupGame(int level, int width, int height, Paint background) {
+    root = new Group();
+    this.width = width;
+    this.height = height;
     if (level == 1) {
-      readFile("level1.txt");
-      Group root = new Group();
-      Text testing = new Text(width / 2, height / 2, "TEST");
-      root.getChildren().add(testing);
-      myScene = new Scene(root, width, height, background);
+      readFile("resources/level1.txt");
     } else if (level == 2) {
-      readFile("level2.txt");
+      readFile("resources/level2.txt");
     } else if (level == 3) {
-      readFile("level3.txt");
+      readFile("resources/level3.txt");
     }
     assembleBricks();
+    createPaddle();
+    createBall();
+    myScene = new Scene(root, width, height, background);
   }
 
   private void readFile(String filename) {
@@ -52,15 +59,36 @@ public class GameController {
   private void assembleBricks() {
     for (int row = 0; row < brickLayout.length; row++) {
       for (int col = 0; col < brickLayout[row].length; col++) {
+        Brick brick = new Brick();
         if (brickLayout[row][col] == 1) {
-
+          brick = new Brick(1, width, height);
         } else if (brickLayout[row][col] == 2) {
-
+          Random random = new Random();
+          brick = new Brick(random.nextInt((5 - 2) + 2) + 2, width, height);
         } else if (brickLayout[row][col] == 3) {
-
+          brick = new PowerupBrick(1, width, height);
         }
+        brick.setX(col * brick.getWidth());
+        brick.setY(row * brick.getHeight());
+        root.getChildren().add(brick);
       }
+
     }
+  }
+
+  public void createBall() {
+    ball = new Ball();
+    ball.setCenterX(width / 2);
+    ball.setCenterY((height - paddle.getHeight() - 20)
+        - paddle.getHeight() / 2 - ball.getRadius() / 2);
+    root.getChildren().add(ball);
+  }
+
+  public void createPaddle() {
+    paddle = new Paddle(width, height);
+    paddle.setX(width / 2 - paddle.getWidth() / 2);
+    paddle.setY(height - paddle.getHeight() - 20);
+    root.getChildren().add(paddle);
   }
 
   public Scene getScene() {

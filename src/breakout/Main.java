@@ -8,15 +8,14 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.Group;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Main extends Application {
 
-  private static final int WIDTH = 600;
-  private static final int HEIGHT = 800;
+  private static final int WIDTH = 700;
+  private static final int HEIGHT = 700;
   private static final String TITLE = "Valentine's Breakout";
   private static final int FRAMES_PER_SECOND = 60;
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
