@@ -90,8 +90,8 @@ arrow keys on the keyboard.
 
 #### Level 1
 Level 1 will be the most basic level of the game. Single-hit blocks will be arranged in a
-large outline of a heart with a region in the middle made of multi-hit blocks. These multi-hit 
-blocks will be adjacent to a power-up in the center.
+large outline of a heart with a region in the middle that contains more single-hit blocks
+as well as power-ups.
 
     0000000000000000
     0001110000111000
@@ -99,20 +99,21 @@ blocks will be adjacent to a power-up in the center.
     0100000110000010
     0100000000000010
     0010000330000100
-    0001002222001000
+    0001001111001000
     0000100000010000
     0000010000100000
     0000001001000000
     0000000110000000
     0000000000000000
 
-In this picture, 1s are single-hit blocks, 2s are multi-hit blocks, and 3s are power-up blocks.
+In this picture, 1s are single-hit blocks and 3s are power-up blocks.
 0s are just empty space. This is true for the diagrams below as well.
 
 #### Level 2
 Level 2 will be slightly more difficult, with smaller hearts made of blocks scattered around
-the screen. Some hearts will be made entirely of multi-hit blocks, and others will be
-made entirely of single-hit blocks. Each heart will have a power-up block at its center.
+the screen and multi-hit blocks introduced. Some hearts will be made entirely of multi-hit
+blocks, and others will be made entirely of single-hit blocks. Each heart will have a power-up
+block at its center.
 
     011011000220220
     100100102002002
