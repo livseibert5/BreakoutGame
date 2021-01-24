@@ -7,6 +7,8 @@ import javafx.scene.paint.Paint;
 import java.io.File;
 import java.util.Scanner;
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameController {
 
@@ -14,6 +16,7 @@ public class GameController {
   private Ball ball;
   private Paddle paddle;
   private Group root;
+  private List<Brick> bricks;
   private int width;
   private int height;
   private int[][] brickLayout;
@@ -23,6 +26,7 @@ public class GameController {
   }
 
   public void setupGame(int level, int width, int height, Paint background) {
+    bricks = new ArrayList<Brick>();
     root = new Group();
     this.width = width;
     this.height = height;
@@ -71,6 +75,7 @@ public class GameController {
         brick.setX(col * brick.getWidth());
         brick.setY(row * brick.getHeight());
         root.getChildren().add(brick);
+        bricks.add(brick);
       }
 
     }
@@ -90,6 +95,12 @@ public class GameController {
     paddle.setY(height - paddle.getHeight() - 20);
     root.getChildren().add(paddle);
   }
+
+  public Paddle getPaddle() { return paddle; }
+
+  public Ball getBall() { return ball; }
+
+  public List<Brick> getBricks() { return bricks; }
 
   public Scene getScene() {
     return myScene;

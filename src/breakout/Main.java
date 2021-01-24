@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.util.List;
 
 public class Main extends Application {
 
@@ -19,7 +20,7 @@ public class Main extends Application {
   private static final String TITLE = "Valentine's Breakout";
   private static final int FRAMES_PER_SECOND = 60;
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-  private static final Paint BACKGROUND = Color.BEIGE;
+  private static final Paint BACKGROUND = Color.WHITE;
 
   private boolean gameStarted = false;
 
@@ -28,6 +29,7 @@ public class Main extends Application {
   private Scene myScene;
   private Paddle paddle;
   private Ball ball;
+  private List<Brick> bricks;
   private int level = 1;
 
   /**
@@ -45,6 +47,7 @@ public class Main extends Application {
       @Override
       public void handle(MouseEvent e) {
         controller.setupGame(level, WIDTH, HEIGHT, BACKGROUND);
+        retrieveGamePieces();
         myScene = controller.getScene();
         stage.setScene(myScene);
         KeyFrame frame = new KeyFrame(Duration.seconds(SECOND_DELAY), event -> step(SECOND_DELAY));
@@ -58,13 +61,24 @@ public class Main extends Application {
 
   // Change properties of shapes in small ways to animate them over time.
   private void step (double elapsedTime) {
+    ball.setCenterX(ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
+    ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
+    if (ball.getCenterX() <= ball.getRadius() ||
+        ball.getCenterX() >= WIDTH - ball.getRadius()) {
+      ball.invertXDirection();
+    }
+    if (ball.getCenterY() <= ball.getRadius() ||
+        ball.getCenterY() >= HEIGHT - ball.getRadius()) {
+      ball.invertYDirection();
+    }
     //paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
   }
 
   // What to do each time a key is pressed.
-  private void handleKeyInput(KeyCode code) {
+  private void handleKeyInput(KeyCode code, double elapsedTime) {
     if (code == KeyCode.RIGHT) {
-      if (paddle.getXDirection() != 1) paddle.switchDirection();
+      if (paddle.getXDirection() != 1) { paddle.switchDirection(); }
+      paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
     } else if (code == KeyCode.LEFT) {
       if (paddle.getXDirection() != -1) paddle.switchDirection();
     } else if (code == KeyCode.DIGIT1) {
@@ -74,6 +88,12 @@ public class Main extends Application {
     } else if (code == KeyCode.DIGIT3) {
       controller.setupGame(3, WIDTH, HEIGHT, BACKGROUND);
     }
+  }
+
+  public void retrieveGamePieces() {
+    this.paddle = controller.getPaddle();
+    this.ball = controller.getBall();
+    this.bricks = controller.getBricks();
   }
 
   /**
