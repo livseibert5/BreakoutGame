@@ -80,7 +80,7 @@ Player gets another life.
 ## Level Descriptions
 
 #### General Overview
-Since it is almost February, this game is going to be Valentine's Day themed. The player will
+This game is going to be Valentine's Day themed. The player will
 start with three lives, represented by roses, and the ball will have a heart on it. The single-hit
 bricks will be pink, the multi-hit bricks will be red with the number of hits they have left
 written on them, and the power-up bricks will be red and pink with hearts. The boss enemy will
@@ -152,7 +152,7 @@ back and forth across the screen. If the ball hits the enemy, the player loses a
     0000000000000000
 
 This is the filled-in heart with the multi-hit blocks on the outside, and the single-hit blocks
-on the inside. The 3s surrounding the heart are the starting power-up. The cupid boss enemy will
+on the inside. The 3s surrounding the heart are the starting power-ups. The cupid boss enemy will
 go back and forth where that last row of zeroes are.
 
 ## Class Ideas
