@@ -28,6 +28,7 @@ public class Main extends Application {
   private Instructions instructions;
   private Scene myScene;
   private Paddle paddle;
+  private Stage stage;
   private Ball ball;
   private List<Brick> bricks;
   private int level = 1;
@@ -40,16 +41,14 @@ public class Main extends Application {
     controller = new GameController();
     instructions = new Instructions(WIDTH, HEIGHT, TITLE);
     myScene = instructions.getScene();
+    this.stage = stage;
     stage.setScene(myScene);
     stage.setTitle(TITLE);
     stage.show();
     myScene.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent e) {
-        controller.setupGame(level, WIDTH, HEIGHT, BACKGROUND);
-        myScene = controller.getScene();
-        retrieveGamePieces();
-        stage.setScene(myScene);
+        setLevel(level);
         KeyFrame frame = new KeyFrame(Duration.seconds(SECOND_DELAY), event -> step(SECOND_DELAY));
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -86,18 +85,19 @@ public class Main extends Application {
     } else if (code == KeyCode.LEFT) {
       if (paddle.getXDirection() != -1) paddle.moveLeft();
     } else if (code == KeyCode.DIGIT1) {
-      controller.setupGame(1, WIDTH, HEIGHT, BACKGROUND);
-      retrieveGamePieces();
-      myScene = controller.getScene();
+      setLevel(1);
     } else if (code == KeyCode.DIGIT2) {
-      controller.setupGame(2, WIDTH, HEIGHT, BACKGROUND);
-      retrieveGamePieces();
-      myScene = controller.getScene();
+      setLevel(2);
     } else if (code == KeyCode.DIGIT3) {
-      controller.setupGame(3, WIDTH, HEIGHT, BACKGROUND);
-      retrieveGamePieces();
-      myScene = controller.getScene();
+      setLevel(3);
     }
+  }
+
+  public void setLevel(int level) {
+    controller.setupGame(level, WIDTH, HEIGHT, BACKGROUND);
+    myScene = controller.getScene();
+    retrieveGamePieces();
+    stage.setScene(myScene);
   }
 
   public void retrieveGamePieces() {
