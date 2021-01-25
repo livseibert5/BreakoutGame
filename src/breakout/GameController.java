@@ -26,9 +26,10 @@ public class GameController {
   private Group root;
   private List<Brick> bricks;
   private Text score;
+  private Text level;
   private int width;
   private int height;
-  private List<Circle> lives = new ArrayList<>();
+  private final List<Circle> lives = new ArrayList<>();
   private final int[][] brickLayout;
 
   /**
@@ -66,12 +67,18 @@ public class GameController {
     createBall();
     setLives();
     setScore();
+    setLevel();
     myScene = new Scene(root, width, height, background);
   }
 
   public void setScore() {
-    score = new Text(width - 50, 40, "0");
+    score = new Text(width - 100, 40, "Score: 0");
     root.getChildren().add(score);
+  }
+
+  public void setLevel() {
+    level = new Text(width - 150, 40, "Level: 1");
+    root.getChildren().add(level);
   }
 
   public void setLives() {
@@ -202,6 +209,10 @@ public class GameController {
 
   public Text getScore() {
     return score;
+  }
+
+  public Text getLevel() {
+    return level;
   }
 
   /**

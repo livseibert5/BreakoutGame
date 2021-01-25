@@ -38,6 +38,7 @@ public class Main extends Application {
   private List<Brick> bricks;
   private List<Circle> livesList;
   private Text scoreLabel;
+  private Text levelLabel;
   private int removedBricks = 0;
   private int level = 1;
   private int lives = 3;
@@ -88,10 +89,12 @@ public class Main extends Application {
 
   public void handleWin() {
     level++;
+
     if (level > 3) {
       Screen win = new Screen(Type.WIN, WIDTH, HEIGHT, TITLE);
       myScene = win.getScene();
     } else {
+      levelLabel.setText("Level: " + String.valueOf(level));
       setLevel(level);
     }
   }
@@ -167,7 +170,7 @@ public class Main extends Application {
     brick.decrementLives();
     if (brick.getLives() <= 0) {
       score += 50;
-      scoreLabel.setText(String.valueOf(score));
+      scoreLabel.setText("Score: " + String.valueOf(score));
       brick.setWidth(0);
       brick.setHeight(0);
       removedBricks++;
@@ -288,6 +291,7 @@ public class Main extends Application {
     this.root = controller.getRoot();
     this.livesList = controller.getLives();
     this.scoreLabel = controller.getScore();
+    this.levelLabel = controller.getLevel();
     myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
     myScene.setOnKeyReleased(e -> handleKeyLift(e.getCode()));
   }
