@@ -28,6 +28,7 @@ public class GameController {
   private List<Brick> bricks;
   private Text score;
   private Text level;
+  private int levelNumber;
   private int width;
   private int height;
   private final List<Circle> lives = new ArrayList<>();
@@ -52,6 +53,7 @@ public class GameController {
    * @param background background color for the scene
    */
   public void setupGame(int level, int width, int height, Paint background) {
+    this.levelNumber = level;
     bricks = new ArrayList<>();
     root = new Group();
     this.width = width;
@@ -84,17 +86,14 @@ public class GameController {
   }
 
   public void setLevel() {
-    level = new Text(width - 150, 40, "Level: 1");
+    level = new Text(width - 150, 40, "Level: " + levelNumber);
     root.getChildren().add(level);
   }
 
   public void setLives() {
     for (int i = 1; i < 4; i++) {
-      Circle life = new Circle();
-      life.setRadius(20);
-      life.setCenterX(i * 30);
-      life.setCenterY(40);
-      life.setFill(new ImagePattern(new Image("file:resources/rose.png")));
+      Circle life = new Circle(i * 30, 40, 20,
+          new ImagePattern(new Image("file:resources/rose.png")));
       root.getChildren().add(life);
       lives.add(life);
     }

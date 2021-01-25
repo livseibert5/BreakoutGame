@@ -97,7 +97,6 @@ public class Main extends Application {
       Screen win = new Screen(Type.WIN, WIDTH, HEIGHT, TITLE);
       myScene = win.getScene();
     } else {
-      levelLabel.setText("Level: " + String.valueOf(level));
       setLevel(level);
     }
   }
