@@ -1,5 +1,7 @@
 package breakout;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -38,6 +40,7 @@ public class Main extends Application {
   private Group root;
   private List<Brick> bricks;
   private List<Circle> livesList;
+  private List<Ball> balls = new ArrayList<>();
   private Text scoreLabel;
   private Text levelLabel;
   private int removedBricks = 0;
@@ -87,6 +90,11 @@ public class Main extends Application {
     ball.setCenterX(ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
     ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
     paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
+    if (paddle.getX() + paddle.getWidth() / 2 >= WIDTH) {
+      paddle.setX(0);
+    } else if (paddle.getX() + paddle.getWidth() / 2 <= 0) {
+      paddle.setX(WIDTH - paddle.getWidth());
+    }
 
     if (bricks.size() == removedBricks) {
       handleWin();
@@ -100,7 +108,7 @@ public class Main extends Application {
    * Called when the ball drops below the paddle. Decrements the lives of the player and resets the
    * ball if the player has more lives.
    */
-  public void decrementLives() {
+  public void decrementLives(Ball ball) {
     lives--;
     if (lives > 0) {
       ball.setCenterX(WIDTH / 2);
@@ -126,6 +134,7 @@ public class Main extends Application {
       root.getChildren().removeAll();
       Screen win = new Screen(Type.WIN, WIDTH, HEIGHT, TITLE);
       myScene = win.getScene();
+      stage.setScene(myScene);
     } else {
       setLevel(level);
     }
@@ -166,7 +175,7 @@ public class Main extends Application {
       ball.invertYDirection();
     }
     if (ball.getCenterY() >= HEIGHT - ball.getRadius()) {
-      decrementLives();
+      decrementLives(ball);
     }
   }
 
@@ -219,9 +228,9 @@ public class Main extends Application {
   public void setPowerUp(PowerupBrick brick) {
     powerupStart = time;
     if (brick.getType() == Power.FAST) {
+      balls.stream().forEach(ball -> ball.setSpeed(160));
       ball.setSpeed(160);
     } else if (brick.getType() == Power.EXTRA) {
-
     } else if (brick.getType() == Power.LONGER) {
       paddle.expand();
     }
@@ -366,6 +375,7 @@ public class Main extends Application {
     this.livesList = controller.getLives();
     this.scoreLabel = controller.getScore();
     this.levelLabel = controller.getLevel();
+    balls.add(ball);
     myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
     myScene.setOnKeyReleased(e -> handleKeyLift(e.getCode()));
   }
