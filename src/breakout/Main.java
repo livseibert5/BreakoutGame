@@ -166,7 +166,7 @@ public class Main extends Application {
       ball.invertXDirection();
     }
     // Second Third.
-    if (ball.getCenterY() + ball.getRadius() >= paddle.getY() &&
+    else if (ball.getCenterY() + ball.getRadius() >= paddle.getY() &&
         ((ball.getCenterX() + ball.getRadius() >= paddle.getX() + (2 * paddle.getWidth()) / 3 &&
             ball.getCenterX() + ball.getRadius() <= paddle.getX() + paddle.getWidth()) ||
             (ball.getCenterX() - ball.getSpeed() >= paddle.getX() + (2 * paddle.getWidth()) / 3 &&
@@ -175,7 +175,7 @@ public class Main extends Application {
       ball.invertXDirection();
     }
     // Middle.
-    if (ball.getCenterY() + ball.getRadius() >= paddle.getY() &&
+    else if (ball.getCenterY() + ball.getRadius() >= paddle.getY() &&
         ((ball.getCenterX() + ball.getRadius() >= paddle.getX() + paddle.getWidth() / 3 &&
           ball.getCenterX() + ball.getRadius() <= paddle.getX() + (2 * paddle.getWidth()) / 3) ||
         (ball.getCenterX() - ball.getSpeed() >= paddle.getX() + paddle.getWidth() / 3 &&
