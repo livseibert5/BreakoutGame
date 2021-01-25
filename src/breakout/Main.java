@@ -102,6 +102,7 @@ public class Main extends Application {
   public void handleLoss() {
     Screen loss = new Screen(Type.LOSS, WIDTH, HEIGHT, TITLE);
     myScene = loss.getScene();
+    stage.setScene(myScene);
   }
 
   /**
