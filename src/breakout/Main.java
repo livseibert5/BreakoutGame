@@ -14,6 +14,9 @@ import javafx.util.Duration;
 import java.util.List;
 import javafx.scene.Group;
 
+/**
+ * Main driver of the game, handles all game behavior.
+ */
 public class Main extends Application {
 
   private static final int WIDTH = 700;
@@ -34,7 +37,8 @@ public class Main extends Application {
   private int lives = 3;
 
   /**
-   * Initialize what will be displayed and how it will be updated.
+   * Display instruction screen, then switch to first level and
+   * start running the step function.
    */
   @Override
   public void start(Stage stage) throws Exception {
@@ -58,7 +62,12 @@ public class Main extends Application {
     });
   }
 
-  // Change properties of shapes in small ways to animate them over time.
+  /**
+   * Change properties of shapes in small ways to animate them over time.
+   * Handles collisions between the ball and the paddle, the ball and the
+   * bricks, and the ball and the walls so that the ball bounces.
+   * @param elapsedTime time since beginning of game
+   */
   private void step(double elapsedTime) {
     ball.setCenterX(ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
     ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
@@ -72,12 +81,23 @@ public class Main extends Application {
     checkBrickCollision();
   }
 
+  /**
+   * Detects collisions between the ball and the paddle,
+   * inverts the y direction of the ball if detected.
+   */
   private void checkPaddleCollision() {
     if (ball.getBoundsInParent().intersects(paddle.getBoundsInParent())) {
       ball.invertYDirection();
     }
   }
 
+  /**
+   * Determines if the ball hits the left or right wall
+   * or the top or bottom wall. If the ball hits the top
+   * or bottom wall, the y direction is inverted. If the
+   * ball hits the left or right wall, the x direction is
+   * inverted.
+   */
   private void checkWallCollision() {
     if (ball.getCenterX() <= ball.getRadius() ||
         ball.getCenterX() >= WIDTH - ball.getRadius()) {
@@ -89,6 +109,14 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * Determines if the ball collides with a brick.
+   * If it hits the top or bottom of the brick, the y
+   * direction is inverted. If it hits the left or right
+   * of the brick, the x direction is inverted. Each
+   * time the brick is hit, the brick loses a life. If
+   * the brick's lives hit zero, it is removed from the game.
+   */
   private void checkBrickCollision() {
     for (Brick brick : bricks) {
       if (collidesWithTop(brick) || collidesWithBottom(brick)) {
@@ -107,6 +135,11 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * Detects collisions between ball and top of brick.
+   * @param brick Brick object to check collision with
+   * @return boolean true if ball collided with top of brick
+   */
   private boolean collidesWithTop(Brick brick) {
     return ball.getCenterY() + ball.getRadius() >= brick.getY() &&
         ball.getCenterY() + ball.getRadius() <= brick.getY() + (1 * brick.getHeight() / 4) &&
@@ -116,6 +149,11 @@ public class Main extends Application {
                 ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth()));
   }
 
+  /**
+   * Detects collisions between ball and bottom of brick.
+   * @param brick Brick object to detect collisions with
+   * @return boolean true if ball collided with bottom of brick
+   */
   private boolean collidesWithBottom(Brick brick) {
     return ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight() &&
         ball.getCenterY() - ball.getRadius() >= brick.getY() + (3 * brick.getHeight() / 4) &&
@@ -125,6 +163,11 @@ public class Main extends Application {
                 ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth()));
   }
 
+  /**
+   * Detects collisions between ball and right side of brick.
+   * @param brick Brick object to detect collisions with
+   * @return boolean true if ball collided with right side of brick
+   */
   private boolean collidesWithRight(Brick brick) {
     return ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth() &&
         ball.getCenterX() - ball.getRadius() >= brick.getX() + (3 * brick.getWidth() / 4) &&
@@ -134,6 +177,11 @@ public class Main extends Application {
                 ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight()));
   }
 
+  /**
+   * Detects collisions between ball and left side of brick.
+   * @param brick Brick object to detect collisions with
+   * @return boolean true if ball collided with left side of brick
+   */
   private boolean collidesWithLeft(Brick brick) {
     return ball.getCenterX() + ball.getRadius() >= brick.getX() &&
         ball.getCenterX() + ball.getRadius() <= brick.getX() + (3 * brick.getWidth() / 4) &&
@@ -143,13 +191,20 @@ public class Main extends Application {
                 ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight()));
   }
 
+  /**
+   * Determines behavior when a key is lifted.
+   * @param code key input
+   */
   private void handleKeyLift(KeyCode code) {
     if (code == KeyCode.RIGHT || code == KeyCode.LEFT) {
       paddle.stop();
     }
   }
 
-  // What to do each time a key is pressed.
+  /**
+   * Determines behavior when a key is pressed.
+   * @param code key input
+   */
   private void handleKeyInput(KeyCode code) {
     if (code == KeyCode.RIGHT) {
       if (paddle.getXDirection() != 1) {
@@ -170,6 +225,10 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * Creates a new scene for the level given.
+   * @param level level to be played next
+   */
   public void setLevel(int level) {
     controller.setupGame(level, WIDTH, HEIGHT, BACKGROUND);
     myScene = controller.getScene();
@@ -177,6 +236,11 @@ public class Main extends Application {
     stage.setScene(myScene);
   }
 
+  /**
+   * Gets the paddle, ball, bricks, and root from
+   * GameController and makes them class variables in
+   * Main so that they can be easily used and updated.
+   */
   public void retrieveGamePieces() {
     this.paddle = controller.getPaddle();
     this.ball = controller.getBall();
