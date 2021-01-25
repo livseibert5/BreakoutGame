@@ -156,7 +156,11 @@ public class Main extends Application {
    * detected.
    */
   private void checkPaddleCollision() {
-    if (ball.getBoundsInParent().intersects(paddle.getBoundsInParent())) {
+    if (ball.getCenterY() + ball.getRadius() >= paddle.getY() &&
+        ((ball.getCenterX() + ball.getRadius() >= paddle.getX() &&
+          ball.getCenterX() + ball.getRadius() <= paddle.getX() + paddle.getWidth()) ||
+        (ball.getCenterX() - ball.getSpeed() >= paddle.getX() &&
+            ball.getCenterX() - ball.getSpeed() <= paddle.getX() + paddle.getWidth()))) {
       ball.invertYDirection();
     }
   }
