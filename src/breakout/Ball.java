@@ -22,12 +22,28 @@ public class Ball extends Circle {
     this.setFill(imagePattern);
   }
 
-  public void setXDirection(int newDirection) { xDirection = newDirection; }
-  public void invertXDirection() { xDirection *= -1; }
-  public void invertYDirection() { yDirection *= -1; }
+  public void setXDirection(int newDirection) {
+    xDirection = newDirection;
+  }
 
-  public int getSpeed() { return speed; }
-  public int getXDirection() { return xDirection; }
-  public int getYDirection() { return yDirection; }
+  public void invertXDirection() {
+    xDirection *= -1;
+  }
+
+  public void invertYDirection() {
+    yDirection *= -1;
+  }
+
+  public int getSpeed() {
+    return speed;
+  }
+
+  public int getXDirection() {
+    return xDirection;
+  }
+
+  public int getYDirection() {
+    return yDirection;
+  }
 
 }

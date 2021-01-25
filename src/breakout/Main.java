@@ -23,7 +23,7 @@ public class Main extends Application {
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
   private static final Paint BACKGROUND = Color.WHITE;
 
-  private boolean gameStarted = false;
+  private final boolean gameStarted = false;
 
   private GameController controller;
   private Instructions instructions;
@@ -33,7 +33,7 @@ public class Main extends Application {
   private Ball ball;
   private Group root;
   private List<Brick> bricks;
-  private int level = 1;
+  private final int level = 1;
   private int lives = 3;
 
   /**
@@ -66,7 +66,7 @@ public class Main extends Application {
     ball.setCenterX(ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
     ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
     paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
-    
+
     if (ball.getCenterX() + ball.getRadius() >= HEIGHT) {
       lives--;
     }
@@ -111,51 +111,39 @@ public class Main extends Application {
   }
 
   private boolean collidesWithTop(Brick brick) {
-    if (ball.getCenterY() + ball.getRadius() >= brick.getY() &&
+    return ball.getCenterY() + ball.getRadius() >= brick.getY() &&
         ball.getCenterY() + ball.getRadius() <= brick.getY() + (1 * brick.getHeight() / 4) &&
         ((ball.getCenterX() + ball.getRadius() >= brick.getX() &&
             ball.getCenterX() + ball.getRadius() <= brick.getX() + brick.getWidth()) ||
             (ball.getCenterX() - ball.getRadius() >= brick.getX() &&
-                ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth()))) {
-      return true;
-    }
-    return false;
+                ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth()));
   }
 
   private boolean collidesWithBottom(Brick brick) {
-    if (ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight() &&
+    return ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight() &&
         ball.getCenterY() - ball.getRadius() >= brick.getY() + (3 * brick.getHeight() / 4) &&
         ((ball.getCenterX() + ball.getRadius() >= brick.getX() &&
             ball.getCenterX() + ball.getRadius() <= brick.getX() + brick.getWidth()) ||
             (ball.getCenterX() - ball.getRadius() >= brick.getX() &&
-                ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth()))) {
-      return true;
-    }
-    return false;
+                ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth()));
   }
 
   private boolean collidesWithRight(Brick brick) {
-    if (ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth() &&
+    return ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth() &&
         ball.getCenterX() - ball.getRadius() >= brick.getX() + (3 * brick.getWidth() / 4) &&
         ((ball.getCenterY() + ball.getRadius() >= brick.getY() &&
             ball.getCenterY() + ball.getRadius() <= brick.getY() + brick.getHeight()) ||
             (ball.getCenterY() - ball.getRadius() >= brick.getY() &&
-                ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight()))) {
-      return true;
-    }
-    return false;
+                ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight()));
   }
 
   private boolean collidesWithLeft(Brick brick) {
-    if (ball.getCenterX() + ball.getRadius() >= brick.getX() &&
+    return ball.getCenterX() + ball.getRadius() >= brick.getX() &&
         ball.getCenterX() + ball.getRadius() <= brick.getX() + (3 * brick.getWidth() / 4) &&
         ((ball.getCenterY() + ball.getRadius() >= brick.getY() &&
             ball.getCenterY() + ball.getRadius() <= brick.getY() + brick.getHeight()) ||
             (ball.getCenterY() - ball.getRadius() >= brick.getY() &&
-                ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight()))) {
-      return true;
-    }
-    return false;
+                ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight()));
   }
 
   private void handleKeyLift(KeyCode code) {

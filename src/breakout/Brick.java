@@ -15,26 +15,36 @@ public class Brick extends Rectangle {
     selectImage();
   }
 
-  public Brick() { this.lives = 1; }
+  public Brick() {
+    this.lives = 1;
+  }
 
   /**
-   * Called when GameController registers a collision between
-   * a brick and the ball. If a multi-hit brick drops to one life,
-   * it's image changes to a single-hit brick. If the brick's lives
-   * drop to zero, the brick disappears.
+   * Called when GameController registers a collision between a brick and the ball. If a multi-hit
+   * brick drops to one life, it's image changes to a single-hit brick. If the brick's lives drop to
+   * zero, the brick disappears.
    */
   public void decrementLives() {
     lives--;
-    if (lives > 0) selectImage();
+    if (lives > 0) {
+      selectImage();
+    }
   }
 
-  public void selectImage () {
-    System.out.println("here");
+  public void selectImage() {
     String imageName = "file:resources/pink.png";
-    if (lives == 2) imageName = "file:resources/red2.png";
-    if (lives == 3) imageName = "file:resources/red3.png";
-    if (lives == 4) imageName = "file:resources/red4.png";
-    if (lives == 5) imageName = "file:resources/red5.png";
+    if (lives == 2) {
+      imageName = "file:resources/red2.png";
+    }
+    if (lives == 3) {
+      imageName = "file:resources/red3.png";
+    }
+    if (lives == 4) {
+      imageName = "file:resources/red4.png";
+    }
+    if (lives == 5) {
+      imageName = "file:resources/red5.png";
+    }
     this.setFill(new ImagePattern(new Image(imageName)));
   }
 

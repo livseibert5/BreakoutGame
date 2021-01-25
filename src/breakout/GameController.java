@@ -97,13 +97,21 @@ public class GameController {
     root.getChildren().add(paddle);
   }
 
-  public Paddle getPaddle() { return paddle; }
+  public Paddle getPaddle() {
+    return paddle;
+  }
 
-  public Ball getBall() { return ball; }
+  public Ball getBall() {
+    return ball;
+  }
 
-  public List<Brick> getBricks() { return bricks; }
+  public List<Brick> getBricks() {
+    return bricks;
+  }
 
-  public Group getRoot() { return root; }
+  public Group getRoot() {
+    return root;
+  }
 
   public Scene getScene() {
     return myScene;

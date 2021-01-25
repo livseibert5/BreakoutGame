@@ -27,10 +27,14 @@ public class Paddle extends Rectangle {
   public void moveRight() {
     xDirection = 1;
   }
+
   public void moveLeft() {
     xDirection = -1;
   }
-  public void stop() { xDirection = 0; }
+
+  public void stop() {
+    xDirection = 0;
+  }
 
   public int getXDirection() {
     return xDirection;
