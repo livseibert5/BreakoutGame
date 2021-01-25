@@ -31,7 +31,8 @@ public class Paddle extends Rectangle {
 
   // Increases length of paddle.
   public void expand() {
-    // TODO: Implement function.
+    double width = this.getWidth() * 2;
+    this.setWidth(width);
   }
 
   /**

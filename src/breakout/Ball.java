@@ -28,6 +28,10 @@ public class Ball extends Circle {
     this.setFill(new ImagePattern(new Image("file:resources/ball.png")));
   }
 
+  public void setSpeed(int speed) {
+    this.speed = speed;
+  }
+
   /**
    * Inverts the X direction of the ball, called
    * when the ball encounters a vertical barrier.

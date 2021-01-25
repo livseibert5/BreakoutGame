@@ -132,22 +132,26 @@ public class GameController {
   private void assembleBricks() {
     for (int row = 0; row < brickLayout.length; row++) {
       for (int col = 0; col < brickLayout[row].length; col++) {
-        Brick brick = new Brick();
         if (brickLayout[row][col] == 1) {
-          brick = new Brick(1, width, height);
+          Brick brick = new Brick(1, width, height);
+          placeBrick(row, col, brick);
         } else if (brickLayout[row][col] == 2) {
-          brick = new Brick((int) Math.random() * 5 + 2, width, height);
+          Brick brick = new Brick((int) Math.random() * 5 + 2, width, height);
+          placeBrick(row, col, brick);
         } else if (brickLayout[row][col] == 3) {
-          brick = new PowerupBrick(1, width, height);
-        }
-        if (brickLayout[row][col] != 0) {
-          brick.setX(col * brick.getWidth());
-          brick.setY(row * brick.getHeight() + 100);
-          root.getChildren().add(brick);
-          bricks.add(brick);
+          PowerupBrick brick = new PowerupBrick(1, width, height);
+          placeBrick(row, col, brick);
         }
       }
+    }
+  }
 
+  private void placeBrick(int row, int col, Brick brick) {
+    if (brickLayout[row][col] != 0) {
+      brick.setX(col * brick.getWidth());
+      brick.setY(row * brick.getHeight() + 100);
+      root.getChildren().add(brick);
+      bricks.add(brick);
     }
   }
 

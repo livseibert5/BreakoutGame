@@ -45,6 +45,8 @@ public class Main extends Application {
   private int level = 1;
   private int lives = 3;
   private int score = 0;
+  private double time;
+  private double powerupStart = 0;
 
   /**
    * Display instruction screen, then switch to first level and
@@ -79,6 +81,8 @@ public class Main extends Application {
    * @param elapsedTime time since beginning of game
    */
   private void step(double elapsedTime) {
+    time = elapsedTime;
+    if (elapsedTime - powerupStart >= 5) removePowerUps();
     ball.setCenterX(ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
     ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
     paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
@@ -91,7 +95,6 @@ public class Main extends Application {
 
   public void handleWin() {
     level++;
-
     if (level > 3) {
       root.getChildren().remove(ball);
       Screen win = new Screen(Type.WIN, WIDTH, HEIGHT, TITLE);
@@ -180,7 +183,26 @@ public class Main extends Application {
       bricks.remove(brick);
       removedBricks++;
       root.getChildren().remove(brick);
+      if (brick instanceof PowerupBrick) {
+        setPowerUp((PowerupBrick) brick);
+      }
     }
+  }
+
+  public void setPowerUp(PowerupBrick brick) {
+    powerupStart = time;
+    if (brick.getType() == Power.FAST) {
+      ball.setSpeed(160);
+    } else if (brick.getType() == Power.EXTRA) {
+
+    } else if (brick.getType() == Power.LONGER) {
+      paddle.expand();
+    }
+  }
+
+  public void removePowerUps() {
+    if (ball.getSpeed() == 160) ball.setSpeed(120);
+    else if (paddle.getWidth() > WIDTH / 6) paddle.setWidth(WIDTH / 6);
   }
 
   /**
