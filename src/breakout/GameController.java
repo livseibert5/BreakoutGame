@@ -2,8 +2,8 @@ package breakout;
 
 import java.io.FileNotFoundException;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.paint.Paint;
+import javafx.scene.Scene;
 import java.io.File;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -15,9 +15,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Text;
 
 /**
- * This class creates the scenes for the game. Depending on
- * the level input, it sets up the brick layout and also creates
- * the ball and paddle.
+ * This class creates the scenes for the game. Depending on the level input, it sets up the brick
+ * layout and also creates the ball and paddle.
  */
 public class GameController {
 
@@ -35,21 +34,20 @@ public class GameController {
   private final int[][] brickLayout;
 
   /**
-   * Default constructor for a GameController object,
-   * instantiates the brickLayout array to keep track of
-   * the placement of the bricks on the screen.
+   * Default constructor for a GameController object, instantiates the brickLayout array to keep
+   * track of the placement of the bricks on the screen.
    */
   public GameController() {
     brickLayout = new int[12][16];
   }
 
   /**
-   * This function takes the current level, width and height
-   * of the screen, and the desired background for the level
-   * and creates the corresponding scene for the game from it.
-   * @param level current level of gameplay
-   * @param width width of the game screen
-   * @param height height of the game screen
+   * This function takes the current level, width and height of the screen, and the desired
+   * background for the level and creates the corresponding scene for the game from it.
+   *
+   * @param level      current level of gameplay
+   * @param width      width of the game screen
+   * @param height     height of the game screen
    * @param background background color for the scene
    */
   public void setupGame(int level, int width, int height, Paint background) {
@@ -74,34 +72,9 @@ public class GameController {
     myScene = new Scene(root, width, height, background);
   }
 
-  public void setScore() {
-    score = new Text(width - 100, 40, "Score: 0");
-    root.getChildren().add(score);
-    Rectangle pageBreak = new Rectangle();
-    pageBreak.setWidth(width);
-    pageBreak.setHeight(3);
-    pageBreak.setX(0);
-    pageBreak.setY(65);
-    root.getChildren().add(pageBreak);
-  }
-
-  public void setLevel() {
-    level = new Text(width - 150, 40, "Level: " + levelNumber);
-    root.getChildren().add(level);
-  }
-
-  public void setLives() {
-    for (int i = 1; i < 4; i++) {
-      Circle life = new Circle(i * 30, 40, 20,
-          new ImagePattern(new Image("file:resources/rose.png")));
-      root.getChildren().add(life);
-      lives.add(life);
-    }
-  }
-
   /**
-   * Takes in a .txt file and populates the brickLayout
-   * array to depict the layout for the level.
+   * Takes in a .txt file and populates the brickLayout array to depict the layout for the level.
+   *
    * @param filename .txt file that holds the level layout
    */
   private void readFile(String filename) {
@@ -123,29 +96,34 @@ public class GameController {
   }
 
   /**
-   * Iterates through the brickLayout array and places
-   * bricks in the scene at the proper coordinates depending
-   * on their location in the array. 1s are created as
-   * single-hit bricks, 2s are created as multi-hit bricks,
-   * and 3s are created as power-up bricks.
+   * Iterates through the brickLayout array and places bricks in the scene at the proper coordinates
+   * depending on their location in the array. 1s are created as single-hit bricks, 2s are created
+   * as multi-hit bricks, and 3s are created as power-up bricks.
    */
   private void assembleBricks() {
     for (int row = 0; row < brickLayout.length; row++) {
       for (int col = 0; col < brickLayout[row].length; col++) {
+        Brick brick = new Brick();
         if (brickLayout[row][col] == 1) {
-          Brick brick = new Brick(1, width, height);
-          placeBrick(row, col, brick);
+          brick = new Brick(1, width, height);
         } else if (brickLayout[row][col] == 2) {
-          Brick brick = new Brick((int) Math.random() * 5 + 2, width, height);
-          placeBrick(row, col, brick);
+          brick = new Brick((int) Math.random() * 5 + 2, width, height);
         } else if (brickLayout[row][col] == 3) {
-          PowerupBrick brick = new PowerupBrick(1, width, height);
-          placeBrick(row, col, brick);
+          brick = new PowerupBrick(width, height);
         }
+        placeBrick(row, col, brick);
       }
     }
   }
 
+  /**
+   * Determines proper coordinates for each brick depending on their row and column and places them
+   * in the scene.
+   *
+   * @param row   brick's row in brickLayout
+   * @param col   brick's column in brickLayout
+   * @param brick Brick object being placed
+   */
   private void placeBrick(int row, int col, Brick brick) {
     if (brickLayout[row][col] != 0) {
       brick.setX(col * brick.getWidth());
@@ -156,8 +134,7 @@ public class GameController {
   }
 
   /**
-   * Creates and sets coordinates for ball object
-   * for the game.
+   * Creates and sets coordinates for ball object for the game and adds the ball to the scene.
    */
   public void createBall() {
     ball = new Ball();
@@ -168,8 +145,7 @@ public class GameController {
   }
 
   /**
-   * Creates and sets coordinates dor the paddle
-   * for the game.
+   * Creates and sets coordinates for the paddle for the game and adds the paddle to the scene.
    */
   public void createPaddle() {
     paddle = new Paddle(width, height);
@@ -179,7 +155,38 @@ public class GameController {
   }
 
   /**
+   * Creates Circle objects to hold images that represent the number of lives the player has left.
+   */
+  public void setLives() {
+    for (int i = 1; i < 4; i++) {
+      Circle life = new Circle(i * 30, 40, 20,
+          new ImagePattern(new Image("file:resources/rose.png")));
+      root.getChildren().add(life);
+      lives.add(life);
+    }
+  }
+
+  /**
+   * Creates a Text object to hold the current score of the game.
+   */
+  public void setScore() {
+    score = new Text(width - 100, 40, "Score: 0");
+    root.getChildren().add(score);
+    Rectangle pageBreak = new Rectangle(0, 65, width, 3);
+    root.getChildren().add(pageBreak);
+  }
+
+  /**
+   * Creates a Text object to hold the current level of the game.
+   */
+  public void setLevel() {
+    level = new Text(width - 150, 40, "Level: " + levelNumber);
+    root.getChildren().add(level);
+  }
+
+  /**
    * Allows Main to access the paddle.
+   *
    * @return paddle paddle object used in gameplay
    */
   public Paddle getPaddle() {
@@ -188,6 +195,7 @@ public class GameController {
 
   /**
    * Allows Main to access the ball.
+   *
    * @return ball ball object used in gameplay
    */
   public Ball getBall() {
@@ -195,8 +203,9 @@ public class GameController {
   }
 
   /**
-   * Allows Main to access a list of all the bricks
-   * used in the scene so that collisions can be detected.
+   * Allows Main to access a list of all the bricks used in the scene so that collisions can be
+   * detected.
+   *
    * @return bricks list of Brick objects in scene
    */
   public List<Brick> getBricks() {
@@ -204,30 +213,45 @@ public class GameController {
   }
 
   /**
-   * Allows Main to access the root of the scene
-   * so that Brick objects can be deleted when they run
+   * Allows Main to access the root of the scene so that Brick objects can be deleted when they run
    * out of lives.
+   *
    * @return root Group object for the scene
    */
   public Group getRoot() {
     return root;
   }
 
+  /**
+   * Allows Main to access the list of lives.
+   *
+   * @return lives Circle objects that represent lives
+   */
   public List<Circle> getLives() {
     return lives;
   }
 
+  /**
+   * Allows main to access the score text box.
+   *
+   * @return score Text object that holds score
+   */
   public Text getScore() {
     return score;
   }
 
+  /**
+   * Allows main to access the level text box.
+   *
+   * @return level Text object that holds current level
+   */
   public Text getLevel() {
     return level;
   }
 
   /**
-   * Allows Main to access the scene itself so that
-   * it can be displayed and used in gameplay.
+   * Allows Main to access the scene itself so that it can be displayed and used in gameplay.
+   *
    * @return myScene the scene that GameController created
    */
   public Scene getScene() {

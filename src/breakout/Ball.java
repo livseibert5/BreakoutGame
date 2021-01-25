@@ -5,8 +5,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 /**
- * This class creates the balls objects needed
- * for game play.
+ * This class creates the balls objects needed for game play.
  */
 public class Ball extends Circle {
 
@@ -15,9 +14,8 @@ public class Ball extends Circle {
   private int yDirection;
 
   /**
-   * Constructor for Ball object, sets the radius
-   * and speed of the ball, as well as it's initial
-   * x and y direction. Also sets the image for the ball.
+   * Constructor for Ball object, sets the radius and speed of the ball, as well as it's initial x
+   * and y direction. Also sets the image for the ball.
    */
   public Ball() {
     this.setRadius(15);
@@ -33,16 +31,14 @@ public class Ball extends Circle {
   }
 
   /**
-   * Inverts the X direction of the ball, called
-   * when the ball encounters a vertical barrier.
+   * Inverts the X direction of the ball, called when the ball encounters a vertical barrier.
    */
   public void invertXDirection() {
     xDirection *= -1;
   }
 
   /**
-   * Inverts the Y direction of the ball, called
-   * when the ball encounters a horizontal barrier.
+   * Inverts the Y direction of the ball, called when the ball encounters a horizontal barrier.
    */
   public void invertYDirection() {
     yDirection *= -1;
@@ -50,6 +46,7 @@ public class Ball extends Circle {
 
   /**
    * Accesses the current speed of the ball.
+   *
    * @return speed velocity of ball
    */
   public int getSpeed() {
@@ -58,6 +55,7 @@ public class Ball extends Circle {
 
   /**
    * Accesses the x direction of the ball.
+   *
    * @return xDirection horizontal direction of the ball
    */
   public int getXDirection() {
@@ -66,6 +64,7 @@ public class Ball extends Circle {
 
   /**
    * Accesses the y direction of the ball.
+   *
    * @return yDirection vertical direction of the ball
    */
   public int getYDirection() {

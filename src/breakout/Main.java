@@ -1,23 +1,22 @@
 package breakout;
 
-import java.util.ArrayList;
+import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
+import javafx.scene.Group;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
-import javafx.stage.Stage;
-import javafx.util.Duration;
-import java.util.List;
-import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * Main driver of the game, handles all game behavior.
@@ -49,8 +48,7 @@ public class Main extends Application {
   private double powerupStart = 0;
 
   /**
-   * Display instruction screen, then switch to first level and
-   * start running the step function.
+   * Display instruction screen, then switch to first level and start running the step function.
    */
   @Override
   public void start(Stage stage) throws Exception {
@@ -75,28 +73,57 @@ public class Main extends Application {
   }
 
   /**
-   * Change properties of shapes in small ways to animate them over time.
-   * Handles collisions between the ball and the paddle, the ball and the
-   * bricks, and the ball and the walls so that the ball bounces.
+   * Change properties of shapes in small ways to animate them over time. Handles collisions between
+   * the ball and the paddle, the ball and the bricks, and the ball and the walls so that the ball
+   * bounces.
+   *
    * @param elapsedTime time since beginning of game
    */
   private void step(double elapsedTime) {
     time = elapsedTime;
-    if (elapsedTime - powerupStart >= 5) removePowerUps();
+    if (elapsedTime - powerupStart >= 5) {
+      removePowerUps();
+    }
     ball.setCenterX(ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
     ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
     paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
 
-    if (bricks.size() == removedBricks) handleWin();
+    if (bricks.size() == removedBricks) {
+      handleWin();
+    }
     checkPaddleCollision();
     checkWallCollision();
     checkBrickCollision();
   }
 
+  /**
+   * Called when the ball drops below the paddle. Decrements the lives of the player and resets the
+   * ball if the player has more lives.
+   */
+  public void decrementLives() {
+    lives--;
+    if (lives > 0) {
+      ball.setCenterX(WIDTH / 2);
+      ball.setCenterY((HEIGHT - paddle.getHeight() - 50)
+          - paddle.getHeight() / 2 - ball.getRadius() / 2);
+    } else {
+      handleLoss();
+    }
+    if (!livesList.isEmpty()) {
+      root.getChildren().remove(livesList.get(livesList.size() - 1));
+      livesList.remove(livesList.size() - 1);
+    }
+  }
+
+  /**
+   * Called when the player destroys all the blocks for the level. Increments the level, if the
+   * level is greater than 3 the user has won the entire game and the win screen is shown.
+   * Otherwise, the next level is set up.
+   */
   public void handleWin() {
     level++;
     if (level > 3) {
-      root.getChildren().remove(ball);
+      root.getChildren().removeAll();
       Screen win = new Screen(Type.WIN, WIDTH, HEIGHT, TITLE);
       myScene = win.getScene();
     } else {
@@ -104,16 +131,20 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * Called when the player's number of lives hits zero. Removes all the components from the screen
+   * and displays the loss message.
+   */
   public void handleLoss() {
-    root.getChildren().remove(ball);
+    root.getChildren().removeAll();
     Screen loss = new Screen(Type.LOSS, WIDTH, HEIGHT, TITLE);
     myScene = loss.getScene();
     stage.setScene(myScene);
   }
 
   /**
-   * Detects collisions between the ball and the paddle,
-   * inverts the y direction of the ball if detected.
+   * Detects collisions between the ball and the paddle, inverts the y direction of the ball if
+   * detected.
    */
   private void checkPaddleCollision() {
     if (ball.getBoundsInParent().intersects(paddle.getBoundsInParent())) {
@@ -122,11 +153,9 @@ public class Main extends Application {
   }
 
   /**
-   * Determines if the ball hits the left or right wall
-   * or the top or bottom wall. If the ball hits the top
-   * or wall, the y direction is inverted. If the
-   * ball hits the left or right wall, the x direction is
-   * inverted. If the ball hits the bottom wall, a life is lost.
+   * Determines if the ball hits the left or right wall or the top or bottom wall. If the ball hits
+   * the top or wall, the y direction is inverted. If the ball hits the left or right wall, the x
+   * direction is inverted. If the ball hits the bottom wall, a life is lost.
    */
   private void checkWallCollision() {
     if (ball.getCenterX() <= ball.getRadius() ||
@@ -137,29 +166,15 @@ public class Main extends Application {
       ball.invertYDirection();
     }
     if (ball.getCenterY() >= HEIGHT - ball.getRadius()) {
-      lives--;
-      if (lives > 0) {
-        ball.setCenterX(WIDTH / 2);
-        ball.setCenterY((HEIGHT - paddle.getHeight() - 50)
-            - paddle.getHeight() / 2 - ball.getRadius() / 2);
-      } else {
-        handleLoss();
-      }
-
-      if (!livesList.isEmpty()) {
-        root.getChildren().remove(livesList.get(livesList.size() - 1));
-        livesList.remove(livesList.size() - 1);
-      }
+      decrementLives();
     }
   }
 
   /**
-   * Determines if the ball collides with a brick.
-   * If it hits the top or bottom of the brick, the y
-   * direction is inverted. If it hits the left or right
-   * of the brick, the x direction is inverted. Each
-   * time the brick is hit, the brick loses a life. If
-   * the brick's lives hit zero, it is removed from the game.
+   * Determines if the ball collides with a brick. If it hits the top or bottom of the brick, the y
+   * direction is inverted. If it hits the left or right of the brick, the x direction is inverted.
+   * Each time the brick is hit, the brick loses a life. If the brick's lives hit zero, it is
+   * removed from the game.
    */
   private void checkBrickCollision() {
     for (Brick brick : bricks) {
@@ -175,6 +190,13 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * If the ball hit the brick, this function decrements the lives of the brick. If the brick is
+   * dead, it increments the score of the game and removes the brick from the scene. If the brick is
+   * a power-up brick, it applies the power-up.
+   *
+   * @param brick Brick that is collided with
+   */
   public void handleBrickCollision(Brick brick) {
     brick.decrementLives();
     if (brick.getLives() <= 0) {
@@ -189,6 +211,11 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * Called when a power-up brick is broken. Applies the power-up to the game.
+   *
+   * @param brick brick that contains the powerup
+   */
   public void setPowerUp(PowerupBrick brick) {
     powerupStart = time;
     if (brick.getType() == Power.FAST) {
@@ -200,13 +227,20 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * Reverts the game back to normal when the power-up is complete.
+   */
   public void removePowerUps() {
-    if (ball.getSpeed() == 160) ball.setSpeed(120);
-    else if (paddle.getWidth() > WIDTH / 6) paddle.setWidth(WIDTH / 6);
+    if (ball.getSpeed() == 160) {
+      ball.setSpeed(120);
+    } else if (paddle.getWidth() > WIDTH / 6) {
+      paddle.setWidth(WIDTH / 6);
+    }
   }
 
   /**
    * Detects collisions between ball and top of brick.
+   *
    * @param brick Brick object to check collision with
    * @return boolean true if ball collided with top of brick
    */
@@ -221,6 +255,7 @@ public class Main extends Application {
 
   /**
    * Detects collisions between ball and bottom of brick.
+   *
    * @param brick Brick object to detect collisions with
    * @return boolean true if ball collided with bottom of brick
    */
@@ -235,6 +270,7 @@ public class Main extends Application {
 
   /**
    * Detects collisions between ball and right side of brick.
+   *
    * @param brick Brick object to detect collisions with
    * @return boolean true if ball collided with right side of brick
    */
@@ -249,6 +285,7 @@ public class Main extends Application {
 
   /**
    * Detects collisions between ball and left side of brick.
+   *
    * @param brick Brick object to detect collisions with
    * @return boolean true if ball collided with left side of brick
    */
@@ -263,6 +300,7 @@ public class Main extends Application {
 
   /**
    * Determines behavior when a key is lifted.
+   *
    * @param code key input
    */
   private void handleKeyLift(KeyCode code) {
@@ -273,6 +311,7 @@ public class Main extends Application {
 
   /**
    * Determines behavior when a key is pressed.
+   *
    * @param code key input
    */
   private void handleKeyInput(KeyCode code) {
@@ -305,6 +344,7 @@ public class Main extends Application {
 
   /**
    * Creates a new scene for the level given.
+   *
    * @param level level to be played next
    */
   public void setLevel(int level) {
@@ -315,8 +355,7 @@ public class Main extends Application {
   }
 
   /**
-   * Gets the paddle, ball, bricks, and root from
-   * GameController and makes them class variables in
+   * Gets the paddle, ball, bricks, and root from GameController and makes them class variables in
    * Main so that they can be easily used and updated.
    */
   public void retrieveGamePieces() {

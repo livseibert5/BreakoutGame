@@ -17,24 +17,24 @@ public class Screen {
 
   private static final Paint BACKGROUND = Color.PINK;
 
-  private Scene myScene;
-  private String directionText = "Welcome to Valentine's Breakout!\n"
+  private final Scene myScene;
+  private final String directionText = "Welcome to Valentine's Breakout!\n"
       + "Your goal is to clear all the blocks from each level.\n"
       + "You have three lives to complete this goal, be sure to collect power-ups as well.\n"
       + "Be sure to watch out for baby cupid, good luck!";
-  private String winText = "Congratulations, you won!";
-  private String lossText = "Sorry, you lost. Better luck next time!";
-  private Group root;
-  private int width;
-  private int height;
+  private final String winText = "Congratulations, you won!";
+  private final String lossText = "Sorry, you lost. Better luck next time!";
+  private final Group root;
+  private final int width;
+  private final int height;
 
   /**
-   * Constructor for an Instructions object. Takes the
-   * width and height of the game screen, as well as the title.
-   * Creates a scene to display the title and instructions.
-   * @param width width of the game screen
+   * Constructor for an Instructions object. Takes the width and height of the game screen, as well
+   * as the title. Creates a scene to display the title and instructions.
+   *
+   * @param width  width of the game screen
    * @param height height of the game screen
-   * @param title title of the game
+   * @param title  title of the game
    */
   public Screen(Type type, int width, int height, String title) {
     root = new Group();
@@ -51,8 +51,9 @@ public class Screen {
   }
 
   /**
-   * Creates the text for the screen, determines the location
-   * of the text based on the width and height of the screen.
+   * Creates the text for the screen, determines the location of the text based on the width and
+   * height of the screen.
+   *
    * @param title title of the game
    */
   public void createInstructionText(String title) {
@@ -70,19 +71,26 @@ public class Screen {
     root.getChildren().add(play);
   }
 
+  /**
+   * Creates the text for the win screen and adds it to the scene.
+   */
   public void createWinText() {
     Text win = new Text(width / 3, height / 4, winText);
     root.getChildren().add(win);
   }
 
+  /**
+   * Creates the text for the loss screen and adds it to the screen.
+   */
   public void createLossText() {
     Text loss = new Text(width / 3, height / 4, lossText);
     root.getChildren().add(loss);
   }
 
   /**
-   * Accesses the instructions scene.
-   * @return myScene instructions scene created
+   * Accesses the scene created.
+   *
+   * @return myScene scene created
    */
   public Scene getScene() {
     return myScene;
