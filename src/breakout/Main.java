@@ -23,10 +23,7 @@ public class Main extends Application {
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
   private static final Paint BACKGROUND = Color.WHITE;
 
-  private final boolean gameStarted = false;
-
   private GameController controller;
-  private Instructions instructions;
   private Scene myScene;
   private Paddle paddle;
   private Stage stage;
@@ -42,7 +39,7 @@ public class Main extends Application {
   @Override
   public void start(Stage stage) throws Exception {
     controller = new GameController();
-    instructions = new Instructions(WIDTH, HEIGHT, TITLE);
+    Instructions instructions = new Instructions(WIDTH, HEIGHT, TITLE);
     myScene = instructions.getScene();
     this.stage = stage;
     stage.setScene(myScene);

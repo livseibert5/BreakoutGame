@@ -8,6 +8,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+/**
+ * Creates the instructions scene for the game.
+ */
 public class Instructions {
 
   private static final Paint BACKGROUND = Color.PINK;
@@ -21,6 +24,14 @@ public class Instructions {
   private Text directions;
   private Text play;
 
+  /**
+   * Constructor for an Instructions object. Takes the
+   * width and height of the game screen, as well as the title.
+   * Creates a scene to display the title and instructions.
+   * @param width width of the game screen
+   * @param height height of the game screen
+   * @param title title of the game
+   */
   public Instructions(int width, int height, String title) {
     Group root = new Group();
     createText(width, height, title);
@@ -30,6 +41,13 @@ public class Instructions {
     myScene = new Scene(root, width, height, BACKGROUND);
   }
 
+  /**
+   * Creates the text for the screen, determines the location
+   * of the text based on the width and height of the screen.
+   * @param width width of the game screen
+   * @param height height of the game screen
+   * @param title title of the game
+   */
   public void createText(int width, int height, String title) {
     titleText = new Text(width / 3, height / 4, title);
     directions = new Text(5, height / 3, directionText);
@@ -42,6 +60,10 @@ public class Instructions {
     play.setTextAlignment(TextAlignment.CENTER);
   }
 
+  /**
+   * Accesses the instructions scene.
+   * @return myScene instructions scene created
+   */
   public Scene getScene() {
     return myScene;
   }
