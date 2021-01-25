@@ -156,11 +156,30 @@ public class Main extends Application {
    * detected.
    */
   private void checkPaddleCollision() {
+    // First Third.
     if (ball.getCenterY() + ball.getRadius() >= paddle.getY() &&
         ((ball.getCenterX() + ball.getRadius() >= paddle.getX() &&
-          ball.getCenterX() + ball.getRadius() <= paddle.getX() + paddle.getWidth()) ||
-        (ball.getCenterX() - ball.getSpeed() >= paddle.getX() &&
-            ball.getCenterX() - ball.getSpeed() <= paddle.getX() + paddle.getWidth()))) {
+            ball.getCenterX() + ball.getRadius() <= paddle.getX() + paddle.getWidth() / 3) ||
+            (ball.getCenterX() - ball.getSpeed() >= paddle.getX() &&
+                ball.getCenterX() - ball.getSpeed() <= paddle.getX() + paddle.getWidth() / 3))) {
+      ball.invertYDirection();
+      ball.invertXDirection();
+    }
+    // Second Third.
+    if (ball.getCenterY() + ball.getRadius() >= paddle.getY() &&
+        ((ball.getCenterX() + ball.getRadius() >= paddle.getX() + (2 * paddle.getWidth()) / 3 &&
+            ball.getCenterX() + ball.getRadius() <= paddle.getX() + paddle.getWidth()) ||
+            (ball.getCenterX() - ball.getSpeed() >= paddle.getX() + (2 * paddle.getWidth()) / 3 &&
+                ball.getCenterX() - ball.getSpeed() <= paddle.getX() + paddle.getWidth()))) {
+      ball.invertYDirection();
+      ball.invertXDirection();
+    }
+    // Middle.
+    if (ball.getCenterY() + ball.getRadius() >= paddle.getY() &&
+        ((ball.getCenterX() + ball.getRadius() >= paddle.getX() + paddle.getWidth() / 3 &&
+          ball.getCenterX() + ball.getRadius() <= paddle.getX() + (2 * paddle.getWidth()) / 3) ||
+        (ball.getCenterX() - ball.getSpeed() >= paddle.getX() + paddle.getWidth() / 3 &&
+            ball.getCenterX() - ball.getSpeed() <= paddle.getX() + (2 * paddle.getWidth()) / 3))) {
       ball.invertYDirection();
     }
   }
