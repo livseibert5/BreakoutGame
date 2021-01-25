@@ -8,6 +8,9 @@ import java.io.File;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.shape.Circle;
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
 
 /**
  * This class creates the scenes for the game. Depending on
@@ -23,6 +26,7 @@ public class GameController {
   private List<Brick> bricks;
   private int width;
   private int height;
+  private List<Circle> lives = new ArrayList<>();
   private final int[][] brickLayout;
 
   /**
@@ -58,7 +62,20 @@ public class GameController {
     assembleBricks();
     createPaddle();
     createBall();
+    setLives();
     myScene = new Scene(root, width, height, background);
+  }
+
+  public void setLives() {
+    for (int i = 1; i < 4; i++) {
+      Circle life = new Circle();
+      life.setRadius(20);
+      life.setCenterX(i * 30);
+      life.setCenterY(40);
+      life.setFill(new ImagePattern(new Image("file:resources/rose.png")));
+      root.getChildren().add(life);
+      lives.add(life);
+    }
   }
 
   /**
@@ -104,7 +121,7 @@ public class GameController {
         }
         if (brickLayout[row][col] != 0) {
           brick.setX(col * brick.getWidth());
-          brick.setY(row * brick.getHeight());
+          brick.setY(row * brick.getHeight() + 100);
           root.getChildren().add(brick);
           bricks.add(brick);
         }
@@ -169,6 +186,10 @@ public class GameController {
    */
   public Group getRoot() {
     return root;
+  }
+
+  public List<Circle> getLives() {
+    return lives;
   }
 
   /**

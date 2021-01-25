@@ -8,10 +8,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+enum Type {INSTRUCTIONS, WIN, LOSS}
+
 /**
  * Creates the instructions scene for the game.
  */
-public class Instructions {
+public class Screen {
 
   private static final Paint BACKGROUND = Color.PINK;
 
@@ -20,9 +22,11 @@ public class Instructions {
       + "Your goal is to clear all the blocks from each level.\n"
       + "You have three lives to complete this goal, be sure to collect power-ups as well.\n"
       + "Be sure to watch out for baby cupid, good luck!";
-  private Text titleText;
-  private Text directions;
-  private Text play;
+  private String winText = "Congratulations, you won!";
+  private String lossText = "Sorry, you lost. Better luck next time!";
+  private Group root;
+  private int width;
+  private int height;
 
   /**
    * Constructor for an Instructions object. Takes the
@@ -32,32 +36,48 @@ public class Instructions {
    * @param height height of the game screen
    * @param title title of the game
    */
-  public Instructions(int width, int height, String title) {
-    Group root = new Group();
-    createText(width, height, title);
-    root.getChildren().add(titleText);
-    root.getChildren().add(directions);
-    root.getChildren().add(play);
+  public Screen(Type type, int width, int height, String title) {
+    root = new Group();
+    this.width = width;
+    this.height = height;
+    if (type == Type.INSTRUCTIONS) {
+      createInstructionText(title);
+    } else if (type == Type.WIN) {
+      createWinText();
+    } else if (type == Type.LOSS) {
+      createLossText();
+    }
     myScene = new Scene(root, width, height, BACKGROUND);
   }
 
   /**
    * Creates the text for the screen, determines the location
    * of the text based on the width and height of the screen.
-   * @param width width of the game screen
-   * @param height height of the game screen
    * @param title title of the game
    */
-  public void createText(int width, int height, String title) {
-    titleText = new Text(width / 3, height / 4, title);
-    directions = new Text(5, height / 3, directionText);
-    play = new Text(width / 3 + 45, height / 2, "CLICK TO PLAY");
+  public void createInstructionText(String title) {
+    Text titleText = new Text(width / 3, height / 4, title);
+    Text directions = new Text(5, height / 3, directionText);
+    Text play = new Text(width / 3 + 45, height / 2, "CLICK TO PLAY");
     titleText.setFont(new Font(24));
     directions.setFont(new Font(18));
     play.setFont(new Font(14));
     titleText.setTextAlignment(TextAlignment.CENTER);
     directions.setTextAlignment(TextAlignment.CENTER);
     play.setTextAlignment(TextAlignment.CENTER);
+    root.getChildren().add(titleText);
+    root.getChildren().add(directions);
+    root.getChildren().add(play);
+  }
+
+  public void createWinText() {
+    Text win = new Text(width / 3, height / 4, winText);
+    root.getChildren().add(win);
+  }
+
+  public void createLossText() {
+    Text loss = new Text(width / 3, height / 4, lossText);
+    root.getChildren().add(loss);
   }
 
   /**

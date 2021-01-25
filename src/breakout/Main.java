@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.util.List;
 import javafx.scene.Group;
+import javafx.scene.shape.Circle;
 
 /**
  * Main driver of the game, handles all game behavior.
@@ -34,6 +35,7 @@ public class Main extends Application {
   private Ball ball;
   private Group root;
   private List<Brick> bricks;
+  private List<Circle> livesList;
   private int removedBricks = 0;
   private int level = 1;
   private int lives = 3;
@@ -45,7 +47,7 @@ public class Main extends Application {
   @Override
   public void start(Stage stage) throws Exception {
     controller = new GameController();
-    Instructions instructions = new Instructions(WIDTH, HEIGHT, TITLE);
+    Screen instructions = new Screen(Type.INSTRUCTIONS, WIDTH, HEIGHT, TITLE);
     myScene = instructions.getScene();
     this.stage = stage;
     stage.setScene(myScene);
@@ -75,7 +77,6 @@ public class Main extends Application {
     ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
     paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
 
-    if (lives == 0) handleLoss();
     if (bricks.size() == removedBricks) handleWin();
     checkPaddleCollision();
     checkWallCollision();
@@ -85,14 +86,16 @@ public class Main extends Application {
   public void handleWin() {
     level++;
     if (level > 3) {
-
+      Screen win = new Screen(Type.WIN, WIDTH, HEIGHT, TITLE);
+      myScene = win.getScene();
     } else {
       setLevel(level);
     }
   }
 
   public void handleLoss() {
-
+    Screen loss = new Screen(Type.LOSS, WIDTH, HEIGHT, TITLE);
+    myScene = loss.getScene();
   }
 
   /**
@@ -117,11 +120,23 @@ public class Main extends Application {
         ball.getCenterX() >= WIDTH - ball.getRadius()) {
       ball.invertXDirection();
     }
-    if (ball.getCenterY() <= ball.getRadius()) {
+    if (ball.getCenterY() <= ball.getRadius() + 80) {
       ball.invertYDirection();
     }
     if (ball.getCenterY() >= HEIGHT - ball.getRadius()) {
       lives--;
+      if (lives > 0) {
+        ball.setCenterX(WIDTH / 2);
+        ball.setCenterY((HEIGHT - paddle.getHeight() - 50)
+            - paddle.getHeight() / 2 - ball.getRadius() / 2);
+      } else {
+        handleLoss();
+      }
+
+      if (!livesList.isEmpty()) {
+        root.getChildren().remove(livesList.get(livesList.size() - 1));
+        livesList.remove(livesList.size() - 1);
+      }
     }
   }
 
@@ -266,6 +281,7 @@ public class Main extends Application {
     this.ball = controller.getBall();
     this.bricks = controller.getBricks();
     this.root = controller.getRoot();
+    this.livesList = controller.getLives();
     myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
     myScene.setOnKeyReleased(e -> handleKeyLift(e.getCode()));
   }
