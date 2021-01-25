@@ -15,6 +15,7 @@ import javafx.util.Duration;
 import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 
 /**
  * Main driver of the game, handles all game behavior.
@@ -36,9 +37,11 @@ public class Main extends Application {
   private Group root;
   private List<Brick> bricks;
   private List<Circle> livesList;
+  private Text scoreLabel;
   private int removedBricks = 0;
   private int level = 1;
   private int lives = 3;
+  private int score = 0;
 
   /**
    * Display instruction screen, then switch to first level and
@@ -163,6 +166,8 @@ public class Main extends Application {
   public void handleBrickCollision(Brick brick) {
     brick.decrementLives();
     if (brick.getLives() <= 0) {
+      score += 50;
+      scoreLabel.setText(String.valueOf(score));
       brick.setWidth(0);
       brick.setHeight(0);
       removedBricks++;
@@ -282,6 +287,7 @@ public class Main extends Application {
     this.bricks = controller.getBricks();
     this.root = controller.getRoot();
     this.livesList = controller.getLives();
+    this.scoreLabel = controller.getScore();
     myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
     myScene.setOnKeyReleased(e -> handleKeyLift(e.getCode()));
   }

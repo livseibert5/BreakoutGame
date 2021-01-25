@@ -11,6 +11,7 @@ import java.util.List;
 import javafx.scene.shape.Circle;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.text.Text;
 
 /**
  * This class creates the scenes for the game. Depending on
@@ -24,6 +25,7 @@ public class GameController {
   private Paddle paddle;
   private Group root;
   private List<Brick> bricks;
+  private Text score;
   private int width;
   private int height;
   private List<Circle> lives = new ArrayList<>();
@@ -63,7 +65,13 @@ public class GameController {
     createPaddle();
     createBall();
     setLives();
+    setScore();
     myScene = new Scene(root, width, height, background);
+  }
+
+  public void setScore() {
+    score = new Text(width - 50, 40, "0");
+    root.getChildren().add(score);
   }
 
   public void setLives() {
@@ -190,6 +198,10 @@ public class GameController {
 
   public List<Circle> getLives() {
     return lives;
+  }
+
+  public Text getScore() {
+    return score;
   }
 
   /**
