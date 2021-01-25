@@ -16,6 +16,8 @@ import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
 
 /**
  * Main driver of the game, handles all game behavior.
@@ -268,8 +270,16 @@ public class Main extends Application {
     } else if (code == KeyCode.DIGIT3) {
       setLevel(3);
     } else if (code == KeyCode.L) {
-      lives++;
+      incrementLives();
     }
+  }
+
+  public void incrementLives() {
+    lives++;
+    Circle life = new Circle((livesList.size() + 1) * 30, 40, 20,
+        new ImagePattern(new Image("file:resources/rose.png")));
+    livesList.add(life);
+    root.getChildren().add(life);
   }
 
   /**
