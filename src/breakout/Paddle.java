@@ -11,7 +11,7 @@ import javafx.scene.shape.Rectangle;
 public class Paddle extends Rectangle {
 
   private int xDirection;
-  private final int PADDLE_SPEED = 70;
+  private final int PADDLE_SPEED = 120;
 
   /**
    * Constructor for paddle class, sets width and

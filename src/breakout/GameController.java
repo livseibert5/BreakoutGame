@@ -102,10 +102,12 @@ public class GameController {
         } else if (brickLayout[row][col] == 3) {
           brick = new PowerupBrick(1, width, height);
         }
-        brick.setX(col * brick.getWidth());
-        brick.setY(row * brick.getHeight());
-        root.getChildren().add(brick);
-        bricks.add(brick);
+        if (brickLayout[row][col] != 0) {
+          brick.setX(col * brick.getWidth());
+          brick.setY(row * brick.getHeight());
+          root.getChildren().add(brick);
+          bricks.add(brick);
+        }
       }
 
     }

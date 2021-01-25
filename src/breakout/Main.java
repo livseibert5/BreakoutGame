@@ -1,5 +1,6 @@
 package breakout;
 
+import java.util.ArrayList;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -33,7 +34,8 @@ public class Main extends Application {
   private Ball ball;
   private Group root;
   private List<Brick> bricks;
-  private final int level = 1;
+  private int removedBricks = 0;
+  private int level = 1;
   private int lives = 3;
 
   /**
@@ -73,12 +75,24 @@ public class Main extends Application {
     ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
     paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
 
-    if (ball.getCenterX() + ball.getRadius() >= HEIGHT) {
-      lives--;
-    }
+    if (lives == 0) handleLoss();
+    if (bricks.size() == removedBricks) handleWin();
     checkPaddleCollision();
     checkWallCollision();
     checkBrickCollision();
+  }
+
+  public void handleWin() {
+    level++;
+    if (level > 3) {
+
+    } else {
+      setLevel(level);
+    }
+  }
+
+  public void handleLoss() {
+
   }
 
   /**
@@ -94,18 +108,20 @@ public class Main extends Application {
   /**
    * Determines if the ball hits the left or right wall
    * or the top or bottom wall. If the ball hits the top
-   * or bottom wall, the y direction is inverted. If the
+   * or wall, the y direction is inverted. If the
    * ball hits the left or right wall, the x direction is
-   * inverted.
+   * inverted. If the ball hits the bottom wall, a life is lost.
    */
   private void checkWallCollision() {
     if (ball.getCenterX() <= ball.getRadius() ||
         ball.getCenterX() >= WIDTH - ball.getRadius()) {
       ball.invertXDirection();
     }
-    if (ball.getCenterY() <= ball.getRadius() ||
-        ball.getCenterY() >= HEIGHT - ball.getRadius()) {
+    if (ball.getCenterY() <= ball.getRadius()) {
       ball.invertYDirection();
+    }
+    if (ball.getCenterY() >= HEIGHT - ball.getRadius()) {
+      lives--;
     }
   }
 
@@ -121,17 +137,21 @@ public class Main extends Application {
     for (Brick brick : bricks) {
       if (collidesWithTop(brick) || collidesWithBottom(brick)) {
         ball.invertYDirection();
-        brick.decrementLives();
+        handleBrickCollision(brick);
       } else if (collidesWithRight(brick) || collidesWithLeft(brick)) {
         ball.invertXDirection();
-        brick.decrementLives();
+        handleBrickCollision(brick);
       }
+    }
+  }
 
-      if (brick.getLives() <= 0) {
-        brick.setWidth(0);
-        brick.setHeight(0);
-        root.getChildren().remove(brick);
-      }
+  public void handleBrickCollision(Brick brick) {
+    brick.decrementLives();
+    if (brick.getLives() <= 0) {
+      brick.setWidth(0);
+      brick.setHeight(0);
+      removedBricks++;
+      root.getChildren().remove(brick);
     }
   }
 
@@ -142,7 +162,7 @@ public class Main extends Application {
    */
   private boolean collidesWithTop(Brick brick) {
     return ball.getCenterY() + ball.getRadius() >= brick.getY() &&
-        ball.getCenterY() + ball.getRadius() <= brick.getY() + (1 * brick.getHeight() / 4) &&
+        ball.getCenterY() + ball.getRadius() <= brick.getY() + (1 * brick.getHeight() / 6) &&
         ((ball.getCenterX() + ball.getRadius() >= brick.getX() &&
             ball.getCenterX() + ball.getRadius() <= brick.getX() + brick.getWidth()) ||
             (ball.getCenterX() - ball.getRadius() >= brick.getX() &&
@@ -156,7 +176,7 @@ public class Main extends Application {
    */
   private boolean collidesWithBottom(Brick brick) {
     return ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight() &&
-        ball.getCenterY() - ball.getRadius() >= brick.getY() + (3 * brick.getHeight() / 4) &&
+        ball.getCenterY() - ball.getRadius() >= brick.getY() + (5 * brick.getHeight() / 6) &&
         ((ball.getCenterX() + ball.getRadius() >= brick.getX() &&
             ball.getCenterX() + ball.getRadius() <= brick.getX() + brick.getWidth()) ||
             (ball.getCenterX() - ball.getRadius() >= brick.getX() &&
@@ -170,7 +190,7 @@ public class Main extends Application {
    */
   private boolean collidesWithRight(Brick brick) {
     return ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth() &&
-        ball.getCenterX() - ball.getRadius() >= brick.getX() + (3 * brick.getWidth() / 4) &&
+        ball.getCenterX() - ball.getRadius() >= brick.getX() + (5 * brick.getWidth() / 6) &&
         ((ball.getCenterY() + ball.getRadius() >= brick.getY() &&
             ball.getCenterY() + ball.getRadius() <= brick.getY() + brick.getHeight()) ||
             (ball.getCenterY() - ball.getRadius() >= brick.getY() &&
@@ -184,7 +204,7 @@ public class Main extends Application {
    */
   private boolean collidesWithLeft(Brick brick) {
     return ball.getCenterX() + ball.getRadius() >= brick.getX() &&
-        ball.getCenterX() + ball.getRadius() <= brick.getX() + (3 * brick.getWidth() / 4) &&
+        ball.getCenterX() + ball.getRadius() <= brick.getX() + (1 * brick.getWidth() / 6) &&
         ((ball.getCenterY() + ball.getRadius() >= brick.getY() &&
             ball.getCenterY() + ball.getRadius() <= brick.getY() + brick.getHeight()) ||
             (ball.getCenterY() - ball.getRadius() >= brick.getY() &&
