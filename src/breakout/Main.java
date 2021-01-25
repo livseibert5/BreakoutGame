@@ -47,7 +47,7 @@ public class Main extends Application {
   private int level = 1;
   private int lives = 3;
   private int score = 0;
-  private double time;
+  private double time = 0;
   private double powerupStart = 0;
 
   /**
@@ -83,8 +83,8 @@ public class Main extends Application {
    * @param elapsedTime time since beginning of game
    */
   private void step(double elapsedTime) {
-    time = elapsedTime;
-    if (elapsedTime - powerupStart >= 5) {
+    time += 1;
+    if (time - powerupStart >= 750) {
       removePowerUps();
     }
     ball.setCenterX(ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);

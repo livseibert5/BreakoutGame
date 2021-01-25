@@ -21,7 +21,7 @@ public class Screen {
   private final String directionText = "Welcome to Valentine's Breakout!\n"
       + "Your goal is to clear all the blocks from each level.\n"
       + "You have three lives to complete this goal, be sure to collect power-ups as well.\n"
-      + "Be sure to watch out for baby cupid, good luck!";
+      + "Watch out for baby cupid, good luck!";
   private final String winText = "Congratulations, you won!";
   private final String lossText = "Sorry, you lost. Better luck next time!";
   private final Group root;
@@ -57,9 +57,9 @@ public class Screen {
    * @param title title of the game
    */
   public void createInstructionText(String title) {
-    Text titleText = new Text(width / 3, height / 4, title);
-    Text directions = new Text(5, height / 3, directionText);
-    Text play = new Text(width / 3 + 45, height / 2, "CLICK TO PLAY");
+    Text titleText = new Text(width / 3 + 20, height / 4, title);
+    Text directions = new Text(40, height / 3, directionText);
+    Text play = new Text(width / 3 + 65, height / 2, "CLICK TO PLAY");
     titleText.setFont(new Font(24));
     directions.setFont(new Font(18));
     play.setFont(new Font(14));
