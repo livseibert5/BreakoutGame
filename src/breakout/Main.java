@@ -91,6 +91,7 @@ public class Main extends Application {
     level++;
 
     if (level > 3) {
+      root.getChildren().remove(ball);
       Screen win = new Screen(Type.WIN, WIDTH, HEIGHT, TITLE);
       myScene = win.getScene();
     } else {
@@ -100,6 +101,7 @@ public class Main extends Application {
   }
 
   public void handleLoss() {
+    root.getChildren().remove(ball);
     Screen loss = new Screen(Type.LOSS, WIDTH, HEIGHT, TITLE);
     myScene = loss.getScene();
     stage.setScene(myScene);
@@ -127,7 +129,7 @@ public class Main extends Application {
         ball.getCenterX() >= WIDTH - ball.getRadius()) {
       ball.invertXDirection();
     }
-    if (ball.getCenterY() <= ball.getRadius() + 80) {
+    if (ball.getCenterY() <= ball.getRadius() + 75) {
       ball.invertYDirection();
     }
     if (ball.getCenterY() >= HEIGHT - ball.getRadius()) {
@@ -160,9 +162,11 @@ public class Main extends Application {
       if (collidesWithTop(brick) || collidesWithBottom(brick)) {
         ball.invertYDirection();
         handleBrickCollision(brick);
+        return;
       } else if (collidesWithRight(brick) || collidesWithLeft(brick)) {
         ball.invertXDirection();
         handleBrickCollision(brick);
+        return;
       }
     }
   }
@@ -172,8 +176,7 @@ public class Main extends Application {
     if (brick.getLives() <= 0) {
       score += 50;
       scoreLabel.setText("Score: " + String.valueOf(score));
-      brick.setWidth(0);
-      brick.setHeight(0);
+      bricks.remove(brick);
       removedBricks++;
       root.getChildren().remove(brick);
     }

@@ -9,6 +9,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Text;
@@ -74,6 +75,12 @@ public class GameController {
   public void setScore() {
     score = new Text(width - 100, 40, "Score: 0");
     root.getChildren().add(score);
+    Rectangle pageBreak = new Rectangle();
+    pageBreak.setWidth(width);
+    pageBreak.setHeight(3);
+    pageBreak.setX(0);
+    pageBreak.setY(65);
+    root.getChildren().add(pageBreak);
   }
 
   public void setLevel() {
