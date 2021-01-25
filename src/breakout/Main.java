@@ -62,45 +62,118 @@ public class Main extends Application {
   }
 
   // Change properties of shapes in small ways to animate them over time.
-  private void step (double elapsedTime) {
+  private void step(double elapsedTime) {
     ball.setCenterX(ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
     ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
     paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
+    
+    if (ball.getCenterX() + ball.getRadius() >= HEIGHT) {
+      lives--;
+    }
+    checkPaddleCollision();
+    checkWallCollision();
+    checkBrickCollision();
+  }
 
+  private void checkPaddleCollision() {
+    if (ball.getBoundsInParent().intersects(paddle.getBoundsInParent())) {
+      ball.invertYDirection();
+    }
+  }
+
+  private void checkWallCollision() {
     if (ball.getCenterX() <= ball.getRadius() ||
-          ball.getCenterX() >= WIDTH - ball.getRadius()) {
+        ball.getCenterX() >= WIDTH - ball.getRadius()) {
       ball.invertXDirection();
     }
     if (ball.getCenterY() <= ball.getRadius() ||
-          ball.getCenterY() >= HEIGHT - ball.getRadius()) {
+        ball.getCenterY() >= HEIGHT - ball.getRadius()) {
       ball.invertYDirection();
     }
-
-    if (ball.getBoundsInParent().intersects(paddle.getBoundsInParent())) ball.invertYDirection();
-    if (ball.getCenterX() + ball.getRadius() >= HEIGHT) lives--;
-
-    checkBallCollision();
   }
 
-  private void checkBallCollision() {
-    for (Brick brick: bricks) {
-      if (ball.getBoundsInParent().intersects(brick.getBoundsInParent())) {
+  private void checkBrickCollision() {
+    for (Brick brick : bricks) {
+      if (collidesWithTop(brick) || collidesWithBottom(brick)) {
+        ball.invertYDirection();
         brick.decrementLives();
-        if (brick.getLives() == 0) root.getChildren().remove(brick);
+      } else if (collidesWithRight(brick) || collidesWithLeft(brick)) {
+        ball.invertXDirection();
+        brick.decrementLives();
+      }
+
+      if (brick.getLives() <= 0) {
+        brick.setWidth(0);
+        brick.setHeight(0);
+        root.getChildren().remove(brick);
       }
     }
   }
 
+  private boolean collidesWithTop(Brick brick) {
+    if (ball.getCenterY() + ball.getRadius() >= brick.getY() &&
+        ball.getCenterY() + ball.getRadius() <= brick.getY() + (1 * brick.getHeight() / 4) &&
+        ((ball.getCenterX() + ball.getRadius() >= brick.getX() &&
+            ball.getCenterX() + ball.getRadius() <= brick.getX() + brick.getWidth()) ||
+            (ball.getCenterX() - ball.getRadius() >= brick.getX() &&
+                ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth()))) {
+      return true;
+    }
+    return false;
+  }
+
+  private boolean collidesWithBottom(Brick brick) {
+    if (ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight() &&
+        ball.getCenterY() - ball.getRadius() >= brick.getY() + (3 * brick.getHeight() / 4) &&
+        ((ball.getCenterX() + ball.getRadius() >= brick.getX() &&
+            ball.getCenterX() + ball.getRadius() <= brick.getX() + brick.getWidth()) ||
+            (ball.getCenterX() - ball.getRadius() >= brick.getX() &&
+                ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth()))) {
+      return true;
+    }
+    return false;
+  }
+
+  private boolean collidesWithRight(Brick brick) {
+    if (ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth() &&
+        ball.getCenterX() - ball.getRadius() >= brick.getX() + (3 * brick.getWidth() / 4) &&
+        ((ball.getCenterY() + ball.getRadius() >= brick.getY() &&
+            ball.getCenterY() + ball.getRadius() <= brick.getY() + brick.getHeight()) ||
+            (ball.getCenterY() - ball.getRadius() >= brick.getY() &&
+                ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight()))) {
+      return true;
+    }
+    return false;
+  }
+
+  private boolean collidesWithLeft(Brick brick) {
+    if (ball.getCenterX() + ball.getRadius() >= brick.getX() &&
+        ball.getCenterX() + ball.getRadius() <= brick.getX() + (3 * brick.getWidth() / 4) &&
+        ((ball.getCenterY() + ball.getRadius() >= brick.getY() &&
+            ball.getCenterY() + ball.getRadius() <= brick.getY() + brick.getHeight()) ||
+            (ball.getCenterY() - ball.getRadius() >= brick.getY() &&
+                ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight()))) {
+      return true;
+    }
+    return false;
+  }
+
   private void handleKeyLift(KeyCode code) {
-    if (code == KeyCode.RIGHT || code == KeyCode.LEFT) { paddle.stop(); }
+    if (code == KeyCode.RIGHT || code == KeyCode.LEFT) {
+      paddle.stop();
+    }
   }
 
   // What to do each time a key is pressed.
   private void handleKeyInput(KeyCode code) {
     if (code == KeyCode.RIGHT) {
-      if (paddle.getXDirection() != 1) { paddle.moveRight(); }
+      if (paddle.getXDirection() != 1) {
+        paddle.moveRight();
+      }
     } else if (code == KeyCode.LEFT) {
-      if (paddle.getXDirection() != -1) paddle.moveLeft();
+      if (paddle.getXDirection() != -1) {
+        paddle.moveLeft();
+      }
     } else if (code == KeyCode.DIGIT1) {
       setLevel(1);
     } else if (code == KeyCode.DIGIT2) {

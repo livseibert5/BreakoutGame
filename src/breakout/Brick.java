@@ -7,7 +7,6 @@ import javafx.scene.image.Image;
 public class Brick extends Rectangle {
 
   private int lives;
-  private Image image;
 
   public Brick(int lives, int width, int height) {
     this.lives = lives;
@@ -26,18 +25,17 @@ public class Brick extends Rectangle {
    */
   public void decrementLives() {
     lives--;
-    selectImage();
+    if (lives > 0) selectImage();
   }
 
-  public void selectImage() {
+  public void selectImage () {
+    System.out.println("here");
     String imageName = "file:resources/pink.png";
     if (lives == 2) imageName = "file:resources/red2.png";
     if (lives == 3) imageName = "file:resources/red3.png";
     if (lives == 4) imageName = "file:resources/red4.png";
     if (lives == 5) imageName = "file:resources/red5.png";
-    image = new Image(imageName);
-    ImagePattern imagePattern = new ImagePattern(image);
-    this.setFill(imagePattern);
+    this.setFill(new ImagePattern(new Image(imageName)));
   }
 
   // Getter function returns the number of lives a brick has left.

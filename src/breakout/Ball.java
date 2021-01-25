@@ -13,7 +13,7 @@ public class Ball extends Circle {
 
   public Ball() {
     this.setRadius(15);
-    this.speed = 100;
+    this.speed = 120;
     this.xDirection = 1;
     this.yDirection = 1;
 

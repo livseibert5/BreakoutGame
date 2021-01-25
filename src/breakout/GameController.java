@@ -69,8 +69,7 @@ public class GameController {
         if (brickLayout[row][col] == 1) {
           brick = new Brick(1, width, height);
         } else if (brickLayout[row][col] == 2) {
-          Random random = new Random();
-          brick = new Brick(random.nextInt((5 - 2) + 2) + 2, width, height);
+          brick = new Brick((int) Math.random() * 5 + 2, width, height);
         } else if (brickLayout[row][col] == 3) {
           brick = new PowerupBrick(1, width, height);
         }
