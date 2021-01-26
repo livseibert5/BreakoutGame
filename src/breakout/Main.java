@@ -333,6 +333,12 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * Called when power-up brick is broken, creates new power-up
+   * that can be caught by the paddle.
+   *
+   * @param brick power-up brick that was broken
+   */
   public void dropPowerUp(PowerupBrick brick) {
     Powerup powerup = new Powerup(brick.getType());
     powerup.setCenterX(brick.getX() + brick.getWidth() / 2);
@@ -431,11 +437,6 @@ public class Main extends Application {
    */
   public boolean inXRange(Brick brick, Ball ball) {
     return ball.getCenterX() > brick.getX() && ball.getCenterX() < brick.getRight();
-    /**
-    return (ball.getRight() >= brick.getX() &&
-        ball.getRight() <= brick.getRight()) ||
-        (ball.getLeft() >= brick.getX() &&
-            ball.getLeft() <= brick.getRight());*/
   }
 
   /**
@@ -447,11 +448,6 @@ public class Main extends Application {
    */
   public boolean inYRange(Brick brick, Ball ball) {
     return ball.getCenterY() >= brick.getY() && ball.getCenterY() <= brick.getBottom();
-    /**
-    return (ball.getBottom() >= brick.getY() &&
-        ball.getBottom() <= brick.getBottom()) ||
-        (ball.getTop() >= brick.getY() &&
-            ball.getTop() <= brick.getBottom());*/
   }
 
   /**
