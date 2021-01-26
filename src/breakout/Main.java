@@ -96,7 +96,7 @@ public class Main extends Application {
       paddle.setX(WIDTH - paddle.getWidth());
     }
 
-    if (bricks.size() == removedBricks) {
+    if (bricks.isEmpty()) {
       handleWin();
     }
     checkPowerUps(elapsedTime);
