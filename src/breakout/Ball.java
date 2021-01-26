@@ -28,6 +28,22 @@ public class Ball extends Circle {
     this.setFill(new ImagePattern(new Image("file:resources/ball.png")));
   }
 
+  public double getTop() {
+    return this.getCenterY() - this.getRadius();
+  }
+
+  public double getBottom() {
+    return this.getCenterY() + this.getRadius();
+  }
+
+  public double getRight() {
+    return this.getCenterX() + this.getRadius();
+  }
+
+  public double getLeft() {
+    return this.getCenterX() - this.getRadius();
+  }
+
   public void setSpeed(int speed) {
     this.speed = speed;
   }

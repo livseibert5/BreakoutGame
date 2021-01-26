@@ -81,40 +81,23 @@ public class Main extends Application {
   }
 
   /**
-   * Change properties of shapes in small ways to animate them over time. Handles collisions between
-   * the ball and the paddle, the ball and the bricks, and the ball and the walls so that the ball
-   * bounces.
+   * Updates location of game pieces to animate them over time. Handles the core functionality of
+   * the game, including detecting and handling collisions, timing powerups, and determining if a
+   * level has been cleared.
    *
-   * @param elapsedTime time since beginning of game
+   * @param elapsedTime time increment since step function was last called
    */
   private void step(double elapsedTime) {
     if (gamePlay) {
       time += 1;
-      balls.stream().forEach(
-          ball -> {
-            ball.setCenterX(
-                ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
-            ball.setCenterY(
-                ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
-            if (level == 3)
-              checkBossCollision(ball);
-            checkPaddleCollision(ball);
-            checkWallCollision(ball);
-            checkBrickCollision(ball);
-          }
-      );
-      balls.removeIf(ball -> ball.getIsActive() == false);
-      paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
-      if (paddle.getX() + paddle.getWidth() / 2 >= WIDTH) {
-        paddle.setX(0);
-      } else if (paddle.getX() + paddle.getWidth() / 2 <= 0) {
-        paddle.setX(WIDTH - paddle.getWidth());
-      }
+      updateBalls(elapsedTime);
+      updatePaddle(elapsedTime);
 
       if (level == 3) {
         boss.setX(boss.getX() + boss.getXDirection() * boss.getSpeed() * elapsedTime);
-        if (boss.getX() < 0 || boss.getX() >= WIDTH - boss.getWidth())
+        if (boss.getX() < 0 || boss.getX() >= WIDTH - boss.getWidth()) {
           boss.invertXDirection();
+        }
       }
 
       if (bricks.isEmpty()) {
@@ -124,6 +107,51 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * Updates the location of the paddle to move it over time. Wraps the paddle to the other side of
+   * the screen when it goes out of bounds.
+   *
+   * @param elapsedTime time increment since last paddle location update
+   */
+  public void updatePaddle(double elapsedTime) {
+    paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
+    if (paddle.getX() + paddle.getWidth() / 2 >= WIDTH) {
+      paddle.setX(0);
+    } else if (paddle.getX() + paddle.getWidth() / 2 <= 0) {
+      paddle.setX(WIDTH - paddle.getWidth());
+    }
+  }
+
+  /**
+   * Updates the location of the balls to move them over time. Checks for collisions between the
+   * ball and the paddle, the ball and the walls, and the ball and the bricks. On the third level,
+   * collisions with the boss enemy are detected as well.
+   *
+   * @param elapsedTime time increment since last ball update
+   */
+  public void updateBalls(double elapsedTime) {
+    balls.stream().forEach(
+        ball -> {
+          ball.setCenterX(
+              ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
+          ball.setCenterY(
+              ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
+          if (level == 3) {
+            checkBossCollision(ball);
+          }
+          checkPaddleCollision(ball);
+          checkWallCollision(ball);
+          checkBrickCollision(ball);
+        }
+    );
+    balls.removeIf(ball -> ball.getIsActive() == false);
+  }
+
+  /**
+   * Decrements player's number of lives if a ball collides with the boss enemy.
+   *
+   * @param ball ball involved in potential collision
+   */
   public void checkBossCollision(Ball ball) {
     if (collidesWithTop((Brick) boss, ball) || collidesWithBottom((Brick) boss, ball)) {
       ball.invertYDirection();
@@ -134,6 +162,13 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * If there are powerups that have been unlocked but haven't hit the paddle yet, this function
+   * moves them down the screen. If the powerup hits the paddle, the powerup goes into effect and is
+   * marked as used so it can be removed from the active powerup list.
+   *
+   * @param elapsedTime time since last powerup check
+   */
   public void checkPowerUps(double elapsedTime) {
     if (time - powerupStart >= 750) {
       removePowerUps();
@@ -151,8 +186,12 @@ public class Main extends Application {
   }
 
   /**
-   * Called when the ball drops below the paddle. Decrements the lives of the player and resets the
-   * ball if the player has more lives.
+   * Called when the ball drops below the paddle or the ball hits the boss enemy in level 3. Only
+   * called for ball dropping when there is one active ball. Decrements the lives of the player and
+   * resets the ball if the player has more lives. If the player is out of lives, loss screen is
+   * displayed.
+   *
+   * @param ball ball to be respawned if all balls have fallen offscreen
    */
   public void decrementLives(Ball ball) {
     lives--;
@@ -205,29 +244,29 @@ public class Main extends Application {
    */
   private void checkPaddleCollision(Ball ball) {
     // First Third.
-    if (ball.getCenterY() + ball.getRadius() >= paddle.getY() &&
-        ((ball.getCenterX() + ball.getRadius() >= paddle.getX() &&
-            ball.getCenterX() + ball.getRadius() <= paddle.getX() + paddle.getWidth() / 3) ||
-            (ball.getCenterX() - ball.getSpeed() >= paddle.getX() &&
-                ball.getCenterX() - ball.getSpeed() <= paddle.getX() + paddle.getWidth() / 3))) {
+    if (ball.getBottom() >= paddle.getY() &&
+        ((ball.getRight() >= paddle.getX() &&
+            ball.getRight() <= paddle.getX() + paddle.getWidth() / 3) ||
+            (ball.getLeft() >= paddle.getX() &&
+                ball.getLeft() <= paddle.getX() + paddle.getWidth() / 3))) {
       ball.invertYDirection();
       ball.invertXDirection();
     }
     // Second Third.
-    else if (ball.getCenterY() + ball.getRadius() >= paddle.getY() &&
-        ((ball.getCenterX() + ball.getRadius() >= paddle.getX() + (2 * paddle.getWidth()) / 3 &&
-            ball.getCenterX() + ball.getRadius() <= paddle.getX() + paddle.getWidth()) ||
-            (ball.getCenterX() - ball.getSpeed() >= paddle.getX() + (2 * paddle.getWidth()) / 3 &&
-                ball.getCenterX() - ball.getSpeed() <= paddle.getX() + paddle.getWidth()))) {
+    else if (ball.getBottom() >= paddle.getY() &&
+        ((ball.getRight() >= paddle.getX() + (2 * paddle.getWidth()) / 3 &&
+            ball.getRight() <= paddle.getX() + paddle.getWidth()) ||
+            (ball.getLeft() >= paddle.getX() + (2 * paddle.getWidth()) / 3 &&
+                ball.getLeft() <= paddle.getX() + paddle.getWidth()))) {
       ball.invertYDirection();
       ball.invertXDirection();
     }
     // Middle.
-    else if (ball.getCenterY() + ball.getRadius() >= paddle.getY() &&
-        ((ball.getCenterX() + ball.getRadius() >= paddle.getX() + paddle.getWidth() / 3 &&
-            ball.getCenterX() + ball.getRadius() <= paddle.getX() + (2 * paddle.getWidth()) / 3) ||
-            (ball.getCenterX() - ball.getSpeed() >= paddle.getX() + paddle.getWidth() / 3 &&
-                ball.getCenterX() - ball.getSpeed()
+    else if (ball.getBottom() >= paddle.getY() &&
+        ((ball.getRight() >= paddle.getX() + paddle.getWidth() / 3 &&
+            ball.getRight() <= paddle.getX() + (2 * paddle.getWidth()) / 3) ||
+            (ball.getLeft() >= paddle.getX() + paddle.getWidth() / 3 &&
+                ball.getLeft()
                     <= paddle.getX() + (2 * paddle.getWidth()) / 3))) {
       ball.invertYDirection();
     }
@@ -342,12 +381,9 @@ public class Main extends Application {
    * @return boolean true if ball collided with top of brick
    */
   private boolean collidesWithTop(Brick brick, Ball ball) {
-    return ball.getCenterY() + ball.getRadius() >= brick.getY() &&
-        ball.getCenterY() + ball.getRadius() <= brick.getY() + (1 * brick.getHeight() / 6) &&
-        ((ball.getCenterX() + ball.getRadius() >= brick.getX() &&
-            ball.getCenterX() + ball.getRadius() <= brick.getX() + brick.getWidth()) ||
-            (ball.getCenterX() - ball.getRadius() >= brick.getX() &&
-                ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth()));
+    return ball.getBottom() >= brick.getY() &&
+        ball.getTop() < brick.getY() &&
+        inXRange(brick, ball);
   }
 
   /**
@@ -357,12 +393,9 @@ public class Main extends Application {
    * @return boolean true if ball collided with bottom of brick
    */
   private boolean collidesWithBottom(Brick brick, Ball ball) {
-    return ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight() &&
-        ball.getCenterY() - ball.getRadius() >= brick.getY() + (5 * brick.getHeight() / 6) &&
-        ((ball.getCenterX() + ball.getRadius() >= brick.getX() &&
-            ball.getCenterX() + ball.getRadius() <= brick.getX() + brick.getWidth()) ||
-            (ball.getCenterX() - ball.getRadius() >= brick.getX() &&
-                ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth()));
+    return ball.getTop() <= brick.getBottom() &&
+        ball.getBottom() > brick.getBottom() &&
+        inXRange(brick, ball);
   }
 
   /**
@@ -372,12 +405,9 @@ public class Main extends Application {
    * @return boolean true if ball collided with right side of brick
    */
   private boolean collidesWithRight(Brick brick, Ball ball) {
-    return ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth() &&
-        ball.getCenterX() - ball.getRadius() >= brick.getX() + (5 * brick.getWidth() / 6) &&
-        ((ball.getCenterY() + ball.getRadius() >= brick.getY() &&
-            ball.getCenterY() + ball.getRadius() <= brick.getY() + brick.getHeight()) ||
-            (ball.getCenterY() - ball.getRadius() >= brick.getY() &&
-                ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight()));
+    return ball.getLeft() <= brick.getRight() &&
+        ball.getRight() > brick.getRight() &&
+        inYRange(brick, ball);
   }
 
   /**
@@ -387,12 +417,41 @@ public class Main extends Application {
    * @return boolean true if ball collided with left side of brick
    */
   private boolean collidesWithLeft(Brick brick, Ball ball) {
-    return ball.getCenterX() + ball.getRadius() >= brick.getX() &&
-        ball.getCenterX() + ball.getRadius() <= brick.getX() + (1 * brick.getWidth() / 6) &&
-        ((ball.getCenterY() + ball.getRadius() >= brick.getY() &&
-            ball.getCenterY() + ball.getRadius() <= brick.getY() + brick.getHeight()) ||
-            (ball.getCenterY() - ball.getRadius() >= brick.getY() &&
-                ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight()));
+    return ball.getRight() >= brick.getX() &&
+        ball.getLeft() < brick.getX() &&
+        inYRange(brick, ball);
+  }
+
+  /**
+   * Detects if the ball is within the horizontal range of the brick.
+   *
+   * @param brick Brick object that serves as reference range
+   * @param ball  ball we're checking for collision with brick
+   * @return boolean true if ball is within same x range as brick
+   */
+  public boolean inXRange(Brick brick, Ball ball) {
+    return ball.getCenterX() > brick.getX() && ball.getCenterX() < brick.getRight();
+    /**
+    return (ball.getRight() >= brick.getX() &&
+        ball.getRight() <= brick.getRight()) ||
+        (ball.getLeft() >= brick.getX() &&
+            ball.getLeft() <= brick.getRight());*/
+  }
+
+  /**
+   * Detects if the ball is within the vertical range of the brick.
+   *
+   * @param brick Brick object that serves as reference range
+   * @param ball  ball we're checking for collision with brick
+   * @return boolean true if ball is within same y range as brick
+   */
+  public boolean inYRange(Brick brick, Ball ball) {
+    return ball.getCenterY() >= brick.getY() && ball.getCenterY() <= brick.getBottom();
+    /**
+    return (ball.getBottom() >= brick.getY() &&
+        ball.getBottom() <= brick.getBottom()) ||
+        (ball.getTop() >= brick.getY() &&
+            ball.getTop() <= brick.getBottom());*/
   }
 
   /**
@@ -442,6 +501,9 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * Adds a new life to the screen when the 'L' cheat code is used.
+   */
   public void incrementLives() {
     lives++;
     Circle life = new Circle((livesList.size() + 1) * 30, 40, 20,
@@ -477,7 +539,9 @@ public class Main extends Application {
     this.scoreLabel = controller.getScore();
     this.levelLabel = controller.getLevel();
     balls.add(ball);
-    if (level == 3) boss = controller.getBoss();
+    if (level == 3) {
+      boss = controller.getBoss();
+    }
     myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
     myScene.setOnKeyReleased(e -> handleKeyLift(e.getCode()));
   }

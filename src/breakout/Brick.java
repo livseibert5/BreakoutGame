@@ -35,6 +35,14 @@ public class Brick extends Rectangle {
   public Brick() {
   }
 
+  public double getRight() {
+    return this.getX() + this.getWidth();
+  }
+
+  public double getBottom() {
+    return this.getY() + this.getHeight();
+  }
+
   /**
    * Called when Main registers a collision between a brick and the ball. Subtracts one life from
    * the brick. If a multi-hit brick drops to one life, it's image changes to a single-hit brick.
