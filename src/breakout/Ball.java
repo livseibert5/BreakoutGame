@@ -12,6 +12,7 @@ public class Ball extends Circle {
   private int speed;
   private int xDirection;
   private int yDirection;
+  private boolean isActive;
 
   /**
    * Constructor for Ball object, sets the radius and speed of the ball, as well as it's initial x
@@ -22,6 +23,7 @@ public class Ball extends Circle {
     this.speed = 120;
     this.xDirection = 1;
     this.yDirection = 1;
+    isActive = true;
 
     this.setFill(new ImagePattern(new Image("file:resources/ball.png")));
   }
@@ -60,6 +62,14 @@ public class Ball extends Circle {
    */
   public int getXDirection() {
     return xDirection;
+  }
+
+  public boolean getIsActive() {
+    return isActive;
+  }
+
+  public void setInactive() {
+    isActive = false;
   }
 
   /**

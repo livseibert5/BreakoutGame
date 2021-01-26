@@ -46,7 +46,6 @@ public class Main extends Application {
   private Text scoreLabel;
   private Text levelLabel;
 
-  private int removedBricks = 0;
   private int level = 1;
   private int lives = 3;
   private int score = 0;
@@ -87,8 +86,16 @@ public class Main extends Application {
    */
   private void step(double elapsedTime) {
     time += 1;
-    ball.setCenterX(ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
-    ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
+    balls.stream().forEach(
+        ball -> {
+          ball.setCenterX(ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
+          ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
+          checkPaddleCollision(ball);
+          checkWallCollision(ball);
+          checkBrickCollision(ball);
+        }
+    );
+    balls.removeIf(ball -> ball.getIsActive() == false);
     paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
     if (paddle.getX() + paddle.getWidth() / 2 >= WIDTH) {
       paddle.setX(0);
@@ -100,9 +107,9 @@ public class Main extends Application {
       handleWin();
     }
     checkPowerUps(elapsedTime);
-    checkPaddleCollision();
-    checkWallCollision();
-    checkBrickCollision();
+    //checkPaddleCollision();
+    //checkWallCollision();
+    //checkBrickCollision();
   }
 
   public void checkPowerUps(double elapsedTime) {
@@ -163,6 +170,7 @@ public class Main extends Application {
    */
   public void handleLoss() {
     root.getChildren().removeAll();
+    balls = new ArrayList<>();
     Screen loss = new Screen(Type.LOSS, WIDTH, HEIGHT, TITLE);
     myScene = loss.getScene();
     stage.setScene(myScene);
@@ -172,7 +180,7 @@ public class Main extends Application {
    * Detects collisions between the ball and the paddle, inverts the y direction of the ball if
    * detected.
    */
-  private void checkPaddleCollision() {
+  private void checkPaddleCollision(Ball ball) {
     // First Third.
     if (ball.getCenterY() + ball.getRadius() >= paddle.getY() &&
         ((ball.getCenterX() + ball.getRadius() >= paddle.getX() &&
@@ -194,9 +202,10 @@ public class Main extends Application {
     // Middle.
     else if (ball.getCenterY() + ball.getRadius() >= paddle.getY() &&
         ((ball.getCenterX() + ball.getRadius() >= paddle.getX() + paddle.getWidth() / 3 &&
-          ball.getCenterX() + ball.getRadius() <= paddle.getX() + (2 * paddle.getWidth()) / 3) ||
-        (ball.getCenterX() - ball.getSpeed() >= paddle.getX() + paddle.getWidth() / 3 &&
-            ball.getCenterX() - ball.getSpeed() <= paddle.getX() + (2 * paddle.getWidth()) / 3))) {
+            ball.getCenterX() + ball.getRadius() <= paddle.getX() + (2 * paddle.getWidth()) / 3) ||
+            (ball.getCenterX() - ball.getSpeed() >= paddle.getX() + paddle.getWidth() / 3 &&
+                ball.getCenterX() - ball.getSpeed()
+                    <= paddle.getX() + (2 * paddle.getWidth()) / 3))) {
       ball.invertYDirection();
     }
   }
@@ -206,7 +215,7 @@ public class Main extends Application {
    * the top or wall, the y direction is inverted. If the ball hits the left or right wall, the x
    * direction is inverted. If the ball hits the bottom wall, a life is lost.
    */
-  private void checkWallCollision() {
+  private void checkWallCollision(Ball ball) {
     if (ball.getCenterX() <= ball.getRadius() ||
         ball.getCenterX() >= WIDTH - ball.getRadius()) {
       ball.invertXDirection();
@@ -214,8 +223,11 @@ public class Main extends Application {
     if (ball.getCenterY() <= ball.getRadius() + 75) {
       ball.invertYDirection();
     }
-    if (ball.getCenterY() >= HEIGHT - ball.getRadius()) {
+    if (ball.getCenterY() >= HEIGHT - ball.getRadius() && balls.size() == 1) {
       decrementLives(ball);
+    } else if (ball.getCenterY() >= HEIGHT - ball.getRadius()) {
+      root.getChildren().remove(ball);
+      ball.setInactive();
     }
   }
 
@@ -225,13 +237,13 @@ public class Main extends Application {
    * Each time the brick is hit, the brick loses a life. If the brick's lives hit zero, it is
    * removed from the game.
    */
-  private void checkBrickCollision() {
+  private void checkBrickCollision(Ball ball) {
     for (Brick brick : bricks) {
-      if (collidesWithTop(brick) || collidesWithBottom(brick)) {
+      if (collidesWithTop(brick, ball) || collidesWithBottom(brick, ball)) {
         ball.invertYDirection();
         handleBrickCollision(brick);
         return;
-      } else if (collidesWithRight(brick) || collidesWithLeft(brick)) {
+      } else if (collidesWithRight(brick, ball) || collidesWithLeft(brick, ball)) {
         ball.invertXDirection();
         handleBrickCollision(brick);
         return;
@@ -252,7 +264,6 @@ public class Main extends Application {
       score += 50;
       scoreLabel.setText("Score: " + String.valueOf(score));
       bricks.remove(brick);
-      removedBricks++;
       root.getChildren().remove(brick);
       if (brick instanceof PowerupBrick) {
         dropPowerUp((PowerupBrick) brick);
@@ -275,12 +286,16 @@ public class Main extends Application {
    * @param powerup powerup token to be enacted
    */
   public void setPowerUp(Powerup powerup) {
-    System.out.println(powerup.getType());
     powerupStart = time;
     if (powerup.getType() == Power.FAST) {
       balls.stream().forEach(ball -> ball.setSpeed(160));
-      ball.setSpeed(160);
     } else if (powerup.getType() == Power.EXTRA) {
+      Ball ball = new Ball();
+      ball.setCenterX(WIDTH / 2);
+      ball.setCenterY((HEIGHT - paddle.getHeight() - 50)
+          - paddle.getHeight() / 2 - ball.getRadius() / 2);
+      balls.add(ball);
+      root.getChildren().add(ball);
     } else if (powerup.getType() == Power.LONGER) {
       paddle.expand();
     }
@@ -290,8 +305,8 @@ public class Main extends Application {
    * Reverts the game back to normal when the power-up is complete.
    */
   public void removePowerUps() {
-    if (ball.getSpeed() == 160) {
-      ball.setSpeed(120);
+    if (balls.get(0).getSpeed() == 160) {
+      balls.stream().forEach(ball -> ball.setSpeed(120));
     } else if (paddle.getWidth() > WIDTH / 6) {
       paddle.setWidth(WIDTH / 6);
     }
@@ -303,7 +318,7 @@ public class Main extends Application {
    * @param brick Brick object to check collision with
    * @return boolean true if ball collided with top of brick
    */
-  private boolean collidesWithTop(Brick brick) {
+  private boolean collidesWithTop(Brick brick, Ball ball) {
     return ball.getCenterY() + ball.getRadius() >= brick.getY() &&
         ball.getCenterY() + ball.getRadius() <= brick.getY() + (1 * brick.getHeight() / 6) &&
         ((ball.getCenterX() + ball.getRadius() >= brick.getX() &&
@@ -318,7 +333,7 @@ public class Main extends Application {
    * @param brick Brick object to detect collisions with
    * @return boolean true if ball collided with bottom of brick
    */
-  private boolean collidesWithBottom(Brick brick) {
+  private boolean collidesWithBottom(Brick brick, Ball ball) {
     return ball.getCenterY() - ball.getRadius() <= brick.getY() + brick.getHeight() &&
         ball.getCenterY() - ball.getRadius() >= brick.getY() + (5 * brick.getHeight() / 6) &&
         ((ball.getCenterX() + ball.getRadius() >= brick.getX() &&
@@ -333,7 +348,7 @@ public class Main extends Application {
    * @param brick Brick object to detect collisions with
    * @return boolean true if ball collided with right side of brick
    */
-  private boolean collidesWithRight(Brick brick) {
+  private boolean collidesWithRight(Brick brick, Ball ball) {
     return ball.getCenterX() - ball.getRadius() <= brick.getX() + brick.getWidth() &&
         ball.getCenterX() - ball.getRadius() >= brick.getX() + (5 * brick.getWidth() / 6) &&
         ((ball.getCenterY() + ball.getRadius() >= brick.getY() &&
@@ -348,7 +363,7 @@ public class Main extends Application {
    * @param brick Brick object to detect collisions with
    * @return boolean true if ball collided with left side of brick
    */
-  private boolean collidesWithLeft(Brick brick) {
+  private boolean collidesWithLeft(Brick brick, Ball ball) {
     return ball.getCenterX() + ball.getRadius() >= brick.getX() &&
         ball.getCenterX() + ball.getRadius() <= brick.getX() + (1 * brick.getWidth() / 6) &&
         ((ball.getCenterY() + ball.getRadius() >= brick.getY() &&
@@ -387,12 +402,12 @@ public class Main extends Application {
     } else if (code == KeyCode.DIGIT2) {
       setLevel(2);
     } else if (code == KeyCode.DIGIT3 ||
-                code == KeyCode.DIGIT4 ||
-                code == KeyCode.DIGIT5 ||
-                code == KeyCode.DIGIT6 ||
-                code == KeyCode.DIGIT7 ||
-                code == KeyCode.DIGIT8 ||
-                code == KeyCode.DIGIT9) {
+        code == KeyCode.DIGIT4 ||
+        code == KeyCode.DIGIT5 ||
+        code == KeyCode.DIGIT6 ||
+        code == KeyCode.DIGIT7 ||
+        code == KeyCode.DIGIT8 ||
+        code == KeyCode.DIGIT9) {
       setLevel(3);
     } else if (code == KeyCode.L) {
       incrementLives();
@@ -415,6 +430,8 @@ public class Main extends Application {
    * @param level level to be played next
    */
   public void setLevel(int level) {
+    balls = new ArrayList<>();
+    lives = 3;
     controller.setupGame(level, WIDTH, HEIGHT, BACKGROUND);
     myScene = controller.getScene();
     retrieveGamePieces();
