@@ -27,6 +27,7 @@ public class GameController {
   private List<Brick> bricks;
   private Text score;
   private Text level;
+  private Boss boss;
   private int levelNumber;
   private int width;
   private int height;
@@ -62,6 +63,7 @@ public class GameController {
       readFile("resources/level2.txt");
     } else if (level == 3) {
       readFile("resources/level3.txt");
+      createBossEnemy();
     }
     assembleBricks();
     createPaddle();
@@ -70,6 +72,15 @@ public class GameController {
     setScore();
     setLevel();
     myScene = new Scene(root, width, height, background);
+  }
+
+  public void createBossEnemy() {
+    boss = new Boss(width);
+    root.getChildren().add(boss);
+  }
+
+  public Boss getBoss() {
+    return boss;
   }
 
   /**

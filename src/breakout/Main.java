@@ -38,6 +38,7 @@ public class Main extends Application {
   private Paddle paddle;
   private Stage stage;
   private Ball ball;
+  private Boss boss;
   private Group root;
   private List<Brick> bricks;
   private List<Circle> livesList;
@@ -49,6 +50,7 @@ public class Main extends Application {
   private int level = 1;
   private int lives = 3;
   private int score = 0;
+  private boolean gamePlay = false;
   private double time = 0;
   private double powerupStart = 0;
 
@@ -68,6 +70,7 @@ public class Main extends Application {
       @Override
       public void handle(MouseEvent e) {
         setLevel(level);
+        gamePlay = true;
         KeyFrame frame = new KeyFrame(Duration.seconds(SECOND_DELAY), event -> step(SECOND_DELAY));
         Timeline animation = new Timeline();
         animation.setCycleCount(Timeline.INDEFINITE);
@@ -85,31 +88,50 @@ public class Main extends Application {
    * @param elapsedTime time since beginning of game
    */
   private void step(double elapsedTime) {
-    time += 1;
-    balls.stream().forEach(
-        ball -> {
-          ball.setCenterX(ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
-          ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
-          checkPaddleCollision(ball);
-          checkWallCollision(ball);
-          checkBrickCollision(ball);
-        }
-    );
-    balls.removeIf(ball -> ball.getIsActive() == false);
-    paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
-    if (paddle.getX() + paddle.getWidth() / 2 >= WIDTH) {
-      paddle.setX(0);
-    } else if (paddle.getX() + paddle.getWidth() / 2 <= 0) {
-      paddle.setX(WIDTH - paddle.getWidth());
-    }
+    if (gamePlay) {
+      time += 1;
+      balls.stream().forEach(
+          ball -> {
+            ball.setCenterX(
+                ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
+            ball.setCenterY(
+                ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
+            if (level == 3)
+              checkBossCollision(ball);
+            checkPaddleCollision(ball);
+            checkWallCollision(ball);
+            checkBrickCollision(ball);
+          }
+      );
+      balls.removeIf(ball -> ball.getIsActive() == false);
+      paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
+      if (paddle.getX() + paddle.getWidth() / 2 >= WIDTH) {
+        paddle.setX(0);
+      } else if (paddle.getX() + paddle.getWidth() / 2 <= 0) {
+        paddle.setX(WIDTH - paddle.getWidth());
+      }
 
-    if (bricks.isEmpty()) {
-      handleWin();
+      if (level == 3) {
+        boss.setX(boss.getX() + boss.getXDirection() * boss.getSpeed() * elapsedTime);
+        if (boss.getX() < 0 || boss.getX() >= WIDTH - boss.getWidth())
+          boss.invertXDirection();
+      }
+
+      if (bricks.isEmpty()) {
+        handleWin();
+      }
+      checkPowerUps(elapsedTime);
     }
-    checkPowerUps(elapsedTime);
-    //checkPaddleCollision();
-    //checkWallCollision();
-    //checkBrickCollision();
+  }
+
+  public void checkBossCollision(Ball ball) {
+    if (collidesWithTop((Brick) boss, ball) || collidesWithBottom((Brick) boss, ball)) {
+      ball.invertYDirection();
+      decrementLives(ball);
+    } else if (collidesWithRight((Brick) boss, ball)) {
+      ball.invertXDirection();
+      decrementLives(ball);
+    }
   }
 
   public void checkPowerUps(double elapsedTime) {
@@ -155,6 +177,7 @@ public class Main extends Application {
   public void handleWin() {
     level++;
     if (level > 3) {
+      gamePlay = false;
       root.getChildren().removeAll();
       Screen win = new Screen(Type.WIN, WIDTH, HEIGHT, TITLE);
       myScene = win.getScene();
@@ -169,8 +192,8 @@ public class Main extends Application {
    * and displays the loss message.
    */
   public void handleLoss() {
+    gamePlay = false;
     root.getChildren().removeAll();
-    balls = new ArrayList<>();
     Screen loss = new Screen(Type.LOSS, WIDTH, HEIGHT, TITLE);
     myScene = loss.getScene();
     stage.setScene(myScene);
@@ -305,7 +328,7 @@ public class Main extends Application {
    * Reverts the game back to normal when the power-up is complete.
    */
   public void removePowerUps() {
-    if (balls.get(0).getSpeed() == 160) {
+    if (!balls.isEmpty() && balls.get(0).getSpeed() == 160) {
       balls.stream().forEach(ball -> ball.setSpeed(120));
     } else if (paddle.getWidth() > WIDTH / 6) {
       paddle.setWidth(WIDTH / 6);
@@ -398,8 +421,10 @@ public class Main extends Application {
         paddle.moveLeft();
       }
     } else if (code == KeyCode.DIGIT1) {
+      level = 1;
       setLevel(1);
     } else if (code == KeyCode.DIGIT2) {
+      level = 2;
       setLevel(2);
     } else if (code == KeyCode.DIGIT3 ||
         code == KeyCode.DIGIT4 ||
@@ -408,6 +433,7 @@ public class Main extends Application {
         code == KeyCode.DIGIT7 ||
         code == KeyCode.DIGIT8 ||
         code == KeyCode.DIGIT9) {
+      level = 3;
       setLevel(3);
     } else if (code == KeyCode.L) {
       incrementLives();
@@ -451,6 +477,7 @@ public class Main extends Application {
     this.scoreLabel = controller.getScore();
     this.levelLabel = controller.getLevel();
     balls.add(ball);
+    if (level == 3) boss = controller.getBoss();
     myScene.setOnKeyPressed(e -> handleKeyInput(e.getCode()));
     myScene.setOnKeyReleased(e -> handleKeyLift(e.getCode()));
   }
