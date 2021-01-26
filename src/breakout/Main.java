@@ -31,6 +31,7 @@ public class Main extends Application {
   private static final int FRAMES_PER_SECOND = 60;
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
   private static final Paint BACKGROUND = Color.WHITE;
+  private static final int POWERUP_SPEED = 60;
 
   private GameController controller;
   private Scene myScene;
@@ -41,8 +42,10 @@ public class Main extends Application {
   private List<Brick> bricks;
   private List<Circle> livesList;
   private List<Ball> balls = new ArrayList<>();
+  private List<Powerup> powerups = new ArrayList<>();
   private Text scoreLabel;
   private Text levelLabel;
+
   private int removedBricks = 0;
   private int level = 1;
   private int lives = 3;
@@ -84,9 +87,6 @@ public class Main extends Application {
    */
   private void step(double elapsedTime) {
     time += 1;
-    if (time - powerupStart >= 750) {
-      removePowerUps();
-    }
     ball.setCenterX(ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
     ball.setCenterY(ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
     paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
@@ -99,9 +99,26 @@ public class Main extends Application {
     if (bricks.size() == removedBricks) {
       handleWin();
     }
+    checkPowerUps(elapsedTime);
     checkPaddleCollision();
     checkWallCollision();
     checkBrickCollision();
+  }
+
+  public void checkPowerUps(double elapsedTime) {
+    if (time - powerupStart >= 750) {
+      removePowerUps();
+    }
+    powerups.stream().forEach(
+        powerup -> {
+          powerup.setCenterY(powerup.getCenterY() + POWERUP_SPEED * elapsedTime);
+          if (powerup.getBoundsInParent().intersects(paddle.getBoundsInParent())) {
+            root.getChildren().remove(powerup);
+            powerup.setUsed();
+            setPowerUp(powerup);
+          }
+        });
+    powerups.removeIf(powerup -> powerup.getUsed());
   }
 
   /**
@@ -238,23 +255,33 @@ public class Main extends Application {
       removedBricks++;
       root.getChildren().remove(brick);
       if (brick instanceof PowerupBrick) {
-        setPowerUp((PowerupBrick) brick);
+        dropPowerUp((PowerupBrick) brick);
       }
     }
+  }
+
+  public void dropPowerUp(PowerupBrick brick) {
+    Powerup powerup = new Powerup(brick.getType());
+    powerup.setCenterX(brick.getX() + brick.getWidth() / 2);
+    powerup.setCenterY(brick.getY() + brick.getHeight() / 2);
+    powerup.setRadius(15);
+    powerups.add(powerup);
+    root.getChildren().add(powerup);
   }
 
   /**
    * Called when a power-up brick is broken. Applies the power-up to the game.
    *
-   * @param brick brick that contains the powerup
+   * @param powerup powerup token to be enacted
    */
-  public void setPowerUp(PowerupBrick brick) {
+  public void setPowerUp(Powerup powerup) {
+    System.out.println(powerup.getType());
     powerupStart = time;
-    if (brick.getType() == Power.FAST) {
+    if (powerup.getType() == Power.FAST) {
       balls.stream().forEach(ball -> ball.setSpeed(160));
       ball.setSpeed(160);
-    } else if (brick.getType() == Power.EXTRA) {
-    } else if (brick.getType() == Power.LONGER) {
+    } else if (powerup.getType() == Power.EXTRA) {
+    } else if (powerup.getType() == Power.LONGER) {
       paddle.expand();
     }
   }
@@ -359,10 +386,18 @@ public class Main extends Application {
       setLevel(1);
     } else if (code == KeyCode.DIGIT2) {
       setLevel(2);
-    } else if (code == KeyCode.DIGIT3) {
+    } else if (code == KeyCode.DIGIT3 ||
+                code == KeyCode.DIGIT4 ||
+                code == KeyCode.DIGIT5 ||
+                code == KeyCode.DIGIT6 ||
+                code == KeyCode.DIGIT7 ||
+                code == KeyCode.DIGIT8 ||
+                code == KeyCode.DIGIT9) {
       setLevel(3);
     } else if (code == KeyCode.L) {
       incrementLives();
+    } else if (code == KeyCode.R) {
+      setLevel(level);
     }
   }
 
