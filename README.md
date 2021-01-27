@@ -2,28 +2,39 @@
 
 This project implements the game of Breakout.
 
-Name: 
+Name: Livia Seibert
 
 ### Timeline
 
-Start Date: 
+Start Date: 1/23/21
 
 Finish Date: 
 
-Hours Spent:
+Hours Spent: 30
 
 ### Resources Used
-
+GeeksForGeeks file reading tutorial: https://www.geeksforgeeks.org/different-ways-reading-text-file-java/
 
 ### Running the Program
 
-Main class:
+Main class: Main.java, calls GameController
 
-Data files needed: 
+Data files needed: level1.txt, level2.txt, and level3.txt are needed
+to create the layouts for the levels, ball.png, cupid.png, heart.png,
+paddle.png, pink.png, power.png, red2.png, red3.png, red4.png, red5.png,
+and rose.png are all needed to display the graphics for the program without
+crashing.
 
 Key/Mouse inputs:
+mouse click starts game, left/right arrows move the paddle
 
 Cheat keys:
+'L' - gives the player an additional life
+'R' - resets the level
+'1-9' - jumps to corresponding level, or highest existing level
+'N' - moves to next level
+'P' - drops a power-up
+'B' - removes the boss enemy in the third level
 
 
 ### Notes/Assumptions
@@ -32,7 +43,9 @@ Assumptions or Simplifications:
 
 Known Bugs:
 
-Extra credit:
+Extra credit: I added a boss enemy in level 3. The boss moves back and
+forth across the screen horizontally for the duration of the level.
+The boss takes one of the player's lives when the ball hits it.
 
 
 ### Impressions
