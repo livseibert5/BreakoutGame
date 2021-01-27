@@ -357,15 +357,19 @@ public class Main extends Application {
     if (powerup.getType() == Power.FAST) {
       balls.stream().forEach(ball -> ball.setSpeed(160));
     } else if (powerup.getType() == Power.EXTRA) {
-      Ball ball = new Ball();
-      ball.setCenterX(WIDTH / 2);
-      ball.setCenterY((HEIGHT - paddle.getHeight() - 50)
-          - paddle.getHeight() / 2 - ball.getRadius() / 2);
-      balls.add(ball);
-      root.getChildren().add(ball);
+      generateNewBall();
     } else if (powerup.getType() == Power.LONGER) {
       paddle.expand();
     }
+  }
+
+  public void generateNewBall() {
+    Ball ball = new Ball();
+    ball.setCenterX(WIDTH / 2);
+    ball.setCenterY((HEIGHT - paddle.getHeight() - 50)
+        - paddle.getHeight() / 2 - ball.getRadius() / 2);
+    balls.add(ball);
+    root.getChildren().add(ball);
   }
 
   /**
