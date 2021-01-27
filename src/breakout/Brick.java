@@ -79,11 +79,6 @@ public class Brick extends Rectangle {
         new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream(imageName))));
   }
 
-  /**
-   * Accesses the number of lives the brick has left.
-   *
-   * @return lives number of hits until the block breaks.
-   */
   public int getLives() {
     return lives;
   }

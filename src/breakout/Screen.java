@@ -86,12 +86,7 @@ public class Screen {
     Text loss = new Text(width / 3, height / 4, lossText);
     root.getChildren().add(loss);
   }
-
-  /**
-   * Accesses the scene created.
-   *
-   * @return myScene scene created
-   */
+  
   public Scene getScene() {
     return myScene;
   }
