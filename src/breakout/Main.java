@@ -82,7 +82,7 @@ public class Main extends Application {
 
   /**
    * Updates location of game pieces to animate them over time. Handles the core functionality of
-   * the game, including detecting and handling collisions, timing powerups, and determining if a
+   * the game, including detecting and handling collisions, timing power-ups, and determining if a
    * level has been cleared.
    *
    * @param elapsedTime time increment since step function was last called
@@ -243,33 +243,34 @@ public class Main extends Application {
    * detected.
    */
   private void checkPaddleCollision(Ball ball) {
-    // First Third.
-    if (ball.getBottom() >= paddle.getY() &&
-        ((ball.getRight() >= paddle.getX() &&
-            ball.getRight() <= paddle.getX() + paddle.getWidth() / 3) ||
-            (ball.getLeft() >= paddle.getX() &&
-                ball.getLeft() <= paddle.getX() + paddle.getWidth() / 3))) {
+    if (intersectsPaddleThird(1, ball) || intersectsPaddleThird(3, ball)) {
       ball.invertYDirection();
       ball.invertXDirection();
-    }
-    // Second Third.
-    else if (ball.getBottom() >= paddle.getY() &&
-        ((ball.getRight() >= paddle.getX() + (2 * paddle.getWidth()) / 3 &&
-            ball.getRight() <= paddle.getX() + paddle.getWidth()) ||
-            (ball.getLeft() >= paddle.getX() + (2 * paddle.getWidth()) / 3 &&
-                ball.getLeft() <= paddle.getX() + paddle.getWidth()))) {
-      ball.invertYDirection();
-      ball.invertXDirection();
-    }
-    // Middle.
-    else if (ball.getBottom() >= paddle.getY() &&
-        ((ball.getRight() >= paddle.getX() + paddle.getWidth() / 3 &&
-            ball.getRight() <= paddle.getX() + (2 * paddle.getWidth()) / 3) ||
-            (ball.getLeft() >= paddle.getX() + paddle.getWidth() / 3 &&
-                ball.getLeft()
-                    <= paddle.getX() + (2 * paddle.getWidth()) / 3))) {
+    } else if (intersectsPaddleThird(1, ball)) {
       ball.invertYDirection();
     }
+  }
+
+  public boolean intersectsPaddleThird(int third, Ball ball) {
+    double left = paddle.getX();
+    double right = paddle.getX() + paddle.getWidth();
+    if (third == 1) {
+      right = paddle.getX() + (1 / 3) * paddle.getWidth();
+    } else if (third == 2) {
+      left = paddle.getX() + (1 / 3) * paddle.getWidth();
+      right = paddle.getX() + (2 / 3) * paddle.getWidth();
+    } else if (third == 3) {
+      left = paddle.getX() + (2 / 3) * paddle.getWidth();
+    }
+    return checkPaddleThirds(left, right, ball);
+  }
+
+  public boolean checkPaddleThirds(double left, double right, Ball ball) {
+    return ball.getBottom() >= paddle.getY() &&
+        ((ball.getRight() >= left &&
+            ball.getRight() <= right) ||
+            (ball.getLeft() >= left &&
+                ball.getLeft() <= right));
   }
 
   /**
@@ -278,16 +279,15 @@ public class Main extends Application {
    * direction is inverted. If the ball hits the bottom wall, a life is lost.
    */
   private void checkWallCollision(Ball ball) {
-    if (ball.getCenterX() <= ball.getRadius() ||
-        ball.getCenterX() >= WIDTH - ball.getRadius()) {
+    if (ball.getLeft() <= 0 || ball.getRight() >= WIDTH) {
       ball.invertXDirection();
     }
-    if (ball.getCenterY() <= ball.getRadius() + 75) {
+    if (ball.getTop() <= 75) {
       ball.invertYDirection();
     }
-    if (ball.getCenterY() >= HEIGHT - ball.getRadius() && balls.size() == 1) {
+    if (ball.getBottom() >= HEIGHT && balls.size() == 1) {
       decrementLives(ball);
-    } else if (ball.getCenterY() >= HEIGHT - ball.getRadius()) {
+    } else if (ball.getBottom() >= HEIGHT) {
       root.getChildren().remove(ball);
       ball.setInactive();
     }
@@ -334,8 +334,7 @@ public class Main extends Application {
   }
 
   /**
-   * Called when power-up brick is broken, creates new power-up
-   * that can be caught by the paddle.
+   * Called when power-up brick is broken, creates new power-up that can be caught by the paddle.
    *
    * @param brick power-up brick that was broken
    */
