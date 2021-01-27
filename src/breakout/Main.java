@@ -490,6 +490,16 @@ public class Main extends Application {
       incrementLives();
     } else if (code == KeyCode.R) {
       setLevel(level);
+    } else if (code == KeyCode.N) {
+      level++;
+      if (level < 4) {
+        setLevel(level);
+      }
+    } else if (code == KeyCode.P) {
+      PowerupBrick random = new PowerupBrick(WIDTH, HEIGHT);
+      random.setX(WIDTH / 2);
+      random.setY(HEIGHT / 2);
+      dropPowerUp(random);
     }
   }
 
