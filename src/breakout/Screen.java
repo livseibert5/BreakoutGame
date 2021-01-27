@@ -20,8 +20,10 @@ public class Screen {
   private final Scene myScene;
   private final String directionText = "Welcome to Valentine's Breakout!\n"
       + "Your goal is to clear all the blocks from each level.\n"
-      + "You have three lives to complete this goal, be sure to collect power-ups as well.\n"
-      + "Watch out for baby cupid, good luck!";
+      + "Pink blocks disappear after one hit, red blocks require more hits to break.\n"
+      + "Gold blocks contain power-ups.\n"
+      + "You have three lives to complete this goal.\n"
+      + "Watch out for baby cupid, good luck!\n";
   private final String winText = "Congratulations, you won!";
   private final String lossText = "Sorry, you lost. Better luck next time!";
   private final Group root;
@@ -58,8 +60,8 @@ public class Screen {
    */
   public void createInstructionText(String title) {
     Text titleText = new Text(width / 3 + 20, height / 4, title);
-    Text directions = new Text(40, height / 3, directionText);
-    Text play = new Text(width / 3 + 65, height / 2, "CLICK TO PLAY");
+    Text directions = new Text(75, height / 3, directionText);
+    Text play = new Text(width / 3 + 70, height - 200, "CLICK TO PLAY");
     titleText.setFont(new Font(24));
     directions.setFont(new Font(18));
     play.setFont(new Font(14));
@@ -87,11 +89,6 @@ public class Screen {
     root.getChildren().add(loss);
   }
 
-  /**
-   * Accesses the scene created.
-   *
-   * @return myScene scene created
-   */
   public Scene getScene() {
     return myScene;
   }

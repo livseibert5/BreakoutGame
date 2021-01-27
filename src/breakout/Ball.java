@@ -44,55 +44,34 @@ public class Ball extends Circle {
     return this.getCenterX() - this.getRadius();
   }
 
-  public void setSpeed(int speed) {
-    this.speed = speed;
-  }
-
-  /**
-   * Inverts the X direction of the ball, called when the ball encounters a vertical barrier.
-   */
   public void invertXDirection() {
     xDirection *= -1;
   }
 
-  /**
-   * Inverts the Y direction of the ball, called when the ball encounters a horizontal barrier.
-   */
   public void invertYDirection() {
     yDirection *= -1;
   }
 
-  /**
-   * Accesses the current speed of the ball.
-   *
-   * @return speed velocity of ball
-   */
+  public void setSpeed(int speed) {
+    this.speed = speed;
+  }
+
   public int getSpeed() {
     return speed;
-  }
-
-  /**
-   * Accesses the x direction of the ball.
-   *
-   * @return xDirection horizontal direction of the ball
-   */
-  public int getXDirection() {
-    return xDirection;
-  }
-
-  public boolean getIsActive() {
-    return isActive;
   }
 
   public void setInactive() {
     isActive = false;
   }
 
-  /**
-   * Accesses the y direction of the ball.
-   *
-   * @return yDirection vertical direction of the ball
-   */
+  public boolean getIsActive() {
+    return isActive;
+  }
+
+  public int getXDirection() {
+    return xDirection;
+  }
+
   public int getYDirection() {
     return yDirection;
   }
