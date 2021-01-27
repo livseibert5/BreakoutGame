@@ -1,6 +1,5 @@
 package breakout;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.animation.KeyFrame;
@@ -37,7 +36,6 @@ public class Main extends Application {
   private Scene myScene;
   private Paddle paddle;
   private Stage stage;
-  private Ball ball;
   private Boss boss;
   private Group root;
   private List<Brick> bricks;
@@ -58,7 +56,7 @@ public class Main extends Application {
    * Display instruction screen, then switch to first level and start running the step function.
    */
   @Override
-  public void start(Stage stage) throws Exception {
+  public void start(Stage stage) {
     controller = new GameController();
     Screen instructions = new Screen(Type.INSTRUCTIONS, WIDTH, HEIGHT, TITLE);
     myScene = instructions.getScene();
@@ -324,7 +322,7 @@ public class Main extends Application {
     brick.decrementLives();
     if (brick.getLives() <= 0) {
       score += 50;
-      scoreLabel.setText("Score: " + String.valueOf(score));
+      scoreLabel.setText("Score: " + score);
       bricks.remove(brick);
       root.getChildren().remove(brick);
       if (brick instanceof PowerupBrick) {
@@ -506,7 +504,7 @@ public class Main extends Application {
   public void incrementLives() {
     lives++;
     Circle life = new Circle((livesList.size() + 1) * 30, 40, 20,
-        new ImagePattern(new Image("file:resources/rose.png")));
+        new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("rose.png"))));
     livesList.add(life);
     root.getChildren().add(life);
   }
@@ -531,7 +529,7 @@ public class Main extends Application {
    */
   public void retrieveGamePieces() {
     this.paddle = controller.getPaddle();
-    this.ball = controller.getBall();
+    Ball ball = controller.getBall();
     this.bricks = controller.getBricks();
     this.root = controller.getRoot();
     this.livesList = controller.getLives();

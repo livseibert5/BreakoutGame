@@ -23,7 +23,8 @@ public class Paddle extends Rectangle {
     xDirection = 0;
     this.setWidth(width / 6);
     this.setHeight(height / 21);
-    this.setFill(new ImagePattern(new Image("file:resources/paddle.png")));
+    this.setFill(
+        new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("paddle.png"))));
   }
 
   /**

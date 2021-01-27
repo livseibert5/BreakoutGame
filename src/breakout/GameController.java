@@ -1,10 +1,8 @@
 package breakout;
 
-import java.io.FileNotFoundException;
 import javafx.scene.Group;
 import javafx.scene.paint.Paint;
 import javafx.scene.Scene;
-import java.io.File;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +56,11 @@ public class GameController {
     this.width = width;
     this.height = height;
     if (level == 1) {
-      readFile("resources/level1.txt");
+      readFile("level1.txt");
     } else if (level == 2) {
-      readFile("resources/level2.txt");
+      readFile("level2.txt");
     } else if (level == 3) {
-      readFile("resources/level3.txt");
+      readFile("level3.txt");
       createBossEnemy();
     }
     assembleBricks();
@@ -89,20 +87,15 @@ public class GameController {
    * @param filename .txt file that holds the level layout
    */
   private void readFile(String filename) {
-    try {
-      File file = new File(filename);
-      Scanner reader = new Scanner(file);
-      int row = 0;
-      while (reader.hasNextLine()) {
-        String line = reader.nextLine();
-        String[] brickRow = line.split("");
-        for (int col = 0; col < brickRow.length; col++) {
-          brickLayout[row][col] = Integer.parseInt(brickRow[col]);
-        }
-        row++;
+    Scanner reader = new Scanner(getClass().getClassLoader().getResourceAsStream(filename));
+    int row = 0;
+    while (reader.hasNextLine()) {
+      String line = reader.nextLine();
+      String[] brickRow = line.split("");
+      for (int col = 0; col < brickRow.length; col++) {
+        brickLayout[row][col] = Integer.parseInt(brickRow[col]);
       }
-    } catch (FileNotFoundException e) {
-      System.out.println(e.getMessage());
+      row++;
     }
   }
 
@@ -171,7 +164,7 @@ public class GameController {
   public void setLives() {
     for (int i = 1; i < 4; i++) {
       Circle life = new Circle(i * 30, 40, 20,
-          new ImagePattern(new Image("file:resources/rose.png")));
+          new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("rose.png"))));
       root.getChildren().add(life);
       lives.add(life);
     }

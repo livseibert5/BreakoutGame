@@ -13,7 +13,8 @@ public class Boss extends Brick {
     this.setY(height - 150);
     this.setWidth(40);
     this.setHeight(40);
-    this.setFill(new ImagePattern(new Image("file:resources/cupid.png")));
+    this.setFill(
+        new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("cupid.png"))));
     xDirection = 1;
   }
 

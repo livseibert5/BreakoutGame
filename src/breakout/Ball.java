@@ -24,8 +24,8 @@ public class Ball extends Circle {
     this.xDirection = 1;
     this.yDirection = 1;
     isActive = true;
-
-    this.setFill(new ImagePattern(new Image("file:resources/ball.png")));
+    this.setFill(
+        new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("ball.png"))));
   }
 
   public double getTop() {

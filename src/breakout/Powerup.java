@@ -10,7 +10,8 @@ public class Powerup extends Circle {
   private boolean used;
 
   public Powerup(Power type) {
-    this.setFill(new ImagePattern(new Image("file:resources/heart.png")));
+    this.setFill(
+        new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("heart.png"))));
     this.setRadius(15);
     used = false;
     powerupType = type;
