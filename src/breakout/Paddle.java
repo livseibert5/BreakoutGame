@@ -5,7 +5,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 /**
- * This class creates the paddle object needed for game play.
+ * This class creates the paddle object needed for game play. Used by GameController class to place
+ * paddle into scene.
  */
 public class Paddle extends Rectangle {
 
@@ -13,8 +14,8 @@ public class Paddle extends Rectangle {
   private final int PADDLE_SPEED = 120;
 
   /**
-   * Constructor for paddle class, sets width and height of paddle based on width and height of game
-   * screen, also sets image for paddle. Sets initial x direction to 0 so the paddle doesn't move.
+   * Constructor for paddle class, width and height of paddle are determined with. respect to the
+   * game screen's dimensions.
    *
    * @param width  width of game screen
    * @param height height of game screen

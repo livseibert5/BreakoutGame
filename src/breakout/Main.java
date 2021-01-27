@@ -116,9 +116,7 @@ public class Main extends Application {
   }
 
   /**
-   * Updates the location of the balls to move them over time. Checks for collisions between the
-   * ball and the paddle, the ball and the walls, and the ball and the bricks. On the third level,
-   * collisions with the boss enemy are detected as well.
+   * Updates the location of the balls to move them over time and checks for collisions.
    *
    * @param elapsedTime time increment since last ball update
    */
@@ -156,11 +154,10 @@ public class Main extends Application {
   }
 
   /**
-   * If there are powerups that have been unlocked but haven't hit the paddle yet, this function
-   * moves them down the screen. If the powerup hits the paddle, the powerup goes into effect and is
-   * marked as used so it can be removed from the active powerup list.
+   * Moves power-ups down the screen and detects if they hit the paddle. Removes power-ups when
+   * their time is up.
    *
-   * @param elapsedTime time since last powerup check
+   * @param elapsedTime time since last power-up check
    */
   private void checkPowerUps(double elapsedTime) {
     if (time - powerupStart >= 750) {
@@ -173,6 +170,8 @@ public class Main extends Application {
             root.getChildren().remove(powerup);
             powerup.setUsed();
             setPowerUp(powerup);
+          } else if (powerup.getCenterY() < paddle.getY() + paddle.getHeight()) {
+            powerup.setUsed();
           }
         });
     powerups.removeIf(powerup -> powerup.getUsed());
@@ -181,8 +180,7 @@ public class Main extends Application {
   /**
    * Called when the ball drops below the paddle or the ball hits the boss enemy in level 3. Only
    * called for ball dropping when there is one active ball. Decrements the lives of the player and
-   * resets the ball if the player has more lives. If the player is out of lives, loss screen is
-   * displayed.
+   * resets the ball if the player has more lives.
    *
    * @param ball ball to be respawned if all balls have fallen offscreen
    */
@@ -202,9 +200,8 @@ public class Main extends Application {
   }
 
   /**
-   * Called when the player destroys all the blocks for the level. Increments the level, if the
-   * level is greater than 3 the user has won the entire game and the win screen is shown.
-   * Otherwise, the next level is set up.
+   * Called when the player destroys all the blocks for the level. Increments the level or shows the
+   * final win screen if applicable
    */
   private void handleWin() {
     level++;
@@ -232,8 +229,7 @@ public class Main extends Application {
   }
 
   /**
-   * Detects collisions between the ball and the paddle, inverts the y direction of the ball if
-   * detected.
+   * Detects collisions between the ball and the paddle.
    */
   private void checkPaddleCollision(Ball ball) {
     if (intersectsPaddleThird(1, ball) || intersectsPaddleThird(3, ball)) {
@@ -244,6 +240,14 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * Given the third of the paddle that we're checking for collisions, the function determines the
+   * left and right bound of that third and checks if it has been hit.
+   *
+   * @param third which third of the paddle we're detecting
+   * @param ball  ball involved in collision
+   * @return boolean true if ball has collided with indicated third of paddle
+   */
   private boolean intersectsPaddleThird(int third, Ball ball) {
     double left = paddle.getX();
     double right = paddle.getX() + paddle.getWidth();
@@ -258,6 +262,15 @@ public class Main extends Application {
     return checkPaddleThirds(left, right, ball);
   }
 
+  /**
+   * Given the bounds of the third of the paddle, detects if a collision has occurred within those
+   * thirds.
+   *
+   * @param left  left bound of third
+   * @param right right bound of third
+   * @param ball  ball involved in collision
+   * @return boolean true if ball collided with paddle in indicated third
+   */
   private boolean checkPaddleThirds(double left, double right, Ball ball) {
     return ball.getBottom() >= paddle.getY() &&
         ((ball.getRight() >= left &&
@@ -267,9 +280,9 @@ public class Main extends Application {
   }
 
   /**
-   * Determines if the ball hits the left or right wall or the top or bottom wall. If the ball hits
-   * the top or wall, the y direction is inverted. If the ball hits the left or right wall, the x
-   * direction is inverted. If the ball hits the bottom wall, a life is lost.
+   * Determines if the ball hits a wall. If the ball hits the top wall, the y direction is inverted.
+   * If the ball hits the left or right wall, the x direction is inverted. If the ball hits the
+   * bottom wall, a life is lost.
    */
   private void checkWallCollision(Ball ball) {
     if (ball.getLeft() <= 0 || ball.getRight() >= WIDTH) {
@@ -287,10 +300,7 @@ public class Main extends Application {
   }
 
   /**
-   * Determines if the ball collides with a brick. If it hits the top or bottom of the brick, the y
-   * direction is inverted. If it hits the left or right of the brick, the x direction is inverted.
-   * Each time the brick is hit, the brick loses a life. If the brick's lives hit zero, it is
-   * removed from the game.
+   * Determines if the ball collides with a brick and alters ball motion accordingly.
    */
   private void checkBrickCollision(Ball ball) {
     for (Brick brick : bricks) {
@@ -356,13 +366,12 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * Generates a new ball for the game, called when a new ball power-up is released.
+   */
   private void generateNewBall() {
-    Ball ball = new Ball();
-    ball.setCenterX(WIDTH / 2.0);
-    ball.setCenterY((HEIGHT - paddle.getHeight() - 50)
-        - paddle.getHeight() / 2 - ball.getRadius() / 2);
-    balls.add(ball);
-    root.getChildren().add(ball);
+    controller.createBall();
+    balls.add(controller.getBall());
   }
 
   /**
@@ -492,6 +501,9 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * Creates a random power-up, called when user presses the 'P' cheat key.
+   */
   private void createRandomPowerup() {
     PowerupBrick random = new PowerupBrick(WIDTH, HEIGHT);
     random.setX(WIDTH / 2);

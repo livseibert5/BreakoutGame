@@ -69,7 +69,7 @@ public class GameController {
   }
 
   /**
-   * Takes in a .txt file and populates the brickLayout array to depict the layout for the level.
+   * Takes in a .txt file and populates the layout for the level.
    *
    * @param filename .txt file that holds the level layout
    */
@@ -88,7 +88,14 @@ public class GameController {
     }
   }
 
-  public void assembleBricks(int row, int col, int type) {
+  /**
+   * Determines the coordinates for the brick given the row and column.
+   *
+   * @param row  row of brick in .txt file
+   * @param col  column of brick in .txt file
+   * @param type type of brick
+   */
+  private void assembleBricks(int row, int col, int type) {
     Brick brick = new Brick();
     if (type == 1) {
       brick = new Brick(1, width, height);
@@ -117,14 +124,17 @@ public class GameController {
   /**
    * Creates and sets coordinates for the paddle for the game and adds the paddle to the scene.
    */
-  public void createPaddle() {
+  private void createPaddle() {
     paddle = new Paddle(width, height);
     paddle.setX(width / 2 - paddle.getWidth() / 2);
     paddle.setY(height - paddle.getHeight() - 20);
     root.getChildren().add(paddle);
   }
 
-  public void createBossEnemy() {
+  /**
+   * Creates boss enemy and adds it to scene. Only called during the third level.
+   */
+  private void createBossEnemy() {
     boss = new Boss(height);
     root.getChildren().add(boss);
   }
@@ -132,7 +142,7 @@ public class GameController {
   /**
    * Creates Circle objects to hold images that represent the number of lives the player has left.
    */
-  public void setLivesLabel() {
+  private void setLivesLabel() {
     for (int i = 1; i < 4; i++) {
       Circle life = new Circle(i * 30, 40, 20,
           new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("rose.png"))));
@@ -144,7 +154,7 @@ public class GameController {
   /**
    * Creates a Text object to hold the current score of the game.
    */
-  public void setScoreLabel() {
+  private void setScoreLabel() {
     score = new Text(width - 100, 40, "Score: 0");
     root.getChildren().add(score);
     Rectangle pageBreak = new Rectangle(0, 65, width, 3);
@@ -154,7 +164,7 @@ public class GameController {
   /**
    * Creates a Text object to hold the current level of the game.
    */
-  public void setLevelLabel() {
+  private void setLevelLabel() {
     level = new Text(width - 150, 40, "Level: " + levelNumber);
     root.getChildren().add(level);
   }
@@ -183,9 +193,6 @@ public class GameController {
     return score;
   }
 
-  public Text getLevelLabel() {
-    return level;
-  }
   public Boss getBoss() {
     return boss;
   }
