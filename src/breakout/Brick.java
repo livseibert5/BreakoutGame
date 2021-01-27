@@ -23,8 +23,8 @@ public class Brick extends Rectangle {
    */
   public Brick(int lives, int width, int height) {
     this.lives = lives;
-    this.setWidth(width / 16);
-    this.setHeight(height / 18);
+    this.setWidth(width / 16.0);
+    this.setHeight(height / 18.0);
     selectImage();
   }
 
@@ -58,18 +58,22 @@ public class Brick extends Rectangle {
    * Determines the appropriate image for the brick depending on how many lives the brick has left.
    */
   public void selectImage() {
-    String imageName = "pink.png";
-    if (lives == 2) {
-      imageName = "red2.png";
-    }
-    if (lives == 3) {
-      imageName = "red3.png";
-    }
-    if (lives == 4) {
-      imageName = "red4.png";
-    }
-    if (lives == 5) {
-      imageName = "red5.png";
+    String imageName;
+    switch(lives) {
+      case 2:
+        imageName = "red2.png";
+        break;
+      case 3:
+        imageName = "red3.png";
+        break;
+      case 4:
+        imageName = "red4.png";
+        break;
+      case 5:
+        imageName = "red5.png";
+        break;
+      default:
+        imageName = "pink.png";
     }
     this.setFill(
         new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream(imageName))));

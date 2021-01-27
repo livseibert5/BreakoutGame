@@ -5,7 +5,6 @@ import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -43,7 +42,6 @@ public class Main extends Application {
   private List<Ball> balls = new ArrayList<>();
   private List<Powerup> powerups = new ArrayList<>();
   private Text scoreLabel;
-  private Text levelLabel;
 
   private int level = 1;
   private int lives = 3;
@@ -64,17 +62,14 @@ public class Main extends Application {
     stage.setScene(myScene);
     stage.setTitle(TITLE);
     stage.show();
-    myScene.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent e) {
-        setLevel(level);
-        gamePlay = true;
-        KeyFrame frame = new KeyFrame(Duration.seconds(SECOND_DELAY), event -> step(SECOND_DELAY));
-        Timeline animation = new Timeline();
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        animation.play();
-      }
+    myScene.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+      setLevel(level);
+      gamePlay = true;
+      KeyFrame frame = new KeyFrame(Duration.seconds(SECOND_DELAY), event -> step(SECOND_DELAY));
+      Timeline animation = new Timeline();
+      animation.setCycleCount(Timeline.INDEFINITE);
+      animation.getKeyFrames().add(frame);
+      animation.play();
     });
   }
 
@@ -128,7 +123,7 @@ public class Main extends Application {
    * @param elapsedTime time increment since last ball update
    */
   public void updateBalls(double elapsedTime) {
-    balls.stream().forEach(
+    balls.forEach(
         ball -> {
           ball.setCenterX(
               ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
@@ -142,7 +137,7 @@ public class Main extends Application {
           checkBrickCollision(ball);
         }
     );
-    balls.removeIf(ball -> ball.getIsActive() == false);
+    balls.removeIf(ball -> !ball.getIsActive());
   }
 
   /**
@@ -151,10 +146,10 @@ public class Main extends Application {
    * @param ball ball involved in potential collision
    */
   public void checkBossCollision(Ball ball) {
-    if (collidesWithTop((Brick) boss, ball) || collidesWithBottom((Brick) boss, ball)) {
+    if (collidesWithTop(boss, ball) || collidesWithBottom(boss, ball)) {
       ball.invertYDirection();
       decrementLives(ball);
-    } else if (collidesWithRight((Brick) boss, ball)) {
+    } else if (collidesWithRight(boss, ball)) {
       ball.invertXDirection();
       decrementLives(ball);
     }
@@ -171,7 +166,7 @@ public class Main extends Application {
     if (time - powerupStart >= 750) {
       removePowerUps();
     }
-    powerups.stream().forEach(
+    powerups.forEach(
         powerup -> {
           powerup.setCenterY(powerup.getCenterY() + POWERUP_SPEED * elapsedTime);
           if (powerup.getBoundsInParent().intersects(paddle.getBoundsInParent())) {
@@ -194,7 +189,7 @@ public class Main extends Application {
   public void decrementLives(Ball ball) {
     lives--;
     if (lives > 0) {
-      ball.setCenterX(WIDTH / 2);
+      ball.setCenterX(WIDTH / 2.0);
       ball.setCenterY((HEIGHT - paddle.getHeight() - 50)
           - paddle.getHeight() / 2 - ball.getRadius() / 2);
     } else {
@@ -244,7 +239,7 @@ public class Main extends Application {
     if (intersectsPaddleThird(1, ball) || intersectsPaddleThird(3, ball)) {
       ball.invertYDirection();
       ball.invertXDirection();
-    } else if (intersectsPaddleThird(1, ball)) {
+    } else if (intersectsPaddleThird(2, ball)) {
       ball.invertYDirection();
     }
   }
@@ -253,12 +248,12 @@ public class Main extends Application {
     double left = paddle.getX();
     double right = paddle.getX() + paddle.getWidth();
     if (third == 1) {
-      right = paddle.getX() + (1 / 3) * paddle.getWidth();
+      right = paddle.getX() + (1 / 3.0) * paddle.getWidth();
     } else if (third == 2) {
-      left = paddle.getX() + (1 / 3) * paddle.getWidth();
-      right = paddle.getX() + (2 / 3) * paddle.getWidth();
+      left = paddle.getX() + (1 / 3.0) * paddle.getWidth();
+      right = paddle.getX() + (2 / 3.0) * paddle.getWidth();
     } else if (third == 3) {
-      left = paddle.getX() + (2 / 3) * paddle.getWidth();
+      left = paddle.getX() + (2 / 3.0) * paddle.getWidth();
     }
     return checkPaddleThirds(left, right, ball);
   }
@@ -353,7 +348,7 @@ public class Main extends Application {
   public void setPowerUp(Powerup powerup) {
     powerupStart = time;
     if (powerup.getType() == Power.FAST) {
-      balls.stream().forEach(ball -> ball.setSpeed(160));
+      balls.forEach(ball -> ball.setSpeed(160));
     } else if (powerup.getType() == Power.EXTRA) {
       generateNewBall();
     } else if (powerup.getType() == Power.LONGER) {
@@ -363,7 +358,7 @@ public class Main extends Application {
 
   public void generateNewBall() {
     Ball ball = new Ball();
-    ball.setCenterX(WIDTH / 2);
+    ball.setCenterX(WIDTH / 2.0);
     ball.setCenterY((HEIGHT - paddle.getHeight() - 50)
         - paddle.getHeight() / 2 - ball.getRadius() / 2);
     balls.add(ball);
@@ -375,9 +370,9 @@ public class Main extends Application {
    */
   public void removePowerUps() {
     if (!balls.isEmpty() && balls.get(0).getSpeed() == 160) {
-      balls.stream().forEach(ball -> ball.setSpeed(120));
-    } else if (paddle.getWidth() > WIDTH / 6) {
-      paddle.setWidth(WIDTH / 6);
+      balls.forEach(ball -> ball.setSpeed(120));
+    } else if (paddle.getWidth() > WIDTH / 6.0) {
+      paddle.setWidth(WIDTH / 6.0);
     }
   }
 
@@ -532,9 +527,8 @@ public class Main extends Application {
     Ball ball = controller.getBall();
     this.bricks = controller.getBricks();
     this.root = controller.getRoot();
-    this.livesList = controller.getLives();
-    this.scoreLabel = controller.getScore();
-    this.levelLabel = controller.getLevel();
+    this.livesList = controller.getLivesLabel();
+    this.scoreLabel = controller.getScoreLabel();
     balls.add(ball);
     if (level == 3) {
       boss = controller.getBoss();
