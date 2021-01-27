@@ -35,10 +35,20 @@ public class Brick extends Rectangle {
   public Brick() {
   }
 
+  /**
+   * Accesses x-coordinate of right side of brick. Used for collision detection.
+   *
+   * @return location of right of brick
+   */
   public double getRight() {
     return this.getX() + this.getWidth();
   }
 
+  /**
+   * Accesses y-coordinate of bottom of brick. Used for collision detection.
+   *
+   * @return location of bottom of brick
+   */
   public double getBottom() {
     return this.getY() + this.getHeight();
   }
@@ -59,7 +69,7 @@ public class Brick extends Rectangle {
    */
   public void selectImage() {
     String imageName;
-    switch(lives) {
+    switch (lives) {
       case 2:
         imageName = "red2.png";
         break;
@@ -79,6 +89,12 @@ public class Brick extends Rectangle {
         new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream(imageName))));
   }
 
+  /**
+   * Accesses number of lives left of brick. Used by Main to detect if brick should be removed from
+   * play.
+   *
+   * @return lives number of hits until brick breaks
+   */
   public int getLives() {
     return lives;
   }
