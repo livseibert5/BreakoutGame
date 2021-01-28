@@ -90,6 +90,13 @@ public class Main extends Application {
         boss.setX(boss.getX() + boss.getXDirection() * boss.getSpeed() * elapsedTime);
         if (boss.getX() < 0 || boss.getX() >= WIDTH - boss.getWidth()) {
           boss.invertXDirection();
+          if (boss.getXDirection() == 1) {
+            boss.setFill(new ImagePattern(
+                new Image(getClass().getClassLoader().getResourceAsStream("cupid.png"))));
+          } else if (boss.getXDirection() == -1) {
+            boss.setFill(new ImagePattern(
+                new Image(getClass().getClassLoader().getResourceAsStream("cupidleft.png"))));
+          }
         }
       }
 
