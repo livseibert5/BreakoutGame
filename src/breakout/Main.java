@@ -170,7 +170,8 @@ public class Main extends Application {
             root.getChildren().remove(powerup);
             powerup.setUsed();
             setPowerUp(powerup);
-          } else if (powerup.getCenterY() < paddle.getY() + paddle.getHeight()) {
+          } else if (powerup.getCenterY() > paddle.getY() + paddle.getHeight()) {
+            root.getChildren().remove(powerup);
             powerup.setUsed();
           }
         });
@@ -358,7 +359,11 @@ public class Main extends Application {
   private void setPowerUp(Powerup powerup) {
     powerupStart = time;
     if (powerup.getType() == Power.FAST) {
-      balls.forEach(ball -> ball.setSpeed(160));
+      balls.forEach(ball -> {
+        ball.setSpeed(160);
+        ball.setFill(new ImagePattern(
+            new Image(getClass().getClassLoader().getResourceAsStream("ballred.png"))));
+      });
     } else if (powerup.getType() == Power.EXTRA) {
       generateNewBall();
     } else if (powerup.getType() == Power.LONGER) {
@@ -372,6 +377,10 @@ public class Main extends Application {
   private void generateNewBall() {
     controller.createBall();
     balls.add(controller.getBall());
+    if (!balls.isEmpty() && balls.get(0).getSpeed() > 120) {
+      controller.getBall().setFill(new ImagePattern(
+          new Image(getClass().getClassLoader().getResourceAsStream("ballred.png"))));
+    }
   }
 
   /**
@@ -379,7 +388,11 @@ public class Main extends Application {
    */
   private void removePowerUps() {
     if (!balls.isEmpty() && balls.get(0).getSpeed() == 160) {
-      balls.forEach(ball -> ball.setSpeed(120));
+      balls.forEach(ball -> {
+        ball.setSpeed(120);
+        ball.setFill(new ImagePattern(
+            new Image(getClass().getClassLoader().getResourceAsStream("ball.png"))));
+      });
     } else if (paddle.getWidth() > WIDTH / 6.0) {
       paddle.setWidth(WIDTH / 6.0);
     }

@@ -43,7 +43,9 @@ Assumptions or Simplifications: Overall, my implementation of the breakout game
 adheres to the plan I laid out in PLAN.md. 
 
 Known Bugs: Ball sometimes gets stuck on paddle and continually inverts its
-direction until it can get free.
+direction until it can get free. When a life is lost at the same time as the L
+cheat key is pressed, sometimes the positioning of the lives in the header is
+thrown off.
 
 Extra credit: I added a boss enemy in level 3. The boss moves back and
 forth across the screen horizontally for the duration of the level.
