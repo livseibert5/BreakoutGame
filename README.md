@@ -8,7 +8,7 @@ Name: Livia Seibert
 
 Start Date: 1/23/21
 
-Finish Date: 
+Finish Date: 1/28/21
 
 Hours Spent: 30
 
@@ -39,9 +39,13 @@ Cheat keys:
 
 ### Notes/Assumptions
 
-Assumptions or Simplifications:
+Assumptions or Simplifications: Overall, my implementation of the breakout game
+adheres to the plan I laid out in PLAN.md. 
 
-Known Bugs:
+Known Bugs: Ball sometimes gets stuck on paddle and continually inverts its
+direction until it can get free. When a life is lost at the same time as the L
+cheat key is pressed, sometimes the positioning of the lives in the header is
+thrown off.
 
 Extra credit: I added a boss enemy in level 3. The boss moves back and
 forth across the screen horizontally for the duration of the level.
@@ -49,3 +53,10 @@ The boss takes one of the player's lives when the ball hits it.
 
 
 ### Impressions
+This project starts off very difficult, as it is tough to visualize how
+to break the game down into components, and I personally had no experience
+with javafx prior to this class. However, as I went along it got easier and
+easier as I got more comfortable with javafx and knew exactly which pieces I
+had to work on to make the project function as intended. Therefore, I think
+this is a good project as it throws you into the deep end (but provides you
+with the tools to succeed), and you learn through trial and error.
