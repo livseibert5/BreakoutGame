@@ -42,8 +42,7 @@ Cheat keys:
 Assumptions or Simplifications: Overall, my implementation of the breakout game
 adheres to the plan I laid out in PLAN.md. 
 
-Known Bugs: Ball sometimes gets stuck on paddle and continually inverts its
-direction until it can get free. When a life is lost at the same time as the L
+Known Bugs: When a life is lost at the same time as the L
 cheat key is pressed, sometimes the positioning of the lives in the header is
 thrown off.
 

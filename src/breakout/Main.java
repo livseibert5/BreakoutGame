@@ -287,7 +287,7 @@ public class Main extends Application {
    * @return boolean true if ball collided with paddle in indicated third
    */
   private boolean checkPaddleThirds(double left, double right, Ball ball) {
-    return ball.getBottom() >= paddle.getY() &&
+    return ball.getBottom() >= paddle.getY() && ball.getBottom() <= paddle.getY() + paddle.getHeight() / 5 &&
         ((ball.getRight() >= left &&
             ball.getRight() <= right) ||
             (ball.getLeft() >= left &&

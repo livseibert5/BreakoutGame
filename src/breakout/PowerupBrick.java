@@ -26,7 +26,7 @@ public class PowerupBrick extends Brick {
     super(1, width, height);
     this.setFill(
         new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("power.png"))));
-    int type = (int) Math.round(Math.random() * 3);
+    int type = (int) Math.round(Math.random() * 2) + 1;
     if (type == 0) {
       powerType = Power.FAST;
     }
