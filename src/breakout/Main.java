@@ -85,25 +85,32 @@ public class Main extends Application {
       time += 1;
       updateBalls(elapsedTime);
       updatePaddle(elapsedTime);
-
       if (level == 3) {
-        boss.setX(boss.getX() + boss.getXDirection() * boss.getSpeed() * elapsedTime);
-        if (boss.getX() < 0 || boss.getX() >= WIDTH - boss.getWidth()) {
-          boss.invertXDirection();
-          if (boss.getXDirection() == 1) {
-            boss.setFill(new ImagePattern(
-                new Image(getClass().getClassLoader().getResourceAsStream("cupid.png"))));
-          } else if (boss.getXDirection() == -1) {
-            boss.setFill(new ImagePattern(
-                new Image(getClass().getClassLoader().getResourceAsStream("cupidleft.png"))));
-          }
-        }
+        updateBoss(elapsedTime);
       }
-
       if (bricks.isEmpty()) {
         handleWin();
       }
       checkPowerUps(elapsedTime);
+    }
+  }
+
+  /**
+   * Moves boss across screen, handles collisions with walls.
+   *
+   * @param elapsedTime time increment since last boss update
+   */
+  private void updateBoss(double elapsedTime) {
+    boss.setX(boss.getX() + boss.getXDirection() * boss.getSpeed() * elapsedTime);
+    if (boss.getX() < 0 || boss.getX() >= WIDTH - boss.getWidth()) {
+      boss.invertXDirection();
+      if (boss.getXDirection() == 1) {
+        boss.setFill(new ImagePattern(
+            new Image(getClass().getClassLoader().getResourceAsStream("cupid.png"))));
+      } else if (boss.getXDirection() == -1) {
+        boss.setFill(new ImagePattern(
+            new Image(getClass().getClassLoader().getResourceAsStream("cupidleft.png"))));
+      }
     }
   }
 
@@ -195,7 +202,7 @@ public class Main extends Application {
   private void decrementLives(Ball ball) {
     lives--;
     if (lives > 0) {
-      ball.setCenterX(WIDTH / 2.0);
+      ball.setCenterX(paddle.getX());
       ball.setCenterY((HEIGHT - paddle.getHeight() - 50)
           - paddle.getHeight() / 2 - ball.getRadius() / 2);
     } else {

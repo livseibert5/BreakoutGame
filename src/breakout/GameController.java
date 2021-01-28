@@ -115,7 +115,7 @@ public class GameController {
    */
   public void createBall() {
     ball = new Ball();
-    ball.setCenterX(width / 2);
+    ball.setCenterX(paddle.getX() + paddle.getWidth() / 2);
     ball.setCenterY((height - paddle.getHeight() - 20)
         - paddle.getHeight() / 2 - ball.getRadius() / 2);
     root.getChildren().add(ball);
