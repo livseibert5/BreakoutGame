@@ -161,12 +161,19 @@ public class Main extends Application {
    * @param ball ball involved in potential collision
    */
   private void checkBossCollision(Ball ball) {
+    boolean hit = false;
     if (collidesWithTop(boss, ball) || collidesWithBottom(boss, ball)) {
       ball.invertYDirection();
-      decrementLives(ball);
+      hit = true;
     } else if (collidesWithRight(boss, ball)) {
       ball.invertXDirection();
+      hit = true;
+    }
+    if (balls.size() == 1 && hit) {
       decrementLives(ball);
+    } else if (hit) {
+      ball.setInactive();
+      root.getChildren().remove(ball);
     }
   }
 
@@ -290,7 +297,8 @@ public class Main extends Application {
    * @return boolean true if ball collided with paddle in indicated third
    */
   private boolean checkPaddleThirds(double left, double right, Ball ball) {
-    return ball.getBottom() >= paddle.getY() && ball.getBottom() <= paddle.getY() + paddle.getHeight() / 5 &&
+    return ball.getBottom() >= paddle.getY()
+        && ball.getBottom() <= paddle.getY() + paddle.getHeight() / 5 &&
         ((ball.getRight() >= left &&
             ball.getRight() <= right) ||
             (ball.getLeft() >= left &&
