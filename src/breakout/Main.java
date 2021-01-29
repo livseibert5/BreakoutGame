@@ -30,6 +30,9 @@ public class Main extends Application {
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
   private static final Paint BACKGROUND = Color.WHITE;
   private static final int POWERUP_SPEED = 60;
+  private static final int FAST_BALL_SPEED = 180;
+  private static final int BALL_SPEED = 120;
+  private static final int PADDLE_WIDTH = WIDTH / 6;
 
   private GameController controller;
   private Scene myScene;
@@ -374,13 +377,13 @@ public class Main extends Application {
     powerupStart = time;
     if (powerup.getType() == Power.FAST) {
       balls.forEach(ball -> {
-        ball.setSpeed(160);
+        ball.setSpeed(FAST_BALL_SPEED);
         ball.setFill(new ImagePattern(
             new Image(getClass().getClassLoader().getResourceAsStream("ballred.png"))));
       });
     } else if (powerup.getType() == Power.EXTRA) {
       generateNewBall();
-    } else if (powerup.getType() == Power.LONGER) {
+    } else if (powerup.getType() == Power.LONGER && paddle.getWidth() == PADDLE_WIDTH) {
       paddle.expand();
     }
   }
@@ -391,7 +394,7 @@ public class Main extends Application {
   private void generateNewBall() {
     controller.createBall();
     balls.add(controller.getBall());
-    if (!balls.isEmpty() && balls.get(0).getSpeed() > 120) {
+    if (!balls.isEmpty() && balls.get(0).getSpeed() > BALL_SPEED) {
       controller.getBall().setFill(new ImagePattern(
           new Image(getClass().getClassLoader().getResourceAsStream("ballred.png"))));
     }
@@ -401,14 +404,14 @@ public class Main extends Application {
    * Reverts the game back to normal when the power-up is complete.
    */
   private void removePowerUps() {
-    if (!balls.isEmpty() && balls.get(0).getSpeed() == 160) {
+    if (!balls.isEmpty() && balls.get(0).getSpeed() == FAST_BALL_SPEED) {
       balls.forEach(ball -> {
-        ball.setSpeed(120);
+        ball.setSpeed(BALL_SPEED);
         ball.setFill(new ImagePattern(
             new Image(getClass().getClassLoader().getResourceAsStream("ball.png"))));
       });
-    } else if (paddle.getWidth() > WIDTH / 6.0) {
-      paddle.setWidth(WIDTH / 6.0);
+    } else if (paddle.getWidth() > PADDLE_WIDTH) {
+      paddle.setWidth(PADDLE_WIDTH);
     }
   }
 
