@@ -17,6 +17,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Main driver of the game, handles all game behavior.
@@ -44,6 +46,7 @@ public class Main extends Application {
   private List<Circle> livesList;
   private List<Ball> balls = new ArrayList<>();
   private List<Powerup> powerups = new ArrayList<>();
+  private Map<Powerup, Double> powerMap = new HashMap<>();
   private Text scoreLabel;
 
   private int level = 1;
@@ -184,8 +187,10 @@ public class Main extends Application {
    * @param elapsedTime time since last power-up check
    */
   private void checkPowerUps(double elapsedTime) {
-    if (time - powerupStart >= 750) {
-      removePowerUps();
+    for (Powerup power: powerMap.keySet()) {
+      if (time - powerMap.get(power) >= 750) {
+        removePowerUps(power);
+      }
     }
     powerups.forEach(
         powerup -> {
@@ -353,13 +358,15 @@ public class Main extends Application {
     brick.decrementLives();
     if (brick.getLives() <= 0) {
       score += 50;
-      scoreLabel.setText("Score: " + score);
       bricks.remove(brick);
       root.getChildren().remove(brick);
       if (brick instanceof PowerupBrick) {
         dropPowerUp((PowerupBrick) brick);
       }
+    } else {
+      score += 25;
     }
+    scoreLabel.setText("Score: " + score);
   }
 
   /**
@@ -382,7 +389,11 @@ public class Main extends Application {
    * @param powerup powerup token to be enacted
    */
   private void setPowerUp(Powerup powerup) {
-    powerupStart = time;
+    if (powerup.getType() == Power.FAST || powerup.getType() == Power.LONGER) {
+      powerupStart = time;
+      powerMap.put(powerup, powerupStart);
+    }
+
     if (powerup.getType() == Power.FAST) {
       balls.forEach(ball -> {
         ball.setSpeed(FAST_BALL_SPEED);
@@ -405,22 +416,24 @@ public class Main extends Application {
     if (!balls.isEmpty() && balls.get(0).getSpeed() > BALL_SPEED) {
       controller.getBall().setFill(new ImagePattern(
           new Image(getClass().getClassLoader().getResourceAsStream("ballred.png"))));
+      controller.getBall().setSpeed(FAST_BALL_SPEED);
     }
   }
 
   /**
    * Reverts the game back to normal when the power-up is complete.
    */
-  private void removePowerUps() {
-    if (!balls.isEmpty() && balls.get(0).getSpeed() == FAST_BALL_SPEED) {
+  private void removePowerUps(Powerup powerup) {
+    if (powerup.getType() == Power.FAST && ! balls.isEmpty()) {
       balls.forEach(ball -> {
         ball.setSpeed(BALL_SPEED);
         ball.setFill(new ImagePattern(
             new Image(getClass().getClassLoader().getResourceAsStream("ball.png"))));
       });
-    } else if (paddle.getWidth() > PADDLE_WIDTH) {
+    } else if (powerup.getType() == Power.LONGER) {
       paddle.setWidth(PADDLE_WIDTH);
     }
+    powerMap.put(powerup, Double.MAX_VALUE);
   }
 
   /**
@@ -536,6 +549,8 @@ public class Main extends Application {
       createRandomPowerup();
     } else if (code == KeyCode.B && level == 3) {
       root.getChildren().remove(boss);
+    } else if (code == KeyCode.E) {
+      generateNewBall();
     }
   }
 
@@ -568,6 +583,7 @@ public class Main extends Application {
   private void setLevel(int level) {
     balls = new ArrayList<>();
     lives = 3;
+    powerMap = new HashMap<>();
     controller.setupGame(level, WIDTH, HEIGHT, BACKGROUND);
     myScene = controller.getScene();
     retrieveGamePieces();
