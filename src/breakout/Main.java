@@ -55,6 +55,7 @@ public class Main extends Application {
   private boolean gamePlay = false;
   private double time = 0;
   private double powerupStart = 0;
+  private boolean bossExists = true;
 
   /**
    * Display instruction screen, then switch to first level and start running the step function.
@@ -91,7 +92,7 @@ public class Main extends Application {
       time += 1;
       updateBalls(elapsedTime);
       updatePaddle(elapsedTime);
-      if (level == 3) {
+      if (level == 3 && bossExists) {
         updateBoss(elapsedTime);
       }
       if (bricks.isEmpty()) {
@@ -147,7 +148,7 @@ public class Main extends Application {
               ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
           ball.setCenterY(
               ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
-          if (level == 3) {
+          if (level == 3 && bossExists) {
             checkBossCollision(ball);
           }
           checkPaddleCollision(ball);
@@ -549,6 +550,7 @@ public class Main extends Application {
       createRandomPowerup();
     } else if (code == KeyCode.B && level == 3) {
       root.getChildren().remove(boss);
+      bossExists = false;
     } else if (code == KeyCode.E) {
       generateNewBall();
     }
