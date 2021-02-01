@@ -188,7 +188,7 @@ public class Main extends Application {
    * @param elapsedTime time since last power-up check
    */
   private void checkPowerUps(double elapsedTime) {
-    for (Powerup power: powerMap.keySet()) {
+    for (Powerup power : powerMap.keySet()) {
       if (time - powerMap.get(power) >= 750) {
         removePowerUps(power);
       }
@@ -425,7 +425,7 @@ public class Main extends Application {
    * Reverts the game back to normal when the power-up is complete.
    */
   private void removePowerUps(Powerup powerup) {
-    if (powerup.getType() == Power.FAST && ! balls.isEmpty()) {
+    if (powerup.getType() == Power.FAST && !balls.isEmpty()) {
       balls.forEach(ball -> {
         ball.setSpeed(BALL_SPEED);
         ball.setFill(new ImagePattern(

@@ -47,9 +47,7 @@ For example, the Powerup class exists, however it is PowerupBrick that has the f
 to generate a random power-up type rather than the Powerup class. Otherwise, I was
 able to include all of the features that I had planned for.
 
-Known Bugs: When a life is lost at the same time as the L
-cheat key is pressed, sometimes the positioning of the life icons in the header are
-thrown off. Sometimes a ball registers a hit more than once
+Known Bugs: Sometimes a ball registers a hit more than once
 and breaks before it is supposed to.
 
 Extra credit: I added a boss enemy in level 3. The boss moves back and

@@ -29,7 +29,7 @@ public class GameController {
   private int levelNumber;
   private int width;
   private int height;
-  private final List<Circle> lives = new ArrayList<>();
+  private List<Circle> lives = new ArrayList<>();
 
   /**
    * Default constructor for a GameController object.
@@ -143,6 +143,7 @@ public class GameController {
    * Creates Circle objects to hold images that represent the number of lives the player has left.
    */
   private void setLivesLabel() {
+    lives = new ArrayList<>();
     for (int i = 1; i < 4; i++) {
       Circle life = new Circle(i * 30, 40, 20,
           new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("rose.png"))));
