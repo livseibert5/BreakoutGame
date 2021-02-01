@@ -47,7 +47,7 @@ For example, the Powerup class exists, however it is PowerupBrick that has the f
 to generate a random power-up type rather than the Powerup class. Otherwise, I was
 able to include all of the features that I had planned for.
 
-Known Bugs: Sometimes a ball registers a hit more than once
+Known Bugs: Sometimes a brick registers a hit more than once
 and breaks before it is supposed to.
 
 Extra credit: I added a boss enemy in level 3. The boss moves back and
