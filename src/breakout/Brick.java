@@ -6,6 +6,7 @@ import javafx.scene.shape.Rectangle;
 
 /**
  * This class creates the single-hit and multi-hit blocks that compose each level.
+ * A single-hit block has lives = 1, a multi-hit block has up to 5 lives.
  *
  * @author Livia Seibert
  */

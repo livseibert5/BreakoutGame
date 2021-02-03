@@ -54,13 +54,7 @@ public class Screen {
     myScene = new Scene(root, width, height, BACKGROUND);
   }
 
-  /**
-   * Creates the text for the screen, determines the location of the text based on the width and
-   * height of the screen.
-   *
-   * @param title title of the game
-   */
-  public void createInstructionText(String title) {
+  private void createInstructionText(String title) {
     Text titleText = new Text(width / 3 + 20, height / 4, title);
     Text directions = new Text(75, height / 3, directionText);
     Text play = new Text(width / 3 + 70, height - 200, "CLICK TO PLAY");
@@ -75,22 +69,22 @@ public class Screen {
     root.getChildren().add(play);
   }
 
-  /**
-   * Creates the text for the win screen and adds it to the scene.
-   */
-  public void createWinText() {
+  private void createWinText() {
     Text win = new Text(width / 3, height / 4, winText);
     root.getChildren().add(win);
   }
 
-  /**
-   * Creates the text for the loss screen and adds it to the screen.
-   */
-  public void createLossText() {
+  private void createLossText() {
     Text loss = new Text(width / 3, height / 4, lossText);
     root.getChildren().add(loss);
   }
 
+  /**
+   * Allows Main to access the instructions, win, or loss
+   * screen created in this class.
+   *
+   * @return myScene Scene for the game
+   */
   public Scene getScene() {
     return myScene;
   }

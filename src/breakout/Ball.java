@@ -5,7 +5,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 /**
- * This class creates the balls objects needed for game play. Used by GameController to put the
+ * This class creates the ball objects needed for game play. Used by GameController to put the
  * original ball in the scene and by Main to add more balls when a power-up requires it.
  *
  * @author Livia Seibert
