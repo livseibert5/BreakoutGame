@@ -8,6 +8,8 @@ enum Power {FAST, EXTRA, LONGER}
 /**
  * Class for bricks that contain a power-up. Extends brick because it shares the same basic
  * functionality of a single-hit brick with the added component that it contains a power-up.
+ *
+ * @author Livia Seibert
  */
 public class PowerupBrick extends Brick {
 

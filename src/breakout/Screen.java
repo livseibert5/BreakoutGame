@@ -12,6 +12,8 @@ enum Type {INSTRUCTIONS, WIN, LOSS}
 
 /**
  * Creates the instructions scene for the game.
+ *
+ * @author Livia Seibert
  */
 public class Screen {
 

@@ -7,6 +7,8 @@ import javafx.scene.shape.Rectangle;
 /**
  * This class creates the paddle object needed for game play. Used by GameController class to place
  * paddle into scene.
+ *
+ * @author Livia Seibert
  */
 public class Paddle extends Rectangle {
 

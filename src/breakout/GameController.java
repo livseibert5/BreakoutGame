@@ -15,6 +15,8 @@ import javafx.scene.text.Text;
 /**
  * This class creates the scenes for the game. Depending on the level input, it sets up the brick
  * layout and also creates the ball and paddle.
+ *
+ * @author Livia Seibert
  */
 public class GameController {
 

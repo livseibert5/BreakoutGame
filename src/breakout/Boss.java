@@ -6,7 +6,9 @@ import javafx.scene.paint.ImagePattern;
 /**
  * This class creates the boss enemy for the third level of game play. Used by GameController to add
  * the boss to the level. Extends Brick class because the boss essentially functions as an
- * un-killable brick since collision handling with the ball is handled in much the same way/
+ * un-killable brick since collision handling with the ball is handled in much the same way.
+ *
+ * @author Livia Seibert
  */
 public class Boss extends Brick {
 

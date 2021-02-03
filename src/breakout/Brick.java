@@ -6,6 +6,8 @@ import javafx.scene.shape.Rectangle;
 
 /**
  * This class creates the single-hit and multi-hit blocks that compose each level.
+ *
+ * @author Livia Seibert
  */
 public class Brick extends Rectangle {
 

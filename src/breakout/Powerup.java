@@ -7,6 +7,8 @@ import javafx.scene.paint.ImagePattern;
 /**
  * Class used to create Powerup objects. Used by Main to create a power-up that moves down the
  * screen when a power-up brick is broken.
+ *
+ * @author Livia Seibert
  */
 public class Powerup extends Circle {
 

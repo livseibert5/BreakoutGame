@@ -22,6 +22,8 @@ import java.util.HashMap;
 
 /**
  * Main driver of the game, handles all game behavior.
+ *
+ * @author Livia Seibert
  */
 public class Main extends Application {
 
