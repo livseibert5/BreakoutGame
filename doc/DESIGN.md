@@ -2,8 +2,8 @@
 ## Livia Seibert
 
 ## Role(s)
-I created this breakout game by myself, so all the files in this
-repository were authored by me.
+I created this breakout game by myself from the design to the implementation,
+so all the files in this repository were authored by me.
 
 ## Design Goals
 **Minimize Repetition** - I wanted to make sure each object I was
@@ -14,8 +14,8 @@ code.
 wanted to be able to incorporate instances of their objects into the
 game easily.
 
-**Game Flow** - I wanted the game to flow from the start screen to the
-win or loss screen without trouble.
+**Game Flow** - I wanted the game to progress from the start screen to the
+win or loss screen without glitches.
 
 ## High-Level Design
 **Main** is the class that acts as the driver for the game. Main calls 
@@ -33,11 +33,11 @@ the number of lives specified as a class variable. **PowerupBrick** extends
 Brick because it has all the same functionality as a regular brick,
 except it also has a power-up type variable. The **Powerup** class extends
 Circle, and Powerup objects are created when a PowerupBrick is broken.
-This Powerup carries the sme powerup type as the PowerupBrick it came
+This Powerup carries the same powerup type as the PowerupBrick it came
 from, and the powerup is implemented when the Powerup object hits the
 paddle. **Boss** also extends Brick, as the collision handling is very
 similar, but it is only used in level 3 when the boss enemy is present.
-The **Screen** class is used to create the instructions scene, the win scene,
+The **Screen** class is used to create the instruction scene, the win scene,
 and the loss scene.
 
 
@@ -80,7 +80,7 @@ correspond with the new Power type. Then, add a new if statement in
 setPowerUp in Main to check for that type of Powerup, and have that if
 statement trigger a new powerup action.
 
-**Levels** - Create a new .txt file with a level layout on it and add it
+**Levels** - Create a new .txt file with a level layout on it and add it to
 the data folder. Add an if statement in setupGame in GameController to
 handle the new level number and read in the correct file. Change handleWin
 in Main so that the win happens after the new level, and not after the third
@@ -89,5 +89,5 @@ level anymore.
 **Other Changes** - To add a new object the game, create a class for it
 in the breakout folder. Then, create a new private function in GameController
 to initialize it and add it to the scene. Any collision handling for the new
-object should be done in Main, and these collisions should trigger some sort
-of effect or action in the game.
+object should be done in Main and called in the step function, and these
+collisions should trigger some sort of effect or action in the game.
