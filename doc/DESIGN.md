@@ -86,6 +86,11 @@ handle the new level number and read in the correct file. Change handleWin
 in Main so that the win happens after the new level, and not after the third
 level anymore.
 
+**Bricks** - To create a new Brick type, create a new class that extends the
+Brick class. Give this class new functions that give it the desired new
+functionality, and then modify a layout .txt file to include this new type 
+of brick.
+
 **Other Changes** - To add a new object the game, create a class for it
 in the breakout folder. Then, create a new private function in GameController
 to initialize it and add it to the scene. Any collision handling for the new
