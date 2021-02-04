@@ -172,34 +172,74 @@ public class GameController {
     root.getChildren().add(level);
   }
 
+  /**
+   * Allows Main to access the paddle created by GameController.
+   *
+   * @return paddle Paddle object created for the game
+   */
   public Paddle getPaddle() {
     return paddle;
   }
 
+  /**
+   * Allows Main to access the ball created by GameController.
+   *
+   * @return ball Ball object created for the game
+   */
   public Ball getBall() {
     return ball;
   }
 
+  /**
+   * Allows Main to access the list of bricks created by GameController.
+   *
+   * @return bricks list of brick objects
+   */
   public List<Brick> getBricks() {
     return bricks;
   }
 
+  /**
+   * Allows Main to access the root of the scene created by GameController.
+   *
+   * @return root root of new scene
+   */
   public Group getRoot() {
     return root;
   }
 
+  /**
+   * Allows Main to access the lives label created by GameController.
+   *
+   * @return lives list of Circle objects that represent lives
+   */
   public List<Circle> getLivesLabel() {
     return lives;
   }
 
+  /**
+   * Allows Main to access the score label created by GameController.
+   *
+   * @return score Text object that contains the score
+   */
   public Text getScoreLabel() {
     return score;
   }
 
+  /**
+   * Allows Main to access the boss enemy created by GameController.
+   *
+   * @return boss Boss object for the third level
+   */
   public Boss getBoss() {
     return boss;
   }
 
+  /**
+   * Allows Main to access the scene created by GameController.
+   *
+   * @return scene scene for the given level
+   */
   public Scene getScene() {
     return myScene;
   }
