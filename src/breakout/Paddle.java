@@ -14,6 +14,8 @@ public class Paddle extends Rectangle {
 
   private int xDirection;
   private int width;
+  private int standardWidth;
+  private int expandWidth;
   private final int PADDLE_SPEED = 120;
 
   /**
@@ -26,7 +28,9 @@ public class Paddle extends Rectangle {
   public Paddle(int width, int height) {
     xDirection = 0;
     this.width = width;
-    this.setWidth(width / 6);
+    this.standardWidth = width / 6;
+    this.expandWidth = standardWidth * 2;
+    this.setWidth(standardWidth);
     this.setHeight(height / 21);
     this.setFill(
         new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("paddle.png"))));
@@ -37,8 +41,14 @@ public class Paddle extends Rectangle {
    * paddle.
    */
   public void expand() {
-    double width = this.getWidth() * 2;
-    this.setWidth(width);
+    this.setWidth(expandWidth);
+  }
+
+  /**
+   * Retracts the width of the paddle after the expand powerup wears off.
+   */
+  public void retract() {
+    this.setWidth(standardWidth);
   }
 
   /**

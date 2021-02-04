@@ -16,6 +16,8 @@ public class Ball extends Circle {
   private int xDirection;
   private int yDirection;
   private boolean isActive;
+  private final int STANDARD_SPEED = 120;
+  private final int FAST_SPEED = 180;
 
   /**
    * Constructor for Ball object, sets the radius and speed of the ball, as well as it's initial x
@@ -41,6 +43,24 @@ public class Ball extends Circle {
         this.getCenterX() + this.getXDirection() * this.getSpeed() * elapsedTime);
     this.setCenterY(
         this.getCenterY() + this.getYDirection() * this.getSpeed() * elapsedTime);
+  }
+
+  /**
+   * Applies speed powerup to ball.
+   */
+  public void makeFast() {
+    this.setSpeed(FAST_SPEED);
+    this.setFill(new ImagePattern(
+        new Image(getClass().getClassLoader().getResourceAsStream("ballred.png"))));
+  }
+
+  /**
+   * Makes ball regular again after speed powerup.
+   */
+  public void makeStandard() {
+    this.setSpeed(STANDARD_SPEED);
+    this.setFill(new ImagePattern(
+        new Image(getClass().getClassLoader().getResourceAsStream("ball.png"))));
   }
 
   /**
@@ -109,6 +129,15 @@ public class Ball extends Circle {
    */
   public int getSpeed() {
     return speed;
+  }
+
+  /**
+   * Used to access the standard speed of the ball without the speed powerup.
+   *
+   * @return STANDARD_SPEED regular speed of ball
+   */
+  public int getStandardSpeed() {
+    return STANDARD_SPEED;
   }
 
   /**

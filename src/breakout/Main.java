@@ -33,9 +33,6 @@ public class Main extends Application {
   private static final int FRAMES_PER_SECOND = 60;
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
   private static final Paint BACKGROUND = Color.WHITE;
-  private static final int FAST_BALL_SPEED = 180;
-  private static final int BALL_SPEED = 120;
-  private static final int PADDLE_WIDTH = WIDTH / 6;
 
   private GameController controller;
   private Scene myScene;
@@ -358,16 +355,13 @@ public class Main extends Application {
       powerupStart = time;
       powerMap.put(powerup, powerupStart);
     }
-
     if (powerup.getType() == Power.FAST) {
       balls.forEach(ball -> {
-        ball.setSpeed(FAST_BALL_SPEED);
-        ball.setFill(new ImagePattern(
-            new Image(getClass().getClassLoader().getResourceAsStream("ballred.png"))));
+        ball.makeFast();
       });
     } else if (powerup.getType() == Power.EXTRA) {
       generateNewBall();
-    } else if (powerup.getType() == Power.LONGER && paddle.getWidth() == PADDLE_WIDTH) {
+    } else if (powerup.getType() == Power.LONGER) {
       paddle.expand();
     }
   }
@@ -378,10 +372,8 @@ public class Main extends Application {
   private void generateNewBall() {
     controller.createBall();
     balls.add(controller.getBall());
-    if (!balls.isEmpty() && balls.get(0).getSpeed() > BALL_SPEED) {
-      controller.getBall().setFill(new ImagePattern(
-          new Image(getClass().getClassLoader().getResourceAsStream("ballred.png"))));
-      controller.getBall().setSpeed(FAST_BALL_SPEED);
+    if (!balls.isEmpty() && balls.get(0).getSpeed() > balls.get(0).getStandardSpeed()) {
+      controller.getBall().makeFast();
     }
   }
 
@@ -391,12 +383,10 @@ public class Main extends Application {
   private void removePowerUps(Powerup powerup) {
     if (powerup.getType() == Power.FAST && !balls.isEmpty()) {
       balls.forEach(ball -> {
-        ball.setSpeed(BALL_SPEED);
-        ball.setFill(new ImagePattern(
-            new Image(getClass().getClassLoader().getResourceAsStream("ball.png"))));
+        ball.makeStandard();
       });
     } else if (powerup.getType() == Power.LONGER) {
-      paddle.setWidth(PADDLE_WIDTH);
+      paddle.retract();
     }
     powerMap.put(powerup, Double.MAX_VALUE);
   }
