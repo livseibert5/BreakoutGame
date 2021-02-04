@@ -33,7 +33,6 @@ public class Main extends Application {
   private static final int FRAMES_PER_SECOND = 60;
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
   private static final Paint BACKGROUND = Color.WHITE;
-  private static final int POWERUP_SPEED = 60;
   private static final int FAST_BALL_SPEED = 180;
   private static final int BALL_SPEED = 120;
   private static final int PADDLE_WIDTH = WIDTH / 6;
@@ -93,48 +92,14 @@ public class Main extends Application {
     if (gamePlay) {
       time += 1;
       updateBalls(elapsedTime);
-      updatePaddle(elapsedTime);
+      paddle.move(elapsedTime);
       if (level == 3 && bossExists) {
-        updateBoss(elapsedTime);
+        boss.move(elapsedTime);
       }
       if (bricks.isEmpty()) {
         handleWin();
       }
       checkPowerUps(elapsedTime);
-    }
-  }
-
-  /**
-   * Moves boss across screen, handles collisions with walls.
-   *
-   * @param elapsedTime time increment since last boss update
-   */
-  private void updateBoss(double elapsedTime) {
-    boss.setX(boss.getX() + boss.getXDirection() * boss.getSpeed() * elapsedTime);
-    if (boss.getX() < 0 || boss.getX() >= WIDTH - boss.getWidth()) {
-      boss.invertXDirection();
-      if (boss.getXDirection() == 1) {
-        boss.setFill(new ImagePattern(
-            new Image(getClass().getClassLoader().getResourceAsStream("cupid.png"))));
-      } else if (boss.getXDirection() == -1) {
-        boss.setFill(new ImagePattern(
-            new Image(getClass().getClassLoader().getResourceAsStream("cupidleft.png"))));
-      }
-    }
-  }
-
-  /**
-   * Updates the location of the paddle to move it over time. Wraps the paddle to the other side of
-   * the screen when it goes out of bounds.
-   *
-   * @param elapsedTime time increment since last paddle location update
-   */
-  private void updatePaddle(double elapsedTime) {
-    paddle.setX(paddle.getX() + paddle.getXDirection() * paddle.getSpeed() * elapsedTime);
-    if (paddle.getX() + paddle.getWidth() / 2 >= WIDTH) {
-      paddle.setX(0);
-    } else if (paddle.getX() + paddle.getWidth() / 2 <= 0) {
-      paddle.setX(WIDTH - paddle.getWidth());
     }
   }
 
@@ -146,10 +111,7 @@ public class Main extends Application {
   private void updateBalls(double elapsedTime) {
     balls.forEach(
         ball -> {
-          ball.setCenterX(
-              ball.getCenterX() + ball.getXDirection() * ball.getSpeed() * elapsedTime);
-          ball.setCenterY(
-              ball.getCenterY() + ball.getYDirection() * ball.getSpeed() * elapsedTime);
+          ball.move(elapsedTime);
           if (level == 3 && bossExists) {
             checkBossCollision(ball);
           }
@@ -197,7 +159,7 @@ public class Main extends Application {
     }
     powerups.forEach(
         powerup -> {
-          powerup.setCenterY(powerup.getCenterY() + POWERUP_SPEED * elapsedTime);
+          powerup.move(elapsedTime);
           if (powerup.getBoundsInParent().intersects(paddle.getBoundsInParent())) {
             root.getChildren().remove(powerup);
             powerup.setUsed();

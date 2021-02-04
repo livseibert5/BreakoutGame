@@ -13,6 +13,7 @@ import javafx.scene.shape.Rectangle;
 public class Paddle extends Rectangle {
 
   private int xDirection;
+  private int width;
   private final int PADDLE_SPEED = 120;
 
   /**
@@ -24,6 +25,7 @@ public class Paddle extends Rectangle {
    */
   public Paddle(int width, int height) {
     xDirection = 0;
+    this.width = width;
     this.setWidth(width / 6);
     this.setHeight(height / 21);
     this.setFill(
@@ -54,6 +56,20 @@ public class Paddle extends Rectangle {
   }
 
   /**
+   * Moves the paddle across the game screen.
+   *
+   * @param elapsedTime time since last update
+   */
+  public void move(double elapsedTime) {
+    this.setX(this.getX() + this.getXDirection() * this.getSpeed() * elapsedTime);
+    if (this.getX() + this.getWidth() / 2 >= width) {
+      this.setX(0);
+    } else if (this.getX() + this.getWidth() / 2 <= 0) {
+      this.setX(width - this.getWidth());
+    }
+  }
+
+  /**
    * Sets the x direction to 0 so that the paddle stops.
    */
   public void stop() {
@@ -77,5 +93,4 @@ public class Paddle extends Rectangle {
   public int getSpeed() {
     return PADDLE_SPEED;
   }
-
 }

@@ -14,6 +14,7 @@ import javafx.scene.paint.ImagePattern;
 public class Boss extends Brick {
 
   private int xDirection;
+  private int width;
   private final static int BOSS_SPEED = 70;
 
   /**
@@ -21,7 +22,8 @@ public class Boss extends Brick {
    *
    * @param height height of the game screen
    */
-  public Boss(int height) {
+  public Boss(int height, int width) {
+    this.width = width;
     this.setX(0);
     this.setY(height - 150);
     this.setWidth(40);
@@ -29,6 +31,25 @@ public class Boss extends Brick {
     this.setFill(
         new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("cupid.png"))));
     xDirection = 1;
+  }
+
+  /**
+   * Moves boss enemy across the screen.
+   *
+   * @param elapsedTime time since last update
+   */
+  public void move(double elapsedTime) {
+    this.setX(this.getX() + this.getXDirection() * this.getSpeed() * elapsedTime);
+    if (this.getX() < 0 || this.getX() >= width - this.getWidth()) {
+      this.invertXDirection();
+      if (this.getXDirection() == 1) {
+        this.setFill(new ImagePattern(
+            new Image(getClass().getClassLoader().getResourceAsStream("cupid.png"))));
+      } else if (this.getXDirection() == -1) {
+        this.setFill(new ImagePattern(
+            new Image(getClass().getClassLoader().getResourceAsStream("cupidleft.png"))));
+      }
+    }
   }
 
   /**

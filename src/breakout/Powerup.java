@@ -15,6 +15,7 @@ public class Powerup extends Circle {
 
   private Power powerupType;
   private boolean used;
+  private static final int POWERUP_SPEED = 60;
 
   /**
    * Constructor for power-up object, sets the type to be the same as the broken brick it came
@@ -28,6 +29,15 @@ public class Powerup extends Circle {
     this.setRadius(15);
     used = false;
     powerupType = type;
+  }
+
+  /**
+   * Moves powerup icon down the screen.
+   *
+   * @param elapsedTime time since last update
+   */
+  public void move(double elapsedTime) {
+    this.setCenterY(this.getCenterY() + POWERUP_SPEED * elapsedTime);
   }
 
   /**

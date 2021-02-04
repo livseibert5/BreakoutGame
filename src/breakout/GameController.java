@@ -137,7 +137,7 @@ public class GameController {
    * Creates boss enemy and adds it to scene. Only called during the third level.
    */
   private void createBossEnemy() {
-    boss = new Boss(height);
+    boss = new Boss(height, width);
     root.getChildren().add(boss);
   }
 

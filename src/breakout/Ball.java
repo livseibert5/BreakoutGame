@@ -32,6 +32,18 @@ public class Ball extends Circle {
   }
 
   /**
+   * Moves ball across the scene.
+   *
+   * @param elapsedTime time since last update.
+   */
+  public void move(double elapsedTime) {
+    this.setCenterX(
+        this.getCenterX() + this.getXDirection() * this.getSpeed() * elapsedTime);
+    this.setCenterY(
+        this.getCenterY() + this.getYDirection() * this.getSpeed() * elapsedTime);
+  }
+
+  /**
    * Returns y-coordinate of top of ball. Used to detect collisions.
    *
    * @return location of top of ball
