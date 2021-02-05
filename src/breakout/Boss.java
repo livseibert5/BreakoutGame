@@ -14,7 +14,7 @@ import javafx.scene.paint.ImagePattern;
 public class Boss extends Brick {
 
   private int xDirection;
-  private int width;
+  private int screenWidth;
   private final static int BOSS_SPEED = 70;
 
   /**
@@ -23,7 +23,7 @@ public class Boss extends Brick {
    * @param height height of the game screen
    */
   public Boss(int height, int width) {
-    this.width = width;
+    this.screenWidth = width;
     this.setX(0);
     this.setY(height - 150);
     this.setWidth(40);
@@ -39,41 +39,16 @@ public class Boss extends Brick {
    * @param elapsedTime time since last update
    */
   public void move(double elapsedTime) {
-    this.setX(this.getX() + this.getXDirection() * this.getSpeed() * elapsedTime);
-    if (this.getX() < 0 || this.getX() >= width - this.getWidth()) {
-      this.invertXDirection();
-      if (this.getXDirection() == 1) {
+    this.setX(this.getX() + xDirection * BOSS_SPEED * elapsedTime);
+    if (this.getX() < 0 || this.getX() >= screenWidth - this.getWidth()) {
+      xDirection *= -1;
+      if (xDirection == 1) {
         this.setFill(new ImagePattern(
             new Image(getClass().getClassLoader().getResourceAsStream("cupid.png"))));
-      } else if (this.getXDirection() == -1) {
+      } else if (xDirection == -1) {
         this.setFill(new ImagePattern(
             new Image(getClass().getClassLoader().getResourceAsStream("cupidleft.png"))));
       }
     }
-  }
-
-  /**
-   * Inverts x-direction of boss, used to make boss bounce off the walls.
-   */
-  public void invertXDirection() {
-    xDirection *= -1;
-  }
-
-  /**
-   * Accesses x-direction of boss, used to move boss.
-   *
-   * @return xDirection horizontal direction of boss
-   */
-  public int getXDirection() {
-    return xDirection;
-  }
-
-  /**
-   * Accesses speed of boss, used to move boss.
-   *
-   * @return BOSS_SPEED speed of boss
-   */
-  public int getSpeed() {
-    return BOSS_SPEED;
   }
 }
