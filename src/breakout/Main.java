@@ -337,7 +337,7 @@ public class Main extends Application {
    * @param brick power-up brick that was broken
    */
   private void dropPowerUp(PowerupBrick brick) {
-    Powerup powerup = new Powerup(brick.getType());
+    Powerup powerup = new Powerup();
     powerup.setCenterX(brick.getX() + brick.getWidth() / 2);
     powerup.setCenterY(brick.getY() + brick.getHeight() / 2);
     powerup.setRadius(15);

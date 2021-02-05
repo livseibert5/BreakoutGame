@@ -4,31 +4,40 @@ import javafx.scene.shape.Circle;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 
+enum Power {FAST, EXTRA, LONGER}
+
 /**
  * Class used to create Powerup objects. Used by Main to create a power-up that moves down the
- * screen when a power-up brick is broken. Carries the same type of power-up as the brick it came
- * from. Powerup activated when this object hits the paddle.
+ * screen when a power-up brick is broken. Powerup type is chosen randomly in the constructor.
+ * Powerup activated when this object hits the paddle.
  *
  * @author Livia Seibert
  */
 public class Powerup extends Circle {
 
-  private Power powerupType;
+  private Power powerType;
   private boolean used;
   private static final int POWERUP_SPEED = 60;
 
   /**
    * Constructor for power-up object, sets the type to be the same as the broken brick it came
    * from.
-   *
-   * @param type type of power-up
    */
-  public Powerup(Power type) {
+  public Powerup() {
     this.setFill(
         new ImagePattern(new Image(getClass().getClassLoader().getResourceAsStream("heart.png"))));
+    int type = (int) Math.round(Math.random() * 2) + 1;
+    if (type == 1) {
+      powerType = Power.FAST;
+    }
+    if (type == 2) {
+      powerType = Power.EXTRA;
+    }
+    if (type == 3) {
+      powerType = Power.LONGER;
+    }
     this.setRadius(15);
     used = false;
-    powerupType = type;
   }
 
   /**
@@ -64,6 +73,6 @@ public class Powerup extends Circle {
    * @return Power enum type of power-up
    */
   public Power getType() {
-    return powerupType;
+    return powerType;
   }
 }
