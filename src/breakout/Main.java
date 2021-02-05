@@ -33,6 +33,7 @@ public class Main extends Application {
   private static final int FRAMES_PER_SECOND = 60;
   private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
   private static final Paint BACKGROUND = Color.WHITE;
+  private static final int POWERUP_DURATION = 750;
 
   private GameController controller;
   private Scene myScene;
@@ -150,20 +151,20 @@ public class Main extends Application {
    */
   private void checkPowerUps(double elapsedTime) {
     for (Powerup power : powerMap.keySet()) {
-      if (time - powerMap.get(power) >= 750) {
+      if (time - powerMap.get(power) >= POWERUP_DURATION) {
         removePowerUps(power);
       }
     }
     powerups.forEach(
         powerup -> {
           powerup.move(elapsedTime);
+          if (powerup.getBoundsInParent().intersects(paddle.getBoundsInParent()) ||
+              powerup.getCenterY() > paddle.getY() + paddle.getHeight()) {
+            root.getChildren().remove(powerup);
+            powerup.setUsed();
+          }
           if (powerup.getBoundsInParent().intersects(paddle.getBoundsInParent())) {
-            root.getChildren().remove(powerup);
-            powerup.setUsed();
             setPowerUp(powerup);
-          } else if (powerup.getCenterY() > paddle.getY() + paddle.getHeight()) {
-            root.getChildren().remove(powerup);
-            powerup.setUsed();
           }
         });
     powerups.removeIf(powerup -> powerup.getUsed());
