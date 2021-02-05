@@ -20,12 +20,12 @@ public class Ball extends Circle {
   private final int FAST_SPEED = 180;
 
   /**
-   * Constructor for Ball object, sets the radius and speed of the ball, as well as it's initial x
+   * Constructor for Ball object, sets the radius and speed of the ball, as well as its initial x
    * and y direction. Also sets the image for the ball.
    */
   public Ball() {
     this.setRadius(15);
-    this.speed = 120;
+    this.speed = STANDARD_SPEED;
     this.xDirection = 1;
     this.yDirection = 1;
     isActive = true;
@@ -40,16 +40,16 @@ public class Ball extends Circle {
    */
   public void move(double elapsedTime) {
     this.setCenterX(
-        this.getCenterX() + this.getXDirection() * this.getSpeed() * elapsedTime);
+        this.getCenterX() + xDirection * speed * elapsedTime);
     this.setCenterY(
-        this.getCenterY() + this.getYDirection() * this.getSpeed() * elapsedTime);
+        this.getCenterY() + yDirection * speed * elapsedTime);
   }
 
   /**
    * Applies speed powerup to ball.
    */
   public void makeFast() {
-    this.setSpeed(FAST_SPEED);
+    speed = FAST_SPEED;
     this.setFill(new ImagePattern(
         new Image(getClass().getClassLoader().getResourceAsStream("ballred.png"))));
   }
@@ -58,7 +58,7 @@ public class Ball extends Circle {
    * Makes ball regular again after speed powerup.
    */
   public void makeStandard() {
-    this.setSpeed(STANDARD_SPEED);
+    speed = STANDARD_SPEED;
     this.setFill(new ImagePattern(
         new Image(getClass().getClassLoader().getResourceAsStream("ball.png"))));
   }
@@ -114,15 +114,6 @@ public class Ball extends Circle {
   }
 
   /**
-   * Used to set new speed for ball to apply and remove speed power-up.
-   *
-   * @param speed speed of ball
-   */
-  public void setSpeed(int speed) {
-    this.speed = speed;
-  }
-
-  /**
    * Used to detect speed for ball to check if power-up needs to be removed.
    *
    * @return speed current ball speed
@@ -155,23 +146,5 @@ public class Ball extends Circle {
    */
   public boolean getIsActive() {
     return isActive;
-  }
-
-  /**
-   * Allows access to x-direction of ball, used to update motion of ball.
-   *
-   * @return xDirection horizontal direction of ball.
-   */
-  public int getXDirection() {
-    return xDirection;
-  }
-
-  /**
-   * Allows access to y-direction of ball, used to update motion of ball.
-   *
-   * @return yDirection vertical direction of ball.
-   */
-  public int getYDirection() {
-    return yDirection;
   }
 }
