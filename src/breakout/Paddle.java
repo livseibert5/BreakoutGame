@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 public class Paddle extends Rectangle {
 
   private int xDirection;
-  private int width;
+  private int screenWidth;
   private int standardWidth;
   private int expandWidth;
   private final int PADDLE_SPEED = 120;
@@ -27,7 +27,7 @@ public class Paddle extends Rectangle {
    */
   public Paddle(int width, int height) {
     xDirection = 0;
-    this.width = width;
+    this.screenWidth = width;
     this.standardWidth = width / 6;
     this.expandWidth = standardWidth * 2;
     this.setWidth(standardWidth);
@@ -71,11 +71,11 @@ public class Paddle extends Rectangle {
    * @param elapsedTime time since last update
    */
   public void move(double elapsedTime) {
-    this.setX(this.getX() + this.getXDirection() * this.getSpeed() * elapsedTime);
-    if (this.getX() + this.getWidth() / 2 >= width) {
+    this.setX(this.getX() + xDirection * PADDLE_SPEED * elapsedTime);
+    if (this.getX() + this.getWidth() / 2 >= screenWidth) {
       this.setX(0);
     } else if (this.getX() + this.getWidth() / 2 <= 0) {
-      this.setX(width - this.getWidth());
+      this.setX(screenWidth - this.getWidth());
     }
   }
 
@@ -84,23 +84,5 @@ public class Paddle extends Rectangle {
    */
   public void stop() {
     xDirection = 0;
-  }
-
-  /**
-   * Accesses the current x direction of the paddle.
-   *
-   * @return xDirection returns horizontal direction of paddle
-   */
-  public int getXDirection() {
-    return xDirection;
-  }
-
-  /**
-   * Accesses the speed of the paddle.
-   *
-   * @return PADDLE_SPEED velocity of paddle
-   */
-  public int getSpeed() {
-    return PADDLE_SPEED;
   }
 }

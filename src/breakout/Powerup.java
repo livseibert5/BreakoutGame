@@ -6,8 +6,8 @@ import javafx.scene.paint.ImagePattern;
 
 /**
  * Class used to create Powerup objects. Used by Main to create a power-up that moves down the
- * screen when a power-up brick is broken. Carries the same type of power-up as the brick it
- * came from. Powerup activated when this object hits the paddle.
+ * screen when a power-up brick is broken. Carries the same type of power-up as the brick it came
+ * from. Powerup activated when this object hits the paddle.
  *
  * @author Livia Seibert
  */
